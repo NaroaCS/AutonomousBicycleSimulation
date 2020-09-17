@@ -93,13 +93,13 @@ class Bike:
     # def UpdateLocation(self,location):
     #      self.location = location
 
-    def UpdateAgent(self,agent_id):
+    def update_agent(self,agent_id):
         self.agent = agent_id
 
-    def DeleteAgent(self):
+    def delete_agent(self):
         self.agent = None
 
-    def Vacant(self):
+    def vacant(self):
         if (self.agent is None):
             return True
 
@@ -121,17 +121,17 @@ class AutonomousBike(Bike):
     def __init__(self,env):
         self.env=env
         self.reservation_id= None
-    def Reserved(self):
+    def reserved(self):
         if (self.reservation_id is not None):
             return True
 
-    def GoTowards(self, target_location):
+    def go_towards(self, target_location):
         #This is for the demand prediction
         distance = self.dist(self.location, target_location) #This should be routing
         yield self.env.timeout(distance)
         self.location = target_location
 
-    def Autonomous_drive(self, user_location):
+    def autonomous_drive(self, user_location):
         #Autonomous drive to pick up the user
         distance = self.dist(self.location, user_location) #This should be routing
         yield self.env.timeout(distance)
