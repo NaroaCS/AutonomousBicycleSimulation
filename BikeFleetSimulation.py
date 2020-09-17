@@ -115,8 +115,7 @@ class Bike:
 
     def dist(self, a, b): #delete after instering routing
         return np.linalg.norm(a - b)
-
-        
+       
 class StationBike(Bike):
     def __init__(self,env):
         self.env=env
@@ -179,7 +178,6 @@ class AutonomousBike(Bike):
         self.delete_agent()
         self.reserved= False
         
-
 class Station:
     def __init__(self,env,station_id):
         self.env=env
@@ -222,8 +220,6 @@ class Station:
             print('[%.2f] Station %d has no bikes available' %
               (self.env.now, self.station_id))
         
-
-
 class Agent:
     def __init__(self,env,agent_id, origin, destination, time):
         self.env=env
@@ -400,7 +396,6 @@ class StationBasedAgent(Agent):
             # yield self.env.timeout(3)
             print("There were no bikes/docks at arrival!")
               
-
 class DocklessAgent(Agent):
     def __init__(self, env, agent_id):
         super().__init__(env, agent_id)
@@ -564,7 +559,6 @@ class AutonomousAgent(Agent):
     def drop_bike(self):
         bike = self.bikes[self.bike_id]
         bike.drop()
-
 
 class SystemStateData:
     #location of bikes, situaition of stations
