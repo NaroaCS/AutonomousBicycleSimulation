@@ -269,9 +269,9 @@ class Agent:
         return np.linalg.norm(a - b)
 
 class StationBasedAgent(Agent):
-    def __init__(self, env, agent_id):
+    def __init__(self, env, datainterface, agent_id,location):
         super().__init__(env, agent_id)
-        
+        self.datainterface=datainterface
 
     def start(self):
         super().start()
@@ -326,6 +326,9 @@ class StationBasedAgent(Agent):
         yield self.env.timeout(10)
         # if self.print:
         #     print('[%.2f] Agent %d working' % (self.env.now, self.agent_id))
+    
+    def select_start_station(self,location,visited_stations):
+        self.datainterface[DataInterface.select_start_station(location,visited_stations)]
 
     def update_station_info(self, location): #simpler data structure ????
         values = []
@@ -565,6 +568,53 @@ class SystemData: #Put inside of City
     #it is updated by user trips and the FleetManager
     def __init__(self,env):
         self.env=env
+class DataInterface:
+    #retreives info from SystemData
+    def __init__(self,env):
+        self.env=env
+
+    def set_data(self, grid, stations, bikes):
+        self.grid = grid
+        self.stations = stations
+        self.bikes = bikes
+
+    def dist(self, a, b):
+        return np.linalg.norm(a - b)
+
+    def select_start_station(self,location,visited_stations):
+        values = []
+        for station in self.stations:
+            station_id = station.station_id
+            has_bikes = station.has_bikes()
+            has_docks = station.has_docks()
+            visited = station_id in visited_stations
+            distance = self.dist(location, station.location) 
+            walkable = distance < WALK_RADIUS
+            values.append((station_id, has_bikes, has_docks,
+                           visited, distance, walkable))
+        labels = ['station_id', 'has_bikes', 'has_docks',
+                  'visited', 'distance', 'walkable']
+        types = [int, int, int,
+                 int, float, int]
+        dtype = list(zip(labels, types))
+        station_info = np.array(values, dtype=dtype)
+
+        self.event_select_station = self.env.event()
+
+        for e in np.sort(station_info, order='distance'):
+            valid = e['has_bikes'] and not e['visited'] and e['walkable']
+            if valid:
+                self.station_id = e['station_id']
+                self.visited_stations.append(self.station_id)
+                self.event_select_station.succeed()        #how do we send this info??
+                
+        if not self.event_select_station.triggered:
+            print("No bikes/docks found in a walkable distance")
+
+        self.station_id ## Otherwise how can I transfer this data?
+        
+
+
 class RebalancingManager:
     #makes rebalancing decisions for SB and dockless
     def __init__(self,env):
@@ -590,4 +640,5 @@ class FleetManager:
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
 city = City(env, map)
+datainterface=DataInterface(env,)
 env.run(until=1000)
