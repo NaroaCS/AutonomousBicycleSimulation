@@ -560,7 +560,7 @@ class AutonomousAgent(Agent):
         bike = self.bikes[self.bike_id]
         bike.drop()
 
-class SystemStateData:
+class SystemData: #Put inside of City
     #location of bikes, situaition of stations
     #it is updated by user trips and the FleetManager
     def __init__(self,env):
