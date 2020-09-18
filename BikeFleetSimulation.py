@@ -50,7 +50,7 @@ class SimulationEngine:
                 station = Station(self.env, station_id)  
                 station.set_capacity(station_data['capacity']) 
                 station.set_location(np.array(station_data['location'])) 
-                station.init_station() #initialize that station (resource and container)
+                #station.init_station() #initialize that station (resource and container)
                 self.stations.append(station) #Adds station to the staions array in city
 
     def init_bikes(self):
@@ -60,7 +60,7 @@ class SimulationEngine:
                     bike = StationBike(self.env, bike_id) 
                     station_id = bike_data['station'] #The initial station is provided in the data
                     self.stations[station_id].return_bike(bike_id) #Saves bike in station
-                    bike.set_station(station_id)  # saves station in bike
+                    bike.attach_station(station_id)  # saves station in bike
                     bike.set_location(self.stations[station_id].location)  #Saves the location of the station as its location
                 elif mode == 1:
                     bike = DocklessBike(self.env, bike_id) #creates object of class Dockless Bike with the env and the id as imput
@@ -122,19 +122,19 @@ class StationBike(Bike):
         self.env=env
         self.station_id = None
 
-    def set_station(self, station_id):
+    def attach_station(self, station_id):
         self.station_id = station_id
 
-    def pop_station(self):
+    def detach_station(self):
         self.station_id = None
 
     def register_unlock(self, user_id):
         self.set_user(user_id)
-        self.pop_station()
+        self.detach_station()
 
     def register_return(self, station_id):
         self.delete_user()
-        self.set_station(station_id)
+        self.attach_station(station_id)
     
     def docked(self):
         return self.station_id is not None
@@ -186,34 +186,34 @@ class Station:
         self.location = None
         self.capacity = None
 
-    def init_station(self): #parameters that help to manage the station
-        self.resource = simpy.Resource(self.env, capacity=1) # Put some order in case 2 arrite at the same time Do we need this ? If all slots are taken, requests are enqueued. Once a usage request is released, a pending request will be triggered
-        self.container = simpy.Container(self.env, self.capacity, init=0) #It supports requests to put or get matter into/from the container
+    # def init_station(self): #parameters that help to manage the station
+    #     self.resource = simpy.Resource(self.env, capacity=1) # Put some order in case 2 arrite at the same time Do we need this ? If all slots are taken, requests are enqueued. Once a usage request is released, a pending request will be triggered
+    #     self.container = simpy.Container(self.env, self.capacity, init=0) #It supports requests to put or get matter into/from the container
    
     def has_bikes(self):
-        return self.container.level > 0
+        return self.n_bikes > 0
 
     def has_docks(self):
-        return self.capacity - self.container.level > 0
+        return self.capacity - self.n_bikes > 0
 
     def empty(self):
-        return self.container.level == 0
+        return self.n_bikes == 0
 
     def full(self):
-        return self.container.level == self.capacity
+        return self.n_bikes == self.capacity
 
-    def return_bike(self, bike_id):
+    def attach_bike(self, bike_id):
         if self.has_docks(): #check that there are docks available
-            self.container.put(1) #add one item 
+            self.n_bikes+=1 #add one item 
             self.bikes.append(bike_id) #add the bike's id
             #Save in SystemStateData
         else:
             print('[%.2f] Station %d has no docks available' %
               (self.env.now, self.station_id))
 
-    def unlock_bike(self):
+    def detach_bike(self):
         if self.has_bikes(): #Check that it has bikes
-            self.container.get(1) #Counts that there is one less
+            self.n_bikes-=1 #Counts that there is one less
             bike_id=random.choice(self.bikes) #chooses a random bike
             self.bikes.remove(bike_id) #removes that bike from the list
             #Save in SystemStateData
