@@ -71,6 +71,7 @@ class City:
                 self.bikes.append(bike) #Adds bike to the array of Bikes in city
 
     def init_agents(self):
+            datainterface=DataInterface(env)
             for agent_id, agent_data in enumerate(self.data['agents']): #saves agents data
                 #Creates a different class of agent depending on the mode
                 origin=agent_data['origin']
@@ -223,8 +224,8 @@ class Station:
 class Agent:
     def __init__(self,env,agent_id, origin, destination, time):
         self.env=env
-        self.stations = None
-        self.bikes = None
+        # self.stations = None
+        # self.bikes = None
 
         self.agent_id=agent_id
         self.location= None
@@ -293,25 +294,27 @@ class StationBasedAgent(Agent):
         self.event_interact_bike = self.env.event() #this structure is a bit confusing
         while not self.event_interact_bike.triggered:
             # 2-Select source station
-            self.select_station(aim='source')
+            [station, station_location, visited_stations]=self.select_start_station(self.location,self.visited_stations)
             yield self.event_select_station
-            station = self.stations[self.station_id]
+            #station = self.stations[self.station_id]
 
             # 3-Walk to source station
-            yield self.env.process(self.walk_to(station.location))
+            yield self.env.process(self.walk_to(station_location))
 
             # 4-Pull bike
             yield self.env.process(self.interact_bike(action='pull'))
             
         self.event_interact_bike = self.env.event()
+        visited_stations.clear() #here we should zero it because one might do a round trip
+        
         while not self.event_interact_bike.triggered:
             # 5-Select target station
-            self.select_station(aim='target')
+            [station, station_location, visited_stations]=self.select_end_station(self.location,self.visited_stations)
             yield self.event_select_station
-            station = self.stations[self.station_id]
+            #station = self.stations[self.station_id]
 
             # 6-Ride bike
-            yield self.env.process(self.ride_bike_to(station.location))
+            yield self.env.process(self.ride_bike_to(station_location))
 
             # 7-Push bike
             yield self.env.process(self.interact_bike(action='push'))
@@ -328,47 +331,52 @@ class StationBasedAgent(Agent):
         #     print('[%.2f] Agent %d working' % (self.env.now, self.agent_id))
     
     def select_start_station(self,location,visited_stations):
-        self.datainterface[DataInterface.select_start_station(location,visited_stations)]
+        selected_station_info=self.datainterface.select_start_station(location,visited_stations)
+        return selected_station_info
 
-    def update_station_info(self, location): #simpler data structure ????
-        values = []
-        for station in self.stations:
-            station_id = station.station_id
-            has_bikes = station.has_bikes()
-            has_docks = station.has_docks()
-            visited = station_id in self.visited_stations
-            distance = self.dist(location, station.location) 
-            walkable = distance < WALK_RADIUS
-            values.append((station_id, has_bikes, has_docks,
-                           visited, distance, walkable))
-        labels = ['station_id', 'has_bikes', 'has_docks',
-                  'visited', 'distance', 'walkable']
-        types = [int, int, int,
-                 int, float, int]
-        dtype = list(zip(labels, types))
-        self.station_info = np.array(values, dtype=dtype)
+    def select_end_station(self,location,visited_stations):
+        selected_station_info=self.datainterface.select_end_station(location,visited_stations)
+        return selected_station_info
 
-    def select_station(self, aim):
-        self.event_select_station = self.env.event()
-        if aim=='source':
-            location=self.location
-        else:
-            location=self.target
+    #def update_station_info(self, location): 
+        # values = []
+        # for station in self.stations:
+        #     station_id = station.station_id
+        #     has_bikes = station.has_bikes()
+        #     has_docks = station.has_docks()
+        #     visited = station_id in self.visited_stations
+        #     distance = self.dist(location, station.location) 
+        #     walkable = distance < WALK_RADIUS
+        #     values.append((station_id, has_bikes, has_docks,
+        #                    visited, distance, walkable))
+        # labels = ['station_id', 'has_bikes', 'has_docks',
+        #           'visited', 'distance', 'walkable']
+        # types = [int, int, int,
+        #          int, float, int]
+        # dtype = list(zip(labels, types))
+        # self.station_info = np.array(values, dtype=dtype)
 
-        self.update_station_info(location)
+    #def select_station(self, aim):
+        # self.event_select_station = self.env.event()
+        # if aim=='source':
+        #     location=self.location
+        # else:
+        #     location=self.target
 
-        for e in np.sort(self.station_info, order='distance'):
-            if aim == 'source':
-                valid = e['has_bikes'] and not e['visited'] and e['walkable']
-            else:
-                valid = e['has_docks'] and not e['visited'] and e['walkable']
-            if valid:
-                self.station_id = e['station_id']
-                self.visited_stations.append(self.station_id)
-                self.event_select_station.succeed()
+        # self.update_station_info(location)
+
+        # for e in np.sort(self.station_info, order='distance'):
+        #     if aim == 'source':
+        #         valid = e['has_bikes'] and not e['visited'] and e['walkable']
+        #     else:
+        #         valid = e['has_docks'] and not e['visited'] and e['walkable']
+        #     if valid:
+        #         self.station_id = e['station_id']
+        #         self.visited_stations.append(self.station_id)
+        #         self.event_select_station.succeed()
                 
-        if not self.event_select_station.triggered:
-            print("No bikes/docks found in a walkable distance")
+        # if not self.event_select_station.triggered:
+        #     print("No bikes/docks found in a walkable distance")
 
     def interact_bike(self, action):
         station = self.stations[self.station_id]
@@ -402,6 +410,7 @@ class StationBasedAgent(Agent):
 class DocklessAgent(Agent):
     def __init__(self, env, agent_id):
         super().__init__(env, agent_id)
+        self.datainterface=datainterface
     def start(self):
         super().start()
 
@@ -421,12 +430,12 @@ class DocklessAgent(Agent):
 
         while not self.event_unlock_bike.triggered:
             # 2-Select dockless bike
-            self.select_dockless_bike()
+            [dockless_bike,dockless_bike_location]=self.select_dockless_bike(self.location)
             yield self.event_select_dockless_bike
-            dockless_bike = self.bikes[self.dockless_bike_id]
+            #dockless_bike = self.bikes[self.dockless_bike_id]
 
             # 3-Walk to dockless bike
-            yield self.env.process(self.walk_to(dockless_bike.location))
+            yield self.env.process(self.walk_to(dockless_bike_location))
 
             # 4-Unlock bike
             yield self.env.process(self.unlock_bike())
@@ -446,33 +455,35 @@ class DocklessAgent(Agent):
         #     print('[%.2f] Agent %d working' % (self.env.now, self.agent_id))
 
 
-    def update_bike_info(self): #simplify?
-        values = []
-        for bike in self.bikes:
-            if isinstance(bike, DocklessBike):
-                bike_id = bike.bike_id
-                rented = bike.rented()
-                distance = self.dist(self.location, bike.location)
-                walkable = distance < WALK_RADIUS
-                values.append((bike_id, rented, distance, walkable))
-        labels = ['bike_id', 'rented', 'distance', 'walkable']
-        types = [int, int, float, int]
-        dtype = list(zip(labels, types))
-        self.bike_info = np.array(values, dtype=dtype)
+    #def update_bike_info(self): 
+        # values = []
+        # for bike in self.bikes:
+        #     if isinstance(bike, DocklessBike):
+        #         bike_id = bike.bike_id
+        #         rented = bike.rented()
+        #         distance = self.dist(self.location, bike.location)
+        #         walkable = distance < WALK_RADIUS
+        #         values.append((bike_id, rented, distance, walkable))
+        # labels = ['bike_id', 'rented', 'distance', 'walkable']
+        # types = [int, int, float, int]
+        # dtype = list(zip(labels, types))
+        # self.bike_info = np.array(values, dtype=dtype)
 
-    def select_dockless_bike(self):
-        self.event_select_dockless_bike = self.env.event()
-        self.update_bike_info()
-        for e in np.sort(self.bike_info, order='distance'):
-            valid = not e['rented'] and e['walkable']
-            if valid:
-                self.dockless_bike_id = e['bike_id']
-                self.event_select_dockless_bike.succeed()
+    #def select_dockless_bike(self):
+        # self.event_select_dockless_bike = self.env.event()
+        # self.update_bike_info()
+        # for e in np.sort(self.bike_info, order='distance'):
+        #     valid = not e['rented'] and e['walkable']
+        #     if valid:
+        #         self.dockless_bike_id = e['bike_id']
+        #         self.event_select_dockless_bike.succeed()
 
-        if not self.event_select_dockless_bike.triggered:
-            print("No bikes in walkable distance")
+        # if not self.event_select_dockless_bike.triggered:
+        #     print("No bikes in walkable distance")
            
-
+    def select_dockless_bike(self,location):
+        selected_bike_info=self.datainterface.select_dockless_bike(location)
+        return selected_bike_info
 
     def unlock_bike(self):
         dockless_bike = self.bikes[self.dockless_bike_id]
@@ -484,7 +495,7 @@ class DocklessAgent(Agent):
             self.event_unlock_bike.succeed()
         else:
             yield self.env.timeout(3)
-            print('Bike has already been rented' %)
+            print('Bike has already been rented')
 
     def lock_bike(self):
         bike = self.bikes[self.bike_id]
@@ -545,7 +556,7 @@ class AutonomousAgent(Agent):
         dtype = list(zip(labels, types))
         self.bike_info = np.array(values, dtype=dtype)
 
-    def call_autonomous_bike(self):  #Here it is not 'walkabke'
+    def call_autonomous_bike(self):  #This should be transferred to the demand manager / Here it is not 'walkabke'
         self.event_call_autonomous_bike = self.env.event()
         self.update_bike_info()
         for e in np.sort(self.bike_info, order='distance'):
@@ -586,16 +597,17 @@ class DataInterface:
         for station in self.stations:
             station_id = station.station_id
             has_bikes = station.has_bikes()
-            has_docks = station.has_docks()
             visited = station_id in visited_stations
             distance = self.dist(location, station.location) 
             walkable = distance < WALK_RADIUS
-            values.append((station_id, has_bikes, has_docks,
-                           visited, distance, walkable))
-        labels = ['station_id', 'has_bikes', 'has_docks',
-                  'visited', 'distance', 'walkable']
-        types = [int, int, int,
-                 int, float, int]
+            lat=station.latitude
+            lon=station.longitude
+            values.append((station_id, has_bikes,
+                           visited, distance, walkable, lat, lon))
+        labels = ['station_id', 'has_bikes',
+                  'visited', 'distance', 'walkable', 'lat','lon']
+        types = [int, int,
+                 int, float, int, float, float]
         dtype = list(zip(labels, types))
         station_info = np.array(values, dtype=dtype)
 
@@ -604,15 +616,84 @@ class DataInterface:
         for e in np.sort(station_info, order='distance'):
             valid = e['has_bikes'] and not e['visited'] and e['walkable']
             if valid:
-                self.station_id = e['station_id']
-                self.visited_stations.append(self.station_id)
-                self.event_select_station.succeed()        #how do we send this info??
+                station_id = e['station_id']
+                lat=e['lat']
+                lon=e['lon']
+                visited_stations.append(station_id)   
+                self.event_select_station.succeed()        
                 
         if not self.event_select_station.triggered:
-            print("No bikes/docks found in a walkable distance")
+            print("No bikes found in a walkable distance")
+        station_location=[lat,lon]
+        return [station_id, station_location, visited_stations] 
 
-        self.station_id ## Otherwise how can I transfer this data?
-        
+    def select_end_station(self,location,visited_stations):
+        values = []
+        for station in self.stations:
+            station_id = station.station_id
+            has_docks = station.has_docks()
+            visited = station_id in visited_stations
+            distance = self.dist(location, station.location) 
+            walkable = distance < WALK_RADIUS
+            lat=station.latitude
+            lon=station.longitude
+            values.append((station_id, has_docks,
+                           visited, distance, walkable, lat, lon))
+        labels = ['station_id', 'has_docks',
+                  'visited', 'distance', 'walkable', 'lat','lon']
+        types = [int, int, 
+                 int, float, int, float, float]
+        dtype = list(zip(labels, types))
+        station_info = np.array(values, dtype=dtype)
+
+        self.event_select_station = self.env.event()
+
+        for e in np.sort(station_info, order='distance'):
+            valid = e['has_docks'] and not e['visited'] and e['walkable']
+            if valid:
+                station_id = e['station_id']
+                lat=e['lat']
+                lon=e['lon']
+                visited_stations.append(station_id)
+                self.event_select_station.succeed()        
+                
+        if not self.event_select_station.triggered:
+            print("No docks found in a walkable distance")
+        station_location=[lat,lon]
+        return [station_id,station_location,visited_stations]
+
+    def select_dockless_bike(self,location):
+
+        values = []
+
+        for bike in self.bikes:
+            if isinstance(bike, DocklessBike):
+                bike_id = bike.bike_id
+                rented = bike.rented()
+                distance = self.dist(location, bike.location)
+                walkable = distance < WALK_RADIUS
+                lat=bike.latitude
+                lon=bike.longitude
+                values.append((bike_id, rented, distance, walkable,lat,lon))
+        labels = ['bike_id', 'rented', 'distance', 'walkable','lat','lon']
+        types = [int, int, float, int,float,float]
+        dtype = list(zip(labels, types))
+        bike_info = np.array(values, dtype=dtype)
+
+        self.event_select_dockless_bike = self.env.event()
+
+        for e in np.sort(bike_info, order='distance'):
+            valid = not e['rented'] and e['walkable']
+            if valid:
+                dockless_bike_id = e['bike_id']
+                lat=e['lat']
+                lon=e['lon']
+                self.event_select_dockless_bike.succeed()
+
+        if not self.event_select_dockless_bike.triggered:
+            print("No bikes in walkable distance")
+        bike_location=[lat,lon]
+        return [dockless_bike_id,bike_location]
 
 
 class RebalancingManager:
