@@ -59,7 +59,7 @@ class SimulationEngine:
                 if mode == 0:
                     bike = StationBike(self.env, bike_id) 
                     station_id = bike_data['station'] #The initial station is provided in the data
-                    self.stations[station_id].return_bike(bike_id) #Saves bike in station
+                    self.stations[station_id].lock_bike(bike_id) #Saves bike in station
                     bike.attach_station(station_id)  # saves station in bike
                     bike.set_location(self.stations[station_id].location)  #Saves the location of the station as its location
                 elif mode == 1:
@@ -132,7 +132,7 @@ class StationBike(Bike):
         self.set_user(user_id)
         self.detach_station()
 
-    def register_return(self, station_id):
+    def register_lock(self, station_id):
         self.delete_user()
         self.attach_station(station_id)
     
@@ -316,8 +316,8 @@ class StationBasedUser(User):
             # 6-Ride bike
             yield self.env.process(self.ride_bike_to(station_location))
 
-            # 7-return bike
-            yield self.env.process(self.interact_bike(action='return'))
+            # 7-lock bike
+            yield self.env.process(self.interact_bike(action='lock'))
 
         # 8-Walk to destination
         yield self.env.process(self.walk_to(self.destination))
@@ -393,8 +393,8 @@ class StationBasedUser(User):
                 self.bikes[self.bike_id].register_unlock(self.user_id) #saves the unlock in bike
                 station.unlock_bike(self.bike_id) #saves the unlock in station
             else:
-                self.bikes[self.bike_id].register_return(self.station_id)
-                station.return_bike(self.bike_id)
+                self.bikes[self.bike_id].register_lock(self.station_id)
+                station.lock_bike(self.bike_id)
 
             self.event_interact_bike.succeed()
 
