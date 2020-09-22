@@ -7,34 +7,45 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from Router import Network
 
 #PARAMETERS/CONFIGURATION
 mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 WALK_RADIUS = 50
 
 
-#INPUT OF DATA
-data={}
 #map
 
+network=Network()
+
+#Testing_route
+# from_lon=-71.058099
+# from_lat=42.361942
+# to_lon= -71.087446
+# to_lat=42.360590
+# route=network.get_route(from_lon, from_lat, to_lon, to_lat)
+# print(route)
+
 # station information
+stations_data=pd.read_excel('bluebikes_stations.xlsx')
 
 #bike information for SB -> id and initial station id
 
 #bike information for dockless and autonomous -> id and location(lat,lon)
 
 #OD matrix
-df=pd.read_excel('output.xlsx')
-
+OD_df=pd.read_excel('output_sample.xlsx')
 
 #Initialize bikes
 
 
 #DEFINITION OF CLASSES
 class SimulationEngine:
-    def __init__(self, env, data): 
+    def __init__(self, env, stations_data, OD_data): 
             self.env = env 
-            self.data = data 
+            #self.data = data
+            self.stations_data=stations_data
+            self.od_data=OD_data
 
             self.stations = [] 
             self.bikes = []
@@ -47,11 +58,12 @@ class SimulationEngine:
             self.init_users()
 
     def init_stations(self):
-            for station_id, station_data in enumerate(self.data['stations']): 
+            for station_id, station_data in enumerate(self.stations_data): 
                 station = Station(self.env, station_id)  
-                station.set_capacity(station_data['capacity']) 
-                station.set_location(np.array(station_data['location'])) 
+                station.set_capacity(station_data['Total docks']) 
+                station.set_location(np.array(station_data['Latitude','Longitude'])) 
                 self.stations.append(station) 
+                print(station)
 
     def init_bikes(self):
             for bike_id, bike_data in enumerate(self.data['bikes']): 
@@ -71,11 +83,15 @@ class SimulationEngine:
                 self.bikes.append(bike) 
 
     def init_users(self):
-            datainterface=DataInterface(env)
-            for user_id, user_data in enumerate(self.data['users']): 
-                origin=user_data['origin']
-                destination=user_data['destination']
-                time=user_data['timestamp']
+            datainterface=DataInterface(env) #Not sure why this is here
+            origin=[]
+            destination=[]
+            for user_id, user_data in enumerate(self.od_data): 
+                origin[0]=user_data['start station latitude']
+                origin[1]=user_data['start station longitude']
+                destination[0]=user_data['end station latitude']
+                destination[1]=user_data['end station longitude']
+                time=user_data['starttime']
                 if mode == 0:
                     user = StationBasedUser(self.env, user_id, origin, destination, time)
                 elif mode == 1:
@@ -85,6 +101,7 @@ class SimulationEngine:
                 user.start() 
                 user.set_data(self.data['grid'], self.stations, self.bikes)  
                 self.users.append(user) 
+                print(user)
 
 class Bike:
     def __init__(self,env, bike_id):
@@ -689,7 +706,7 @@ class DataInterface:
             print("No bikes in walkable distance")
         bike_location=[lat,lon]
         return [dockless_bike_id,bike_location]
-        
+
 class RebalancingManager:
     #makes rebalancing decisions for SB and dockless
     def __init__(self,env):
@@ -714,5 +731,5 @@ class FleetManager:
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
-city = SimulationEngine(env, map)
+city = SimulationEngine(env, stations_data, OD_df)
 env.run(until=1000)
