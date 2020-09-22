@@ -8,6 +8,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#PARAMETERS/CONFIGURATION
+mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+WALK_RADIUS = 50
+
+
 #INPUT OF DATA
 data={}
 #map
@@ -24,56 +29,50 @@ df=pd.read_excel('output.xlsx')
 
 #Initialize bikes
 
-#PARAMETERS/CONFIGURATION
-mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
-WALK_RADIUS = 50
 
 #DEFINITION OF CLASSES
 class SimulationEngine:
-    def __init__(self, env, data): #Constructor is automatically called when you create a new instance of a class
-            self.env = env #Takes simulation environment
-            self.data = data #Its the city that takes the initial data and sets it 
+    def __init__(self, env, data): 
+            self.env = env 
+            self.data = data 
 
-            self.stations = [] #defines arrays of objects of different classes within itself
+            self.stations = [] 
             self.bikes = []
             self.users = []
 
             self.start()
-    def start(self): #Start calls to the initialization of station, bikes, users
+    def start(self): 
             self.init_stations()
             self.init_bikes()
             self.init_users()
 
     def init_stations(self):
-            #Takes data of stations and goes one by one adjudicating the data to the station objects (that now have an id)
             for station_id, station_data in enumerate(self.data['stations']): 
                 station = Station(self.env, station_id)  
                 station.set_capacity(station_data['capacity']) 
                 station.set_location(np.array(station_data['location'])) 
-                #station.init_station() #initialize that station (resource and container)
-                self.stations.append(station) #Adds station to the staions array in city
+                self.stations.append(station) 
 
     def init_bikes(self):
             for bike_id, bike_data in enumerate(self.data['bikes']): 
                 #mode = bike_data['mode'] #Takes the mode 
                 if mode == 0:
                     bike = StationBike(self.env, bike_id) 
-                    station_id = bike_data['station'] #The initial station is provided in the data
-                    self.stations[station_id].lock_bike(bike_id) #Saves bike in station
-                    bike.attach_station(station_id)  # saves station in bike
-                    bike.set_location(self.stations[station_id].location)  #Saves the location of the station as its location
+                    station_id = bike_data['station'] 
+                    self.stations[station_id].lock_bike(bike_id) 
+                    bike.attach_station(station_id)  
+                    bike.set_location(self.stations[station_id].location)  
                 elif mode == 1:
-                    bike = DocklessBike(self.env, bike_id) #creates object of class Dockless Bike with the env and the id as imput
-                    bike.set_location(np.array(bike_data['location'])) #initial location is given, so it takes it and saves it
+                    bike = DocklessBike(self.env, bike_id) 
+                    bike.set_location(np.array(bike_data['location']))
                 elif mode == 2:
-                    bike = AutonomousBike(self.env, bike_id) #creates object of class Autonomous Bike with the env and the id as imput
-                    bike.set_location(np.array(bike_data['location'])) #initial location is given, so it takes it and saves it
-                self.bikes.append(bike) #Adds bike to the array of Bikes in city
+                    bike = AutonomousBike(self.env, bike_id) 
+                    bike.set_location(np.array(bike_data['location'])) 
+                self.bikes.append(bike) 
 
     def init_users(self):
             datainterface=DataInterface(env)
-            for user_id, user_data in enumerate(self.data['users']): #saves users data
-                #Creates a different class of user depending on the mode
+            for user_id, user_data in enumerate(self.data['users']): 
                 origin=user_data['origin']
                 destination=user_data['destination']
                 time=user_data['timestamp']
@@ -85,7 +84,7 @@ class SimulationEngine:
                     user = AutonomousUser(self.env, user_id, origin, destination, time)
                 user.start() 
                 user.set_data(self.data['grid'], self.stations, self.bikes)  
-                self.users.append(user) #Adds the user to the array of users in city
+                self.users.append(user) 
 
 class Bike:
     def __init__(self,env, bike_id):
@@ -170,7 +169,6 @@ class AutonomousBike(Bike):
         self.location = destination_location
 
     def autonomous_drive(self, user_location):
-        #Autonomous drive to pick up the user
         distance = self.dist(self.location, user_location) #This should be routing
         yield self.env.timeout(distance)
         self.location =user_location
@@ -185,10 +183,6 @@ class Station:
         self.station_id=station_id
         self.location = None
         self.capacity = None
-
-    # def init_station(self): #parameters that help to manage the station
-    #     self.resource = simpy.Resource(self.env, capacity=1) # Put some order in case 2 arrite at the same time Do we need this ? If all slots are taken, requests are enqueued. Once a usage request is released, a pending request will be triggered
-    #     self.container = simpy.Container(self.env, self.capacity, init=0) #It supports requests to put or get matter into/from the container
    
     def has_bikes(self):
         return self.n_bikes > 0
@@ -203,19 +197,19 @@ class Station:
         return self.n_bikes == self.capacity
 
     def attach_bike(self, bike_id):
-        if self.has_docks(): #check that there are docks available
-            self.n_bikes+=1 #add one item 
-            self.bikes.append(bike_id) #add the bike's id
+        if self.has_docks(): 
+            self.n_bikes+=1 
+            self.bikes.append(bike_id) 
             #Save in SystemStateData
         else:
             print('[%.2f] Station %d has no docks available' %
               (self.env.now, self.station_id))
 
     def detach_bike(self):
-        if self.has_bikes(): #Check that it has bikes
-            self.n_bikes-=1 #Counts that there is one less
-            bike_id=random.choice(self.bikes) #chooses a random bike
-            self.bikes.remove(bike_id) #removes that bike from the list
+        if self.has_bikes(): 
+            self.n_bikes-=1 
+            bike_id=random.choice(self.bikes) 
+            self.bikes.remove(bike_id) 
             #Save in SystemStateData
         else:
             print('[%.2f] Station %d has no bikes available' %
@@ -263,7 +257,7 @@ class User:
 
     def ride_bike_to(self, location):
         bike = self.bikes[self.bike_id]
-        yield self.env.process(bike.ride(location)) #ride is a function in bike, not user
+        yield self.env.process(bike.ride(location)) 
         self.location = location
     
     def dist(self, a, b):
@@ -291,7 +285,7 @@ class StationBasedUser(User):
         # 1-Init on origin
         yield self.env.process(super().process())
 
-        self.event_interact_bike = self.env.event() #this structure is a bit confusing
+        self.event_interact_bike = self.env.event() 
         while not self.event_interact_bike.triggered:
             # 2-Select origin station
             [station, station_location, visited_stations]=self.select_start_station(self.location,self.visited_stations)
@@ -390,8 +384,8 @@ class StationBasedUser(User):
         if valid:
             if action == 'unlock':
                 self.bike_id = station.choose_bike()
-                self.bikes[self.bike_id].register_unlock(self.user_id) #saves the unlock in bike
-                station.unlock_bike(self.bike_id) #saves the unlock in station
+                self.bikes[self.bike_id].register_unlock(self.user_id) 
+                station.unlock_bike(self.bike_id)
             else:
                 self.bikes[self.bike_id].register_lock(self.station_id)
                 station.lock_bike(self.bike_id)
@@ -579,6 +573,7 @@ class Assets: #Put inside of City
     #it is updated by user trips and the FleetManager
     def __init__(self,env):
         self.env=env
+
 class DataInterface:
     #retreives info from SystemData
     def __init__(self,env):
@@ -694,6 +689,7 @@ class DataInterface:
             print("No bikes in walkable distance")
         bike_location=[lat,lon]
         return [dockless_bike_id,bike_location]
+        
 class RebalancingManager:
     #makes rebalancing decisions for SB and dockless
     def __init__(self,env):
