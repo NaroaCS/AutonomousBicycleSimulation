@@ -12,7 +12,7 @@ from Router import Network
 #PARAMETERS/CONFIGURATION
 mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 WALK_RADIUS = 50
-
+n_bikes= 10
 
 #map
 
@@ -30,6 +30,21 @@ network=Network()
 stations_data=pd.read_excel('bluebikes_stations.xlsx')
 
 #bike information for SB -> id and initial station id
+bikes_data = [] 
+if mode==1 or mode==2:
+    i=0
+    while i<n_bikes:
+        bike=[i,0,0] #Set random locatio (lat,lon)
+        bikes_data.append(bike) 
+        i+=1
+elif mode==0:
+    i=0
+    while i<n_bikes:
+        station_id=24 # Set random station 
+        bike=[i,station_id]    
+        bikes_data.append(bike)
+
+print(bikes_data)
 
 #bike information for dockless and autonomous -> id and location(lat,lon)
 
@@ -41,17 +56,19 @@ OD_df=pd.read_excel('output_sample.xlsx')
 
 #DEFINITION OF CLASSES
 class SimulationEngine:
-    def __init__(self, env, stations_data, OD_data): 
+    def __init__(self, env, stations_data, OD_data, bikes_data): 
             self.env = env 
             #self.data = data
             self.stations_data=stations_data
             self.od_data=OD_data
+            self.bikes_data=bikes_data
 
             self.stations = [] 
             self.bikes = []
             self.users = []
 
             self.start()
+
     def start(self): 
             self.init_stations()
             self.init_bikes()
@@ -60,26 +77,26 @@ class SimulationEngine:
     def init_stations(self):
             for station_id, station_data in enumerate(self.stations_data): 
                 station = Station(self.env, station_id)  
-                station.set_capacity(station_data['Total docks']) 
-                station.set_location(np.array(station_data['Latitude','Longitude'])) 
+                station.set_capacity(station_data[3]) 
+                station.set_location(station_data[1], station_data[2]) #(lat,lon)
                 self.stations.append(station) 
                 print(station)
 
     def init_bikes(self):
-            for bike_id, bike_data in enumerate(self.data['bikes']): 
+            for bike_id, bike_data in enumerate(self.bikes_data): 
                 #mode = bike_data['mode'] #Takes the mode 
                 if mode == 0:
                     bike = StationBike(self.env, bike_id) 
-                    station_id = bike_data['station'] 
+                    station_id = bike_data[1] 
                     self.stations[station_id].lock_bike(bike_id) 
                     bike.attach_station(station_id)  
-                    bike.set_location(self.stations[station_id].location)  
+                    bike.set_location(self.stations[station_id].location)  #Check if this gives the proper input to set_loc 
                 elif mode == 1:
                     bike = DocklessBike(self.env, bike_id) 
-                    bike.set_location(np.array(bike_data['location']))
+                    bike.set_location(bike_data[1], bike_data[2]) #lat,lon
                 elif mode == 2:
                     bike = AutonomousBike(self.env, bike_id) 
-                    bike.set_location(np.array(bike_data['location'])) 
+                    bike.set_location(bike_data[1], bike_data[2]) 
                 self.bikes.append(bike) 
 
     def init_users(self):
@@ -87,19 +104,19 @@ class SimulationEngine:
             origin=[]
             destination=[]
             for user_id, user_data in enumerate(self.od_data): 
-                origin[0]=user_data['start station latitude']
-                origin[1]=user_data['start station longitude']
-                destination[0]=user_data['end station latitude']
-                destination[1]=user_data['end station longitude']
-                time=user_data['starttime']
+                origin.append(user_data[1]) #origin lat
+                origin.append(user_data[2]) #origin lon
+                destination.append(user_data[3]) #destination lat
+                destination.append(user_data[4]) #destination lon
+                time=user_data[0] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, user_id, origin, destination, time)
+                    user = StationBasedUser(self.env, user_id, origin, destination, time, datainterface)
                 elif mode == 1:
-                    user = DocklessUser(self.env, user_id, origin, destination, time)
+                    user = DocklessUser(self.env, user_id, origin, destination, time, datainterface)
                 elif mode == 2:
                     user = AutonomousUser(self.env, user_id, origin, destination, time)
                 user.start() 
-                user.set_data(self.data['grid'], self.stations, self.bikes)  
+                #user.set_data(self.data['grid'], self.stations, self.bikes)  
                 self.users.append(user) 
                 print(user)
 
@@ -109,8 +126,12 @@ class Bike:
         self.bike_id=bike_id
         self.location=None
         self.user=None
-    # def UpdateLocation(self,location):
-    #      self.location = location
+
+    def set_location(self, lat, lon):
+        self.location = [lat,lon]
+    
+    # def update_location(self,location):
+    #     self.location = location
 
     def update_user(self,user_id):
         self.user = user_id
@@ -134,8 +155,8 @@ class Bike:
         return np.linalg.norm(a - b)
        
 class StationBike(Bike):
-    def __init__(self,env):
-        self.env=env
+    def __init__(self,env,bike_id):
+        super().__init__(env, bike_id)  
         self.station_id = None
 
     def attach_station(self, station_id):
@@ -158,7 +179,7 @@ class StationBike(Bike):
 class DocklessBike(Bike):
     def __init__(self, env, bike_id):
         super().__init__(env, bike_id)        
-        self.init_state()
+        #self.init_state()
 
     def unlock(self, user_id):
         self.set_user(user_id)
@@ -167,9 +188,10 @@ class DocklessBike(Bike):
         self.delete_user()
 
 class AutonomousBike(Bike):
-    def __init__(self,env):
-        self.env=env
+    def __init__(self,env, bike_id):
+        super().__init__(env, bike_id)
         self.reserved=False
+        
     
     def call(self, user_id):
          self.set_user(user_id)
@@ -200,6 +222,12 @@ class Station:
         self.station_id=station_id
         self.location = None
         self.capacity = None
+
+    def set_location(self, lat, lon):
+        self.location = [lat,lon]
+
+    def set_capacity(self, capacity):
+        self.capacity = capacity
    
     def has_bikes(self):
         return self.n_bikes > 0
@@ -235,9 +263,6 @@ class Station:
 class User:
     def __init__(self,env,user_id, origin, destination, time):
         self.env=env
-        # self.stations = None
-        # self.bikes = None
-
         self.user_id=user_id
         self.location= None
         self.state=None #None, walking,waiting,biking
@@ -281,12 +306,12 @@ class User:
         return np.linalg.norm(a - b)
 
 class StationBasedUser(User):
-    def __init__(self, env, datainterface, user_id,location):
-        super().__init__(env, user_id)
+    def __init__(self, env, user_id, origin, destination, time, datainterface):
+        super().__init__(env, user_id, origin, destination, time)
         self.datainterface=datainterface
 
     def start(self):
-        super().start()
+        #super().start()
 
         # STATION-BASED
         self.station_id = None
@@ -419,11 +444,11 @@ class StationBasedUser(User):
             print("There were no bikes/docks at arrival!")
               
 class DocklessUser(User):
-    def __init__(self, env, user_id):
-        super().__init__(env, user_id)
+    def __init__(self, env, user_id, origin, destination, time, datainterface):
+        super().__init__(env, user_id, origin, destination, time)
         self.datainterface=datainterface
     def start(self):
-        super().start()
+        #super().start()
 
         # DOCKLESS
         self.dockless_bike_id = None
@@ -513,11 +538,11 @@ class DocklessUser(User):
         bike.lock()
 
 class AutonomousUser(User):
-    def __init__(self, env, user_id):
-        super().__init__(env, user_id)
+    def __init__(self, env, user_id, origin, destination, time):
+        super().__init__(env, user_id, origin, destination, time)
 
     def start(self):
-        super().start()
+        #super().start()
 
         # AUTONOMOUS
         self.event_call_autonomous_bike = self.env.event()
@@ -731,5 +756,5 @@ class FleetManager:
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
-city = SimulationEngine(env, stations_data, OD_df)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data)
 env.run(until=1000)
