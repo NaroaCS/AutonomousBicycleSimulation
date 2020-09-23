@@ -80,7 +80,6 @@ class SimulationEngine:
                 station.set_capacity(station_data[3]) 
                 station.set_location(station_data[1], station_data[2]) #(lat,lon)
                 self.stations.append(station) 
-                print(station)
 
     def init_bikes(self):
             for bike_id, bike_data in enumerate(self.bikes_data): 
@@ -147,7 +146,7 @@ class Bike:
         #Here it should call the routing algotithm
         # time=routing(self.location,destination,bikingspeed)
         distance = self.dist(self.location, destination)
-        yield self.env.timeout(distance)
+        yield self.env.timeout(pd.Timedelta(seconds=distance))
         self.location = destination
         #save this info in SystemStateData
 
@@ -209,7 +208,7 @@ class AutonomousBike(Bike):
 
     def autonomous_drive(self, user_location):
         distance = self.dist(self.location, user_location) #This should be routing
-        yield self.env.timeout(distance)
+        yield self.env.timeout(pd.Timedelta(seconds=distance))
         self.location =user_location
         #Save pickup and update
     def drop(self):
@@ -283,9 +282,12 @@ class User:
         # 1-Init on origin
         yield self.env.process(self.init_user())
 
-
     def init_user(self):
-        yield self.env.timeout(self.time) #waits until its the hour
+        print(self.time)
+        print(env_start_time)
+        time_delta=pd.Timedelta(self.time-env_start_time).seconds / 3600.0
+        print(time_delta)
+        yield self.env.timeout(pd.Timedelta(seconds=time_delta)) #waits until its the hour
         self.location = self.origin
         if self.print:
             print('[%.2f] User %d initialized at location [%.2f, %.2f]' %
@@ -294,7 +296,7 @@ class User:
     def walk_to(self, location):
         #Here it should call routing
         distance = self.dist(self.location, location)
-        yield self.env.timeout(distance)
+        yield self.env.timeout(pd.Timedelta(seconds=distance))
         self.location = location
 
     def ride_bike_to(self, location):
@@ -362,7 +364,7 @@ class StationBasedUser(User):
         # self.save_state()
 
         # # 10-Finish
-        yield self.env.timeout(10)
+        yield self.env.timeout(pd.Timedelta(seconds=10))
         # if self.print:
         #     print('[%.2f] User %d working' % (self.env.now, self.user_id))
     
@@ -434,7 +436,7 @@ class StationBasedUser(User):
 
             self.event_interact_bike.succeed()
 
-            yield self.env.timeout(1)
+            yield self.env.timeout(pd.Timedelta(seconds=1))
         else:
             # self.time_interact_bike = None
             # if self.print:
@@ -486,7 +488,7 @@ class DocklessUser(User):
         #self.save_state()
 
         # # 8-Finish
-        yield self.env.timeout(10)
+        yield self.env.timeout(pd.Timedelta(seconds=10))
         # if self.print:
         #     print('[%.2f] User %d working' % (self.env.now, self.user_id))
 
@@ -524,13 +526,13 @@ class DocklessUser(User):
     def unlock_bike(self):
         dockless_bike = self.bikes[self.dockless_bike_id]
         if not dockless_bike.rented():
-            yield self.env.timeout(1)
+            yield self.env.timeout(pd.Timedelta(seconds=1))
             self.bike_id = dockless_bike.bike_id
             dockless_bike.unlock(self.user_id)
             #HERE IT DOESNT SAVE THAT IT HAS BEEN RENTED
             self.event_unlock_bike.succeed()
         else:
-            yield self.env.timeout(3)
+            yield self.env.timeout(pd.Timedelta(seconds=3))
             print('Bike has already been rented')
 
     def lock_bike(self):
@@ -553,6 +555,7 @@ class AutonomousUser(User):
     def process(self):
         # 0-Setup
         # 1-Init on origin
+        print('call to User process')
         yield self.env.process(super().process())
 
         # 2-Call autonomous bike
@@ -573,7 +576,7 @@ class AutonomousUser(User):
         #self.save_state()
 
         # 7-Finish
-        yield self.env.timeout(10)
+        yield self.env.timeout(pd.Timedelta(seconds=10))
         # if self.print:
         #     print('[%.2f] User %d working' % (self.env.now, self.user_id))
 
@@ -755,6 +758,8 @@ class FleetManager:
         self.env=env
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
-env = simpy.Environment()
+env_start_time=pd.Timestamp(2019, 9 , 8, 00)
+env_end_time=pd.Timestamp(2019, 9, 9, 1) # This would be 1 h
+env = simpy.Environment(initial_time=env_start_time)
 city = SimulationEngine(env, stations_data, OD_df, bikes_data)
-env.run(until=1000)
+env.run(env_end_time)

@@ -567,6 +567,7 @@ class StationAgent(Agent):
     def select_station(self, aim):
         self.event_select_station = self.env.event()
         location = self.location if aim == 'source' else self.target ###?????? aim== source
+        
         self.update_station_info(location)
         for e in np.sort(self.station_info, order='distance'):
             if aim == 'source':
