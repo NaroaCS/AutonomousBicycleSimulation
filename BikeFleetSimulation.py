@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from Router import Network
+import time
 
 #PARAMETERS/CONFIGURATION
 mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
@@ -50,7 +51,7 @@ print(bikes_data)
 
 #OD matrix
 OD_df=pd.read_excel('output_sample.xlsx')
-
+print(OD_df.head())
 #Initialize bikes
 
 
@@ -102,18 +103,18 @@ class SimulationEngine:
             datainterface=DataInterface(env) #Not sure why this is here
             origin=[]
             destination=[]
-            for user_id, user_data in enumerate(self.od_data): 
-                origin.append(user_data[1]) #origin lat
-                origin.append(user_data[2]) #origin lon
-                destination.append(user_data[3]) #destination lat
-                destination.append(user_data[4]) #destination lon
-                time=user_data[0] #departure time
+            for index,row in self.od_data.iterrows(): 
+                origin.append(row['start station latitude']) #origin lat
+                origin.append(row[2]) #origin lon
+                destination.append(row[3]) #destination lat
+                destination.append(row[4]) #destination lon
+                departure_time=row[5] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, user_id, origin, destination, time, datainterface)
+                    user = StationBasedUser(self.env, index, origin, destination, departure_time, datainterface)
                 elif mode == 1:
-                    user = DocklessUser(self.env, user_id, origin, destination, time, datainterface)
+                    user = DocklessUser(self.env, index, origin, destination, departure_time, datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, user_id, origin, destination, time)
+                    user = AutonomousUser(self.env, index, origin, destination, departure_time)
                 user.start() 
                 #user.set_data(self.data['grid'], self.stations, self.bikes)  
                 self.users.append(user) 
@@ -260,7 +261,7 @@ class Station:
               (self.env.now, self.station_id))
         
 class User:
-    def __init__(self,env,user_id, origin, destination, time):
+    def __init__(self,env,user_id, origin, destination, departure_time):
         self.env=env
         self.user_id=user_id
         self.location= None
@@ -268,9 +269,9 @@ class User:
         self.event_setup_task = self.env.event() # ?¿ Here or in a start() function
         self.bike_id=None
 
-        self.origin=None
-        self.destination=None
-        self.time=None
+        self.origin=origin
+        self.destination=destination
+        self.departure_time=departure_time
     
     def set_data(self, grid, stations, bikes):
         self.grid = grid
@@ -283,11 +284,7 @@ class User:
         yield self.env.process(self.init_user())
 
     def init_user(self):
-        print(self.time)
-        print(env_start_time)
-        time_delta=pd.Timedelta(self.time-env_start_time).seconds / 3600.0
-        print(time_delta)
-        yield self.env.timeout(pd.Timedelta(seconds=time_delta)) #waits until its the hour
+        yield self.env.timeout(self.departure_time) #waits until its the hour
         self.location = self.origin
         if self.print:
             print('[%.2f] User %d initialized at location [%.2f, %.2f]' %
@@ -308,8 +305,8 @@ class User:
         return np.linalg.norm(a - b)
 
 class StationBasedUser(User):
-    def __init__(self, env, user_id, origin, destination, time, datainterface):
-        super().__init__(env, user_id, origin, destination, time)
+    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
 
     def start(self):
@@ -446,8 +443,8 @@ class StationBasedUser(User):
             print("There were no bikes/docks at arrival!")
               
 class DocklessUser(User):
-    def __init__(self, env, user_id, origin, destination, time, datainterface):
-        super().__init__(env, user_id, origin, destination, time)
+    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
     def start(self):
         #super().start()
@@ -540,8 +537,8 @@ class DocklessUser(User):
         bike.lock()
 
 class AutonomousUser(User):
-    def __init__(self, env, user_id, origin, destination, time):
-        super().__init__(env, user_id, origin, destination, time)
+    def __init__(self, env, user_id, origin, destination, departure_time):
+        super().__init__(env, user_id, origin, destination, departure_time)
 
     def start(self):
         #super().start()
@@ -758,8 +755,8 @@ class FleetManager:
         self.env=env
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
-env_start_time=pd.Timestamp(2019, 9 , 8, 00)
-env_end_time=pd.Timestamp(2019, 9, 9, 1) # This would be 1 h
-env = simpy.Environment(initial_time=env_start_time)
+# env_start_time=pd.Timestamp(2019, 9 , 8, 00)
+# env_end_time=pd.Timestamp(2019, 9, 9, 1) # This would be 1 h
+env = simpy.Environment()
 city = SimulationEngine(env, stations_data, OD_df, bikes_data)
-env.run(env_end_time)
+env.run(until=1000)
