@@ -11,7 +11,7 @@ from Router import Network
 import time
 
 #PARAMETERS/CONFIGURATION
-mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 WALK_RADIUS = 50
 n_bikes= 10
 
@@ -41,9 +41,10 @@ if mode==1 or mode==2:
 elif mode==0:
     i=0
     while i<n_bikes:
-        station_id=24 # Set random station 
+        station_id='S32035' # Set random station 
         bike=[i,station_id]    
         bikes_data.append(bike)
+        i+=1
 
 print(bikes_data)
 
@@ -88,7 +89,8 @@ class SimulationEngine:
                 if mode == 0:
                     bike = StationBike(self.env, bike_id) 
                     station_id = bike_data[1] 
-                    self.stations[station_id].lock_bike(bike_id) 
+                    index=self.stations.index(station_id)
+                    self.stations[index].lock_bike(bike_id) 
                     bike.attach_station(station_id)  
                     bike.set_location(self.stations[station_id].location)  #Check if this gives the proper input to set_loc 
                 elif mode == 1:
@@ -105,10 +107,10 @@ class SimulationEngine:
             destination=[]
             for index,row in self.od_data.iterrows(): 
                 origin.append(row['start station latitude']) #origin lat
-                origin.append(row[2]) #origin lon
-                destination.append(row[3]) #destination lat
-                destination.append(row[4]) #destination lon
-                departure_time=row[5] #departure time
+                origin.append(row['start station latitude']) #origin lon
+                destination.append(row['end station latitude']) #destination lat
+                destination.append(row['end station longitude']) #destination lon
+                departure_time=row['elapsed time'] #departure time
                 if mode == 0:
                     user = StationBasedUser(self.env, index, origin, destination, departure_time, datainterface)
                 elif mode == 1:
@@ -126,6 +128,7 @@ class Bike:
         self.bike_id=bike_id
         self.location=None
         self.user=None
+        self.busy=False
 
     def set_location(self, lat, lon):
         self.location = [lat,lon]
@@ -168,10 +171,12 @@ class StationBike(Bike):
     def register_unlock(self, user_id):
         self.set_user(user_id)
         self.detach_station()
+        self.busy=True
 
     def register_lock(self, station_id):
         self.delete_user()
         self.attach_station(station_id)
+        self.busy=False
     
     def docked(self):
         return self.station_id is not None
@@ -183,9 +188,11 @@ class DocklessBike(Bike):
 
     def unlock(self, user_id):
         self.set_user(user_id)
+        self.busy=True
 
     def lock(self):
         self.delete_user()
+        self.busy=False
 
 class AutonomousBike(Bike):
     def __init__(self,env, bike_id):
@@ -195,7 +202,8 @@ class AutonomousBike(Bike):
     
     def call(self, user_id):
          self.set_user(user_id)
-         reserved= True
+         self.reserved= True            #Maybe we dont need this anymore
+         self.busy=True
 
     def reserved(self):
         if (self.reservation_id is not None):
@@ -214,7 +222,9 @@ class AutonomousBike(Bike):
         #Save pickup and update
     def drop(self):
         self.delete_user()
-        self.reserved= False
+        self.reserved= False   #Maybe we dont need this anymore
+        self.busy=False
+
         
 class Station:
     def __init__(self,env,station_id):
@@ -286,9 +296,7 @@ class User:
     def init_user(self):
         yield self.env.timeout(self.departure_time) #waits until its the hour
         self.location = self.origin
-        if self.print:
-            print('[%.2f] User %d initialized at location [%.2f, %.2f]' %
-                  (self.env.now, self.user_id, *self.location))
+        print('[%.2f] User %d initialized at location [%.2f, %.2f]' % (self.env.now, self.user_id, self.location[0], self.location[1]))
                   
     def walk_to(self, location):
         #Here it should call routing
@@ -552,7 +560,6 @@ class AutonomousUser(User):
     def process(self):
         # 0-Setup
         # 1-Init on origin
-        print('call to User process')
         yield self.env.process(super().process())
 
         # 2-Call autonomous bike
@@ -604,7 +611,6 @@ class AutonomousUser(User):
 
         if not self.event_call_autonomous_bike.triggered:
             print("No autonomous bikes in XX miles")
-    
 
     def drop_bike(self):
         bike = self.bikes[self.bike_id]
@@ -755,8 +761,6 @@ class FleetManager:
         self.env=env
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
-# env_start_time=pd.Timestamp(2019, 9 , 8, 00)
-# env_end_time=pd.Timestamp(2019, 9, 9, 1) # This would be 1 h
 env = simpy.Environment()
 city = SimulationEngine(env, stations_data, OD_df, bikes_data)
 env.run(until=1000)
