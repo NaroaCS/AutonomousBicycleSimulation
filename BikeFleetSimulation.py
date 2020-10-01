@@ -13,6 +13,7 @@ import time
 #PARAMETERS/CONFIGURATION
 mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 WALK_RADIUS = 50
+MAX_AUTONOMOUS_RADIUS= 100
 n_bikes= 10
 
 #map
@@ -58,7 +59,7 @@ print(OD_df.head())
 
 #DEFINITION OF CLASSES
 class SimulationEngine:
-    def __init__(self, env, stations_data, OD_data, bikes_data): 
+    def __init__(self, env, stations_data, OD_data, bikes_data, datainterface, demandmanager): 
             self.env = env 
             #self.data = data
             self.stations_data=stations_data
@@ -69,12 +70,16 @@ class SimulationEngine:
             self.bikes = []
             self.users = []
 
+            self.datainterface=datainterface 
+            self.demandmanager=demandmanager
+
             self.start()
 
     def start(self): 
             self.init_stations()
             self.init_bikes()
             self.init_users()
+            self.init_managers()
 
     def init_stations(self):
             for station_id, station_data in enumerate(self.stations_data): 
@@ -102,7 +107,6 @@ class SimulationEngine:
                 self.bikes.append(bike) 
 
     def init_users(self):
-            datainterface=DataInterface(env) #Not sure why this is here
             origin=[]
             destination=[]
             for index,row in self.od_data.iterrows(): 
@@ -116,11 +120,14 @@ class SimulationEngine:
                 elif mode == 1:
                     user = DocklessUser(self.env, index, origin, destination, departure_time, datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin, destination, departure_time)
+                    user = AutonomousUser(self.env, index, origin, destination, departure_time, demandmanager)
                 user.start() 
                 #user.set_data(self.data['grid'], self.stations, self.bikes)  
                 self.users.append(user) 
                 print(user)
+    def init_managers(self):
+        self.datainterface.set_data(stations,bikes)
+        self.demandmanager.set_data(bikes)
 
 class Bike:
     def __init__(self,env, bike_id):
@@ -458,7 +465,6 @@ class DocklessUser(User):
         #super().start()
 
         # DOCKLESS
-        self.dockless_bike_id = None
         #self.dockless_history = []
 
         self.event_select_dockless_bike = self.env.event()
@@ -473,7 +479,8 @@ class DocklessUser(User):
 
         while not self.event_unlock_bike.triggered:
             # 2-Select dockless bike
-            [dockless_bike,dockless_bike_location]=self.select_dockless_bike(self.location)
+            [dockless_bike_id,dockless_bike_location]=self.select_dockless_bike(self.location)
+            self.bike_id=dockless_bike_id
             yield self.event_select_dockless_bike
             #dockless_bike = self.bikes[self.dockless_bike_id]
 
@@ -528,8 +535,8 @@ class DocklessUser(User):
         selected_bike_info=self.datainterface.select_dockless_bike(location)
         return selected_bike_info
 
-    def unlock_bike(self):
-        dockless_bike = self.bikes[self.dockless_bike_id]
+    def unlock_bike(self,dockless_bike_id):
+        dockless_bike = self.bikes[self.bike_id]
         if not dockless_bike.rented():
             yield self.env.timeout(pd.Timedelta(seconds=1))
             self.bike_id = dockless_bike.bike_id
@@ -545,8 +552,9 @@ class DocklessUser(User):
         bike.lock()
 
 class AutonomousUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time):
+    def __init__(self, env, user_id, origin, destination, departure_time,demandmanager):
         super().__init__(env, user_id, origin, destination, departure_time)
+        self.demandmanager=demandmanager
 
     def start(self):
         #super().start()
@@ -563,7 +571,8 @@ class AutonomousUser(User):
         yield self.env.process(super().process())
 
         # 2-Call autonomous bike
-        self.call_autonomous_bike()
+        [autonomous_bike_id,autonomous_bike_location]=self.call_autonomous_bike(self.location)
+        self.bike_id=autonomous_bike_id
         yield self.event_call_autonomous_bike
 
         # 3-Wait for autonomous bike
@@ -585,32 +594,23 @@ class AutonomousUser(User):
         #     print('[%.2f] User %d working' % (self.env.now, self.user_id))
 
 
-    def update_bike_info(self):  ##Isinstannce???
-        values = []
-        for bike in self.bikes:
-            if isinstance(bike, AutonomousBike):
-                bike_id = bike.bike_id
-                rented = bike.rented()
-                distance = self.dist(self.location, bike.location)
-                walkable = distance < WALK_RADIUS
-                values.append((bike_id, rented, distance, walkable))
-        labels = ['bike_id', 'rented', 'distance', 'walkable']
-        types = [int, int, float, int]
-        dtype = list(zip(labels, types))
-        self.bike_info = np.array(values, dtype=dtype)
+    #def update_bike_info(self):  ##Isinstannce???
+        # values = []
+        # for bike in self.bikes:
+        #     if isinstance(bike, AutonomousBike):
+        #         bike_id = bike.bike_id
+        #         rented = bike.rented()
+        #         distance = self.dist(self.location, bike.location)
+        #         walkable = distance < WALK_RADIUS
+        #         values.append((bike_id, rented, distance, walkable))
+        # labels = ['bike_id', 'rented', 'distance', 'walkable']
+        # types = [int, int, float, int]
+        # dtype = list(zip(labels, types))
+        # self.bike_info = np.array(values, dtype=dtype)
 
-    def call_autonomous_bike(self):  #This should be transferred to the demand manager / Here it is not 'walkabke'
-        self.event_call_autonomous_bike = self.env.event()
-        self.update_bike_info()
-        for e in np.sort(self.bike_info, order='distance'):
-            valid = not e['rented'] and e['walkable']
-            if valid:
-                self.bike_id = e['bike_id']
-                self.bikes[self.bike_id].call(self.user_id)
-                self.event_call_autonomous_bike.succeed()
-
-        if not self.event_call_autonomous_bike.triggered:
-            print("No autonomous bikes in XX miles")
+    def call_autonomous_bike(self, location):  
+        assigned_bike_info=self.demandmanager.assign_autonomous_bike(location)
+        return assigned_bike_info
 
     def drop_bike(self):
         bike = self.bikes[self.bike_id]
@@ -627,8 +627,8 @@ class DataInterface:
     def __init__(self,env):
         self.env=env
 
-    def set_data(self, grid, stations, bikes):
-        self.grid = grid
+    def set_data(self, stations, bikes):
+        #self.grid = grid
         self.stations = stations
         self.bikes = bikes
 
@@ -754,6 +754,44 @@ class DemandManager:
     #receives orders from users and decides which bike goes
     def __init__(self,env):
         self.env=env
+    
+    def set_data(self, stations, bikes):
+        #self.grid = grid
+        self.stations = stations
+        self.bikes = bikes
+
+    def assign_autonomous_bike(self, location):
+        values = []
+
+        for bike in self.bikes:
+            if isinstance(bike, DocklessBike):
+                bike_id = bike.bike_id
+                rented = bike.rented()
+                distance = self.dist(location, bike.location)
+                reachable = distance < MAX_AUTONOMOUS_RADIUS
+                lat=bike.latitude
+                lon=bike.longitude
+                values.append((bike_id, rented, distance, reachable,lat,lon))
+        labels = ['bike_id', 'rented', 'distance', 'reachable','lat','lon']
+        types = [int, int, float, int,float,float]
+        dtype = list(zip(labels, types))
+        bike_info = np.array(values, dtype=dtype)
+
+        self.event_select_autonomous_bike = self.env.event()
+
+        for e in np.sort(bike_info, order='distance'):
+            valid = not e['rented'] and e['reachable']
+            if valid:
+                autonomous_bike_id = e['bike_id']
+                lat=e['lat']
+                lon=e['lon']
+                self.event_select_autonomous_bike.succeed()
+
+        if not self.event_select_autonomous_bike.triggered:
+            print("No bikes in"+ str(MAX_AUTONOMOUS_RADIUS) +"distance")
+        bike_location=[lat,lon]
+        return [autonomous_bike_id,bike_location]
+
 class FleetManager:
     #sends the decisions to the bikes
     #updates SystemStateData
@@ -762,5 +800,7 @@ class FleetManager:
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
-city = SimulationEngine(env, stations_data, OD_df, bikes_data)
+datainterface=DataInterface(env)
+demandmanager=DemandManager(env)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data, datainterface, demandmanager)
 env.run(until=1000)
