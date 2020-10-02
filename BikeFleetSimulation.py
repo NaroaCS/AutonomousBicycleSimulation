@@ -30,7 +30,10 @@ network=Network()
 
 # station information
 stations_data=pd.read_excel('bluebikes_stations.xlsx', index_col=None)
-print(stations_data.head())
+stations_data.drop([83],inplace=True) #This station has 0 docks
+stations_data.reset_index(drop=True, inplace=True) #reset index
+print(stations_data[70:90])
+
 #bike information for SB -> id and initial station id
 bikes_data = [] 
 
