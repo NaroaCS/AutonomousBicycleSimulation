@@ -12,9 +12,9 @@ import time
 
 #PARAMETERS/CONFIGURATION
 mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
-WALK_RADIUS = 50
-MAX_AUTONOMOUS_RADIUS= 100
-n_bikes= 10
+WALK_RADIUS = 500
+MAX_AUTONOMOUS_RADIUS= 1000
+n_bikes= 300
 
 #map
 
@@ -44,10 +44,13 @@ elif mode==0:
     i=0
     while i<n_bikes:
         station_reference='S32035' # Set random station
-        #Transform reference (str) to id (index, int)
-        for station_id, station_info in stations_data.iterrows():
-            if station_info[0]== station_reference:
-                bike_station_id=station_id
+
+        # #Transform reference (str) to id (index, int)
+        # for station_id, station_info in stations_data.iterrows():
+        #     if station_info[0]== station_reference:
+        #         bike_station_id=station_id
+
+        bike_station_id=random.randint(0,len(stations_data))  #This does not check if full      
         bike=[i,bike_station_id]    
         bikes_data.append(bike)
         i+=1
@@ -369,7 +372,7 @@ class StationBasedUser(User):
         while not self.event_interact_bike.triggered:
             # 5-Select destination station
             [station, station_location, visited_stations]=self.select_end_station(self.location,self.visited_stations)
-            yield self.event_select_station
+            #yield self.event_select_station
             #station = self.stations[self.station_id]
 
             # 6-Ride bike
