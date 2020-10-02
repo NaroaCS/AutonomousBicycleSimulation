@@ -29,10 +29,11 @@ network=Network()
 # print(route)
 
 # station information
-stations_data=pd.read_excel('bluebikes_stations.xlsx')
-
+stations_data=pd.read_excel('bluebikes_stations.xlsx', index_col=None)
+print(stations_data.head())
 #bike information for SB -> id and initial station id
 bikes_data = [] 
+
 if mode==1 or mode==2:
     i=0
     while i<n_bikes:
@@ -42,8 +43,12 @@ if mode==1 or mode==2:
 elif mode==0:
     i=0
     while i<n_bikes:
-        station_id='S32035' # Set random station 
-        bike=[i,station_id]    
+        station_reference='S32035' # Set random station
+        #Transform reference (str) to id (index, int)
+        for station_id, station_info in stations_data.iterrows():
+            if station_info[0]== station_reference:
+                bike_station_id=station_id
+        bike=[i,bike_station_id]    
         bikes_data.append(bike)
         i+=1
 
@@ -82,10 +87,10 @@ class SimulationEngine:
             self.init_managers()
 
     def init_stations(self):
-            for station_id, station_data in enumerate(self.stations_data): 
+            for station_id, station_data in self.stations_data.iterrows(): 
                 station = Station(self.env, station_id)  
-                station.set_capacity(station_data[3]) 
-                station.set_location(station_data[1], station_data[2]) #(lat,lon)
+                station.set_capacity(station_data['Total docks']) 
+                station.set_location(station_data['Latitude'], station_data['Longitude'])
                 self.stations.append(station) 
 
     def init_bikes(self):
@@ -94,10 +99,9 @@ class SimulationEngine:
                 if mode == 0:
                     bike = StationBike(self.env, bike_id) 
                     station_id = bike_data[1] 
-                    index=self.stations.index(station_id)
-                    self.stations[index].lock_bike(bike_id) 
+                    self.stations[station_id].attach_bike(bike_id) 
                     bike.attach_station(station_id)  
-                    bike.set_location(self.stations[station_id].location)  #Check if this gives the proper input to set_loc 
+                    bike.set_location(self.stations[station_id].location[0],self.stations[station_id].location[1])  #Check if this gives the proper input to set_loc 
                 elif mode == 1:
                     bike = DocklessBike(self.env, bike_id) 
                     bike.set_location(bike_data[1], bike_data[2]) #lat,lon
@@ -107,27 +111,29 @@ class SimulationEngine:
                 self.bikes.append(bike) 
 
     def init_users(self):
-            origin=[]
-            destination=[]
+ 
             for index,row in self.od_data.iterrows(): 
+                origin=[]
+                destination=[]
                 origin.append(row['start station latitude']) #origin lat
                 origin.append(row['start station latitude']) #origin lon
+                origin_np=np.array(origin)
                 destination.append(row['end station latitude']) #destination lat
                 destination.append(row['end station longitude']) #destination lon
+                destination_np=np.array(destination)
                 departure_time=row['elapsed time'] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, index, origin, destination, departure_time, datainterface)
+                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
                 elif mode == 1:
-                    user = DocklessUser(self.env, index, origin, destination, departure_time, datainterface)
+                    user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin, destination, departure_time, demandmanager)
+                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, demandmanager)
                 user.start() 
                 #user.set_data(self.data['grid'], self.stations, self.bikes)  
                 self.users.append(user) 
-                print(user)
     def init_managers(self):
-        self.datainterface.set_data(stations,bikes)
-        self.demandmanager.set_data(bikes)
+        self.datainterface.set_data(self.stations,self.bikes)
+        self.demandmanager.set_data(self.bikes)
 
 class Bike:
     def __init__(self,env, bike_id):
@@ -138,7 +144,7 @@ class Bike:
         self.busy=False
 
     def set_location(self, lat, lon):
-        self.location = [lat,lon]
+        self.location = np.array([lat,lon])
     
     # def update_location(self,location):
     #     self.location = location
@@ -238,10 +244,13 @@ class Station:
         self.env=env
         self.station_id=station_id
         self.location = None
-        self.capacity = None
+        self.capacity = 0
+        self.n_bikes= 0
+
+        self.bikes = []
 
     def set_location(self, lat, lon):
-        self.location = [lat,lon]
+        self.location = np.array([lat,lon])
 
     def set_capacity(self, capacity):
         self.capacity = capacity
@@ -303,7 +312,7 @@ class User:
     def init_user(self):
         yield self.env.timeout(self.departure_time) #waits until its the hour
         self.location = self.origin
-        print('[%.2f] User %d initialized at location [%.2f, %.2f]' % (self.env.now, self.user_id, self.location[0], self.location[1]))
+        print('[%.2f] User %d initialized at location [%.4f, %.4f]' % (self.env.now, self.user_id, self.location[0], self.location[1]))
                   
     def walk_to(self, location):
         #Here it should call routing
@@ -633,7 +642,7 @@ class DataInterface:
         self.bikes = bikes
 
     def dist(self, a, b):
-        return np.linalg.norm(a - b)
+      return np.linalg.norm(a - b)
 
     def select_start_station(self,location,visited_stations):
         values = []
@@ -643,8 +652,8 @@ class DataInterface:
             visited = station_id in visited_stations
             distance = self.dist(location, station.location) 
             walkable = distance < WALK_RADIUS
-            lat=station.latitude
-            lon=station.longitude
+            lat=station.location[0]
+            lon=station.location[1]
             values.append((station_id, has_bikes,
                            visited, distance, walkable, lat, lon))
         labels = ['station_id', 'has_bikes',
@@ -667,7 +676,7 @@ class DataInterface:
                 
         if not self.event_select_station.triggered:
             print("No bikes found in a walkable distance")
-        station_location=[lat,lon]
+        station_location=np.array([lat,lon])
         return [station_id, station_location, visited_stations] 
 
     def select_end_station(self,location,visited_stations):
@@ -715,8 +724,8 @@ class DataInterface:
                 rented = bike.rented()
                 distance = self.dist(location, bike.location)
                 walkable = distance < WALK_RADIUS
-                lat=bike.latitude
-                lon=bike.longitude
+                lat=bike.location[0]
+                lon=bike.location[1]
                 values.append((bike_id, rented, distance, walkable,lat,lon))
         labels = ['bike_id', 'rented', 'distance', 'walkable','lat','lon']
         types = [int, int, float, int,float,float]
@@ -735,7 +744,7 @@ class DataInterface:
 
         if not self.event_select_dockless_bike.triggered:
             print("No bikes in walkable distance")
-        bike_location=[lat,lon]
+        bike_location=np.array([lat,lon])
         return [dockless_bike_id,bike_location]
 
 class RebalancingManager:
@@ -755,9 +764,8 @@ class DemandManager:
     def __init__(self,env):
         self.env=env
     
-    def set_data(self, stations, bikes):
+    def set_data(self, bikes):
         #self.grid = grid
-        self.stations = stations
         self.bikes = bikes
 
     def assign_autonomous_bike(self, location):
@@ -769,8 +777,8 @@ class DemandManager:
                 rented = bike.rented()
                 distance = self.dist(location, bike.location)
                 reachable = distance < MAX_AUTONOMOUS_RADIUS
-                lat=bike.latitude
-                lon=bike.longitude
+                lat=bike.location[0]
+                lon=bike.location[1]
                 values.append((bike_id, rented, distance, reachable,lat,lon))
         labels = ['bike_id', 'rented', 'distance', 'reachable','lat','lon']
         types = [int, int, float, int,float,float]
@@ -789,7 +797,7 @@ class DemandManager:
 
         if not self.event_select_autonomous_bike.triggered:
             print("No bikes in"+ str(MAX_AUTONOMOUS_RADIUS) +"distance")
-        bike_location=[lat,lon]
+        bike_location=np.array([lat,lon])
         return [autonomous_bike_id,bike_location]
 
 class FleetManager:
