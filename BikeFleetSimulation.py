@@ -132,7 +132,7 @@ class SimulationEngine:
                 elif mode == 2:
                     user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, demandmanager)
                 user.start() 
-                user.set_data(self.stations, self.bikes)  
+                #user.set_data(self.stations, self.bikes)  
                 self.users.append(user) 
     def init_managers(self):
         self.datainterface.set_data(self.stations,self.bikes)
@@ -308,16 +308,16 @@ class User:
         self.event_setup_task = self.env.event() # ?¿ Here or in a start() function
         self.bike_id=None
 
-        self.stations=[]
-        self.bikes=[]
+        #self.stations=[]
+        #self.bikes=[]
 
         self.origin=origin
         self.destination=destination
         self.departure_time=departure_time
     
-    def set_data(self, stations, bikes):
-        self.stations = stations
-        self.bikes = bikes
+    # def set_data(self, stations, bikes):
+    #     self.stations = stations
+    #     self.bikes = bikes
 
     def process(self):
 
@@ -338,9 +338,10 @@ class User:
         print('[%.2f] User %d walked from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.user_id, self.location[0], self.location[1], location[0], location[1]))
 
     def ride_bike_to(self, location):
-        bike = self.bikes[self.bike_id]
-        print('[%.2f] User %d biking from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.user_id, self.location[0], self.location[1], bike.location[0], bike.location[1]))
-        yield self.env.process(bike.ride(location)) 
+        #bike = self.bikes[self.bike_id]
+        bike_id=self.bike_id
+        print('[%.2f] User %d biking from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.user_id, self.location[0], self.location[1], location[0], location[1]))
+        yield self.env.process(self.datainterface.bike_ride(bike_id, location)) 
         self.location = location
         
     
@@ -380,7 +381,7 @@ class StationBasedUser(User):
             self.station_id=station
             print('[%.2f] User %d selected start station [%.4f, %.4f]' % (self.env.now, self.user_id, station_location[0],station_location[1]))
             #yield self.event_select_station
-            station = self.stations[self.station_id]
+            #station = self.stations[self.station_id]
 
             # 3-Walk to origin station
             yield self.env.process(self.walk_to(station_location))
@@ -425,22 +426,25 @@ class StationBasedUser(User):
 
 
     def interact_bike(self, action):
-        station = self.stations[self.station_id]
-
+        #station = self.stations[self.station_id]
+        station_id=self.station_id
+        
         #Check if there are still bikes/docks at arrival
         if action=='unlock':
-            valid=station.has_bikes()
+            valid=self.datainterface.station_has_bikes(station_id)
         else:
-            valid=station.has_docks()
+            valid=self.datainterface.station_has_docks(station_id)
     
         if valid:
             if action == 'unlock':
-                self.bike_id = station.choose_bike()
-                self.bikes[self.bike_id].register_unlock(self.user_id) 
-                station.detach_bike(self.bike_id)
+                self.bike_id = self.datainterface.station_choose_bike(station_id)
+                bike_id=self.bike_id
+                self.datainterface.bike_register_unlock(bike_id, self.user_id)
+                self.datainterface.station_detach_bike(station_id, self.bike_id)
             else:
-                self.bikes[self.bike_id].register_lock(self.station_id)
-                station.attach_bike(self.bike_id)
+                bike_id=self.bike_id
+                self.datainterface.bike_register_lock(bike_id, self.user_id)
+                self.datainterface.station_attach_bike(station_id, self.bike_id)
 
             self.event_interact_bike.succeed()
 
@@ -448,10 +452,10 @@ class StationBasedUser(User):
         else:
             # self.time_interact_bike = None
             # if self.print:
-            #     print('[%.2f] Station %d has zero %s available' %
-            #            (self.env.now, self.station_id, 'bikes' if action == 'unlock' else 'docks'))
+            print('[%.2f] Station %d had zero %s available at arrival' %
+                       (self.env.now, self.station_id, 'bikes' if action == 'unlock' else 'docks'))
             # yield self.env.timeout(3)
-            print("There were no bikes/docks at arrival!")
+            #print("There were no bikes/docks at arrival!")
               
 class DocklessUser(User):
     def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
@@ -699,6 +703,39 @@ class DataInterface:
             print("No bikes in walkable distance")
         bike_location=np.array([lat,lon])
         return [dockless_bike_id,bike_location]
+
+    def bike_ride(self, bike_id, location):
+        bike=self.bikes[bike_id]
+        yield self.env.process(bike.ride(location))
+
+    def station_has_bikes(self, station_id):
+        station=self.stations[station_id]
+        valid=station.has_bikes()
+        return valid  
+    def station_has_docks(self, station_id):
+        station=self.stations[station_id]
+        valid=station.has_docks()
+        return valid  
+    def station_choose_bike(self, station_id):
+        station=self.stations[station_id]
+        bike_id=station.choose_bike()
+        return bike_id
+    
+    def station_attach_bike(self, station_id, bike_id):
+        station=self.stations[station_id]
+        station.attach_bike(bike_id)
+
+    def station_detach_bike(self, station_id, bike_id):
+        station=self.stations[station_id]
+        station.detach_bike(bike_id)
+    
+    def bike_register_unlock(self, bike_id, user_id):
+        bike=self.bikes[bike_id]
+        bike.register_unlock(user_id)
+
+    def bike_register_lock(self, bike_id, user_id):
+        bike=self.bikes[bike_id]
+        bike.register_lock(user_id)
 
 class RebalancingManager:
     #makes rebalancing decisions for SB and dockless
