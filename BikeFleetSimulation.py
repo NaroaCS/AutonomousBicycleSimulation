@@ -11,11 +11,11 @@ from Router import Network
 import time
 
 #PARAMETERS/CONFIGURATION
-mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 n_bikes= 300
 
-WALK_RADIUS = 500
-MAX_AUTONOMOUS_RADIUS= 1000
+WALK_RADIUS = 3500 #Just to try the dockless mode !
+MAX_AUTONOMOUS_RADIUS= 3000
 WALKING_SPEED= 5/3.6 #m/s
 RIDING_SPEED = 15/3.6 #m/s
 AUT_DRIVING_SPEED = 10/3.6 #m/s
@@ -24,49 +24,42 @@ AUT_DRIVING_SPEED = 10/3.6 #m/s
 
 network=Network()
 
-#Testing_route
-
-from_lon=-71.058099
-from_lat=42.361942
-to_lon= -71.087446
-to_lat=42.360590
-route=network.get_route(from_lon, from_lat, to_lon, to_lat)
-d=route['cum_distances'][-1]
-print(route)
-print(d)
-
 # station information
 stations_data=pd.read_excel('bluebikes_stations.xlsx', index_col=None)
 stations_data.drop([83],inplace=True) #This station has 0 docks
 stations_data.reset_index(drop=True, inplace=True) #reset index
 
-#bike information for SB -> id and initial station id
+#bike information
 bikes_data = [] 
 
 if mode==1 or mode==2:
+    #For dockless and autonomous the initial location is the lat,lon of a random station (placeholder)
     i=0
-    while i<n_bikes:
-        bike=[i,0,0] #Set random locatio (lat,lon)
+    while i<n_bikes: 
+        rand_station=random.randint(0,len(stations_data)-1)
+        lat=stations_data.iloc[rand_station]['Latitude']
+        lon=stations_data.iloc[rand_station]['Longitude']
+        bike=[i,lat,lon] 
         bikes_data.append(bike) 
         i+=1
 elif mode==0:
+    #For station based the initial location is defined by the id of a random station (placeholder)
     i=0
     while i<n_bikes:
         #We can only set to len(stations_data)-1 because length is 340 but the last station is the 339 (First row + deleted station)
-        bike_station_id=random.randint(0,len(stations_data)-1)  #This does not check if full      
+        bike_station_id=random.randint(0,len(stations_data)-1)  #Warning! This does not check if the station is full     
         bike=[i,bike_station_id]    
         bikes_data.append(bike)
         i+=1
 
-#bike information for dockless and autonomous -> id and location(lat,lon)
-
-#OD matrix
+#Loads info from ODmatrix
 OD_df=pd.read_excel('output_sample.xlsx')
 print(OD_df.head())
 
 
 #DEFINITION OF CLASSES
-class SimulationEngine:
+
+class SimulationEngine: #This is the 
     def __init__(self, env, stations_data, OD_data, bikes_data, datainterface, demandmanager): 
             self.env = env 
             #self.data = data
@@ -130,7 +123,7 @@ class SimulationEngine:
                 elif mode == 1:
                     user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, demandmanager)
+                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, datainterface, demandmanager)
                 user.start() 
                 #user.set_data(self.stations, self.bikes)  
                 self.users.append(user) 
@@ -208,7 +201,7 @@ class DocklessBike(Bike):
         #self.init_state()
 
     def unlock(self, user_id):
-        self.set_user(user_id)
+        self.update_user(user_id)
         self.busy=True
 
     def lock(self):
@@ -221,14 +214,14 @@ class AutonomousBike(Bike):
         self.reserved=False
         
     
-    def call(self, user_id):
-         self.set_user(user_id)
-         self.reserved= True            #Maybe we dont need this anymore
-         self.busy=True
+    # def call(self, user_id):
+    #      self.set_user(user_id)
+    #      #self.reserved= True            #Maybe we dont need this anymore
+    #      self.busy=True
 
-    def reserved(self):
-        if (self.reservation_id is not None):
-            return True
+    # def reserved(self):
+    #     if (self.reservation_id is not None):
+    #         return True
 
     def go_towards(self, destination_location):
         #This is for the demand prediction
@@ -238,16 +231,20 @@ class AutonomousBike(Bike):
         self.location = destination_location
 
     def autonomous_drive(self, user_location):
+        print('[%.2f] Bike %d driving autonomously from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.bike_id, self.location[0], self.location[1], user_location[0], user_location[1]))
         distance = self.dist(self.location, user_location)
         time=distance/AUT_DRIVING_SPEED
         yield self.env.timeout(time)
         self.location =user_location
+        print('[%.2f] Bike %d drove autonomously from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.bike_id, self.location[0], self.location[1], user_location[0], user_location[1]))
         #Save pickup and update
     def drop(self):
         self.delete_user()
-        self.reserved= False   #Maybe we dont need this anymore
+        #self.reserved= False   #Maybe we dont need this anymore
         self.busy=False
-
+    def unlock(self, user_id):
+        self.update_user(user_id)
+        self.busy=True
         
 class Station:
     def __init__(self,env,station_id):
@@ -334,8 +331,8 @@ class User:
         distance = self.dist(self.location, location)
         time=distance/WALKING_SPEED
         yield self.env.timeout(time)
-        self.location = location
         print('[%.2f] User %d walked from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.user_id, self.location[0], self.location[1], location[0], location[1]))
+        self.location = location
 
     def ride_bike_to(self, location):
         #bike = self.bikes[self.bike_id]
@@ -379,6 +376,9 @@ class StationBasedUser(User):
             # 2-Select origin station
             [station, station_location, visited_stations]=self.select_start_station(self.location,self.visited_stations)
             self.station_id=station
+            if self.station_id is None:
+                print('User '+str(self.user_id)+ ' will not make the trip.')
+                return
             print('[%.2f] User %d selected start station [%.4f, %.4f]' % (self.env.now, self.user_id, station_location[0],station_location[1]))
             #yield self.event_select_station
             #station = self.stations[self.station_id]
@@ -394,7 +394,7 @@ class StationBasedUser(User):
         
         while not self.event_interact_bike.triggered:
             # 5-Select destination station
-            [station, station_location, visited_stations]=self.select_end_station(self.location,self.visited_stations)
+            [station, station_location, visited_stations]=self.select_end_station(self.destination,self.visited_stations)
             print('[%.2f] User %d selected end station %d' % (self.env.now, self.user_id, self.station_id))
             #yield self.event_select_station
             #station = self.stations[self.station_id]
@@ -420,8 +420,8 @@ class StationBasedUser(User):
         selected_station_info=self.datainterface.select_start_station(location,visited_stations)
         return selected_station_info
 
-    def select_end_station(self,location,visited_stations):
-        selected_station_info=self.datainterface.select_end_station(location,visited_stations)
+    def select_end_station(self,destination,visited_stations):
+        selected_station_info=self.datainterface.select_end_station(destination,visited_stations)
         return selected_station_info
 
 
@@ -480,9 +480,13 @@ class DocklessUser(User):
         while not self.event_unlock_bike.triggered:
             # 2-Select dockless bike
             [dockless_bike_id,dockless_bike_location]=self.select_dockless_bike(self.location)
+            if dockless_bike_id is None:
+                print('User '+str(self.user_id)+ ' will not make the trip')
+                return
             self.bike_id=dockless_bike_id
-            yield self.event_select_dockless_bike
+            #yield self.event_select_dockless_bike
             #dockless_bike = self.bikes[self.dockless_bike_id]
+            print('[%.2f] User %d selected dockless bike %d' % (self.env.now, self.user_id, dockless_bike_id))
 
             # 3-Walk to dockless bike
             yield self.env.process(self.walk_to(dockless_bike_location))
@@ -508,26 +512,28 @@ class DocklessUser(User):
         selected_bike_info=self.datainterface.select_dockless_bike(location)
         return selected_bike_info
 
-    def unlock_bike(self,dockless_bike_id):
-        dockless_bike = self.bikes[self.bike_id]
-        if not dockless_bike.rented():
+    def unlock_bike(self):
+        dockless_bike_id=self.bike_id
+        #dockless_bike = self.bikes[self.bike_id]
+        if not self.datainterface.dockless_bike_busy(dockless_bike_id):
             yield self.env.timeout(1)
-            self.bike_id = dockless_bike.bike_id
-            dockless_bike.unlock(self.user_id)
-            #HERE IT DOESNT SAVE THAT IT HAS BEEN RENTED
+            self.bike_id = dockless_bike_id
+            self.datainterface.dockless_bike_unlock(dockless_bike_id, self.user_id)
             self.event_unlock_bike.succeed()
         else:
             yield self.env.timeout(3)
-            print('Bike has already been rented')
+            print('Bike ' + str(dockless_bike_id) +' has already been rented')
 
     def lock_bike(self):
-        bike = self.bikes[self.bike_id]
-        bike.lock()
+        #bike = self.bikes[self.bike_id]
+        dockless_bike_id=self.bike_id
+        self.datainterface.dockless_bike_lock(dockless_bike_id)
 
 class AutonomousUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time,demandmanager):
+    def __init__(self, env, user_id, origin, destination, departure_time, datainterface, demandmanager):
         super().__init__(env, user_id, origin, destination, departure_time)
         self.demandmanager=demandmanager
+        self.datainterface=datainterface
 
     def start(self):
         #super().start()
@@ -546,18 +552,22 @@ class AutonomousUser(User):
         # 2-Call autonomous bike
         [autonomous_bike_id,autonomous_bike_location]=self.call_autonomous_bike(self.location)
         self.bike_id=autonomous_bike_id
+        if self.bike_id is None:
+            print('User '+str(self.user_id)+ ' will not make the trip.')
+            return
+        print('[%.2f] User %d was assigned the autonomous bike %d' % (self.env.now, self.user_id, autonomous_bike_id))
         #yield self.event_call_autonomous_bike
 
         # 3-Wait for autonomous bike
-        autonomous_bike = self.bikes[self.bike_id]
-        yield self.env.process(autonomous_bike.autonomous_move(self.location))
-
+        #autonomous_bike = self.bikes[self.bike_id]
+        yield self.env.process(self.drive_autonomously())
+        self.datainterface.unlock_autonomous_bike(self.bike_id,self.user_id)
         # 4-Ride bike
         yield self.env.process(self.ride_bike_to(self.destination))
 
         # 5-Drop bike
         self.drop_bike()
-
+        print('[%.2f] User %d dropped the autonomous bike %d at the destination [%.4f, %.4f]' % (self.env.now, self.user_id, autonomous_bike_id, self.location[0],self.location[1]))
         # 6-Save state
         #self.save_state()
 
@@ -566,14 +576,17 @@ class AutonomousUser(User):
         # if self.print:
         #     print('[%.2f] User %d working' % (self.env.now, self.user_id))
 
+    def drive_autonomously(self):
+        yield self.env.process(self.datainterface.autonomous_bike_drive(self.bike_id, self.location))
 
     def call_autonomous_bike(self, location):  
         assigned_bike_info=self.demandmanager.assign_autonomous_bike(location)
         return assigned_bike_info
 
     def drop_bike(self):
-        bike = self.bikes[self.bike_id]
-        bike.drop()
+        #bike = self.bikes[self.bike_id]
+        bike_id=self.bike_id
+        self.datainterface.bike_drop(bike_id)
 
 class Assets: #Put inside of City
     #location of bikes, situaition of stations
@@ -627,47 +640,51 @@ class DataInterface:
                 lat=e['lat']
                 lon=e['lon']
                 visited_stations.append(station_id)
-                select_succeeded = 1   
+                select_succeeded = 1  
+                station_location=np.array([lat,lon]) 
                 break         
   
         if select_succeeded == 0: 
             print("No bikes found in a walkable distance")
-        station_location=np.array([lat,lon])
+            station_id=None
+            station_location=None
 
         return [station_id, station_location, visited_stations] 
 
-    def select_end_station(self,location,visited_stations):
+    def select_end_station(self,destination,visited_stations):
         values = []
         for station in self.stations:
             station_id = station.station_id
             has_docks = station.has_docks()
             visited = station_id in visited_stations
-            distance = self.dist(location, station.location) 
-            walkable = distance < WALK_RADIUS
+            distance = self.dist(destination, station.location) 
+            walkable = distance < WALK_RADIUS # ---> Once that ou're in the bike you have to leav eit even if it's very far
             lat=station.location[0]
             lon=station.location[1]
             values.append((station_id, has_docks,
-                           visited, distance, walkable, lat, lon))
+                           visited, distance, lat, lon))
         labels = ['station_id', 'has_docks',
-                  'visited', 'distance', 'walkable', 'lat','lon']
+                  'visited', 'distance', 'walkable','lat','lon']
         types = [int, int, 
-                 int, float, int, float, float]
+                 int, float,int, float, float]
         dtype = list(zip(labels, types))
         station_info = np.array(values, dtype=dtype)
 
         select_succeeded = 0
 
         for e in np.sort(station_info, order='distance'):
-            valid = e['has_docks'] and not e['visited'] and e['walkable']
+            valid = e['has_docks'] and not e['visited'] 
             if valid:
                 station_id = e['station_id']
                 lat=e['lat']
                 lon=e['lon']
                 visited_stations.append(station_id)
-                select_succeeded = 1        
+                select_succeeded = 1
+                if not e['walkable']:
+                    print("(Note) The station slected is located ot of a walkable distance from the destination")
+
+                break        
                 
-        if select_succeeded == 0:
-            print("No docks found in a walkable distance")
         station_location=np.array([lat,lon])
         return [station_id,station_location,visited_stations]
 
@@ -678,13 +695,13 @@ class DataInterface:
         for bike in self.bikes:
             if isinstance(bike, DocklessBike):
                 bike_id = bike.bike_id
-                rented = bike.rented()
+                busy = bike.busy
                 distance = self.dist(location, bike.location)
                 walkable = distance < WALK_RADIUS
                 lat=bike.location[0]
                 lon=bike.location[1]
-                values.append((bike_id, rented, distance, walkable,lat,lon))
-        labels = ['bike_id', 'rented', 'distance', 'walkable','lat','lon']
+                values.append((bike_id, busy, distance, walkable,lat,lon))
+        labels = ['bike_id', 'busy', 'distance', 'walkable','lat','lon']
         types = [int, int, float, int,float,float]
         dtype = list(zip(labels, types))
         bike_info = np.array(values, dtype=dtype)
@@ -692,21 +709,28 @@ class DataInterface:
         select_dockless_bike_succeeded = 0
 
         for e in np.sort(bike_info, order='distance'):
-            valid = not e['rented'] and e['walkable']
+            valid = not e['busy'] and e['walkable']
             if valid:
                 dockless_bike_id = e['bike_id']
                 lat=e['lat']
                 lon=e['lon']
                 select_dockless_bike_succeeded = 1
+                bike_location=np.array([lat,lon])
+                break
 
         if select_dockless_bike_succeeded == 0:
             print("No bikes in walkable distance")
-        bike_location=np.array([lat,lon])
+            dockless_bike_id=None
+            bike_location=None
+
         return [dockless_bike_id,bike_location]
 
     def bike_ride(self, bike_id, location):
         bike=self.bikes[bike_id]
         yield self.env.process(bike.ride(location))
+    def autonomous_bike_drive(self, bike_id, location):
+        bike=self.bikes[bike_id]
+        yield self.env.process(bike.autonomous_drive(location))
 
     def station_has_bikes(self, station_id):
         station=self.stations[station_id]
@@ -716,6 +740,7 @@ class DataInterface:
         station=self.stations[station_id]
         valid=station.has_docks()
         return valid  
+    
     def station_choose_bike(self, station_id):
         station=self.stations[station_id]
         bike_id=station.choose_bike()
@@ -724,7 +749,6 @@ class DataInterface:
     def station_attach_bike(self, station_id, bike_id):
         station=self.stations[station_id]
         station.attach_bike(bike_id)
-
     def station_detach_bike(self, station_id, bike_id):
         station=self.stations[station_id]
         station.detach_bike(bike_id)
@@ -732,11 +756,27 @@ class DataInterface:
     def bike_register_unlock(self, bike_id, user_id):
         bike=self.bikes[bike_id]
         bike.register_unlock(user_id)
-
     def bike_register_lock(self, bike_id, user_id):
         bike=self.bikes[bike_id]
         bike.register_lock(user_id)
 
+    def dockless_bike_busy(self,dockless_bike_id):
+        bike=self.bikes[dockless_bike_id]
+        busy=bike.busy
+        return busy
+    def dockless_bike_unlock(self, dockless_bike_id, user_id):
+        bike=self.bikes[dockless_bike_id]
+        bike.unlock(user_id)
+    def dockless_bike_lock(self,dockless_bike_id):
+        bike=self.bikes[dockless_bike_id]
+        bike.lock()
+
+    def unlock_autonomous_bike(self, bike_id,user_id):
+        bike=self.bikes[bike_id]
+        bike.unlock(user_id)
+    def bike_drop(self,bike_id):
+        bike=self.bikes[bike_id]
+        bike.drop()
 class RebalancingManager:
     #makes rebalancing decisions for SB and dockless
     def __init__(self,env):
@@ -769,15 +809,15 @@ class DemandManager:
         values = []
 
         for bike in self.bikes:
-            if isinstance(bike, DocklessBike):
+            if isinstance(bike, AutonomousBike):
                 bike_id = bike.bike_id
-                rented = bike.rented()
+                busy = bike.busy
                 distance = self.dist(location, bike.location)
                 reachable = distance < MAX_AUTONOMOUS_RADIUS
                 lat=bike.location[0]
                 lon=bike.location[1]
-                values.append((bike_id, rented, distance, reachable,lat,lon))
-        labels = ['bike_id', 'rented', 'distance', 'reachable','lat','lon']
+                values.append((bike_id, busy, distance, reachable,lat,lon))
+        labels = ['bike_id', 'busy', 'distance', 'reachable','lat','lon']
         types = [int, int, float, int,float,float]
         dtype = list(zip(labels, types))
         bike_info = np.array(values, dtype=dtype)
@@ -785,16 +825,20 @@ class DemandManager:
         select_autonomous_bike_succeeded = 0
 
         for e in np.sort(bike_info, order='distance'):
-            valid = not e['rented'] and e['reachable']
+            valid = not e['busy'] and e['reachable']
             if valid:
                 autonomous_bike_id = e['bike_id']
                 lat=e['lat']
                 lon=e['lon']
                 select_autonomous_bike_succeeded = 1
+                bike_location=np.array([lat,lon])
+                break
 
         if select_autonomous_bike_succeeded == 0:
-            print("No bikes in"+ str(MAX_AUTONOMOUS_RADIUS) +"distance")
-        bike_location=np.array([lat,lon])
+            print("No autonomous bikes in "+ str(MAX_AUTONOMOUS_RADIUS) +" distance")
+            autonomous_bike_id=None
+            bike_location=None
+
         return [autonomous_bike_id,bike_location]
 
 class FleetManager:
