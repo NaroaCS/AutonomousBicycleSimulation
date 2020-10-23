@@ -54,7 +54,6 @@ elif mode==0:
 
 #Loads info from ODmatrix
 OD_df=pd.read_excel('output_sample.xlsx')
-print(OD_df.head())
 
 
 #DEFINITION OF CLASSES
