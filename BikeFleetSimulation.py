@@ -19,7 +19,8 @@ MAX_AUTONOMOUS_RADIUS= 3000
 WALKING_SPEED= 5/3.6 #m/s
 RIDING_SPEED = 15/3.6 #m/s
 AUT_DRIVING_SPEED = 10/3.6 #m/s
-
+BATTERY_CONSUMPTION_METER= 0.001 #Just a random number for now
+MIN_BATTERY_LEVEL=25
 #map
 
 network=Network()
@@ -203,6 +204,7 @@ class AutonomousBike(Bike):
     def __init__(self,env, bike_id):
         super().__init__(env, bike_id)
         self.reserved=False
+        self.battery= 100 #We will assume that all the bikes start with a full charge
 
     def go_towards(self, destination_location): #This is for the demand prediction -> maybe it's enugh with autonomous_drive()  
         distance = self.dist(self.location, destination_location) 
@@ -216,6 +218,8 @@ class AutonomousBike(Bike):
         time=distance/AUT_DRIVING_SPEED
         yield self.env.timeout(time)
         self.location =user_location
+        self.battery= self.battery-distance*BATTERY_CONSUMPTION_METER
+        print('battery level: ' +str(self.battery))
         print('[%.2f] Bike %d drove autonomously from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.bike_id, self.location[0], self.location[1], user_location[0], user_location[1]))
 
     def drop(self):
@@ -760,18 +764,19 @@ class DemandManager:
                 busy = bike.busy
                 distance = self.dist(location, bike.location)
                 reachable = distance < MAX_AUTONOMOUS_RADIUS
+                battery= bike.battery > MIN_BATTERY_LEVEL
                 lat=bike.location[0]
                 lon=bike.location[1]
-                values.append((bike_id, busy, distance, reachable,lat,lon))
-        labels = ['bike_id', 'busy', 'distance', 'reachable','lat','lon']
-        types = [int, int, float, int,float,float]
+                values.append((bike_id, busy, distance, reachable,battery, lat,lon))
+        labels = ['bike_id', 'busy', 'distance', 'reachable', 'battery','lat','lon']
+        types = [int, int, float, int, int, float,float]
         dtype = list(zip(labels, types))
         bike_info = np.array(values, dtype=dtype)
 
         select_autonomous_bike_succeeded = 0
 
         for e in np.sort(bike_info, order='distance'):
-            valid = not e['busy'] and e['reachable']
+            valid = not e['busy'] and e['reachable'] and e[battery]
             if valid:
                 autonomous_bike_id = e['bike_id']
                 lat=e['lat']
