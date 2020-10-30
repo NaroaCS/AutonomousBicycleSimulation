@@ -314,7 +314,7 @@ class User:
     
     def dist(self, a, b):
         route=network.get_route(a[1], a[0], b[1], b[0]) #Warning! In routing is lon,lat instead of lat,lon
-        d=route['cum_distances'][-1] #The cumulative ditance is saved in thsi colum so we only need the last item
+        d=route['cum_distances'][-1] #The cumulative distance is saved in thsi colum so we only need the last item
         return d
 
 class StationBasedUser(User):
@@ -344,7 +344,7 @@ class StationBasedUser(User):
             self.station_id=station
 
             if self.station_id is None:
-                print('User '+str(self.user_id)+ ' will not make the trip.')
+                print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
                 return
 
             print('[%.2f] User %d selected start station [%.4f, %.4f]' % (self.env.now, self.user_id, station_location[0],station_location[1]))
@@ -414,7 +414,7 @@ class StationBasedUser(User):
 
             yield self.env.timeout(1)
 
-        else: #What should happen here?
+        else: 
             print('[%.2f] Station %d had zero %s available at arrival' %
                        (self.env.now, self.station_id, 'bikes' if action == 'unlock' else 'docks'))
              
@@ -440,7 +440,7 @@ class DocklessUser(User):
             self.bike_id=dockless_bike_id
 
             if dockless_bike_id is None:
-                print('User '+str(self.user_id)+ ' will not make the trip')
+                print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
                 return
 
             print('[%.2f] User %d selected dockless bike %d' % (self.env.now, self.user_id, dockless_bike_id))
@@ -472,13 +472,13 @@ class DocklessUser(User):
     def unlock_bike(self):
         dockless_bike_id=self.bike_id
         if not self.datainterface.dockless_bike_busy(dockless_bike_id):
-            yield self.env.timeout(1)
+            #yield self.env.timeout(1)
             self.bike_id = dockless_bike_id
             self.datainterface.dockless_bike_unlock(dockless_bike_id, self.user_id)
             self.event_unlock_bike.succeed()
         else:
-            yield self.env.timeout(3)
-            print('Bike ' + str(dockless_bike_id) +' has already been rented')
+            #yield self.env.timeout(3)
+            print('[%.2f] User %d -> Bike %d has already been rented. Looking for another one.' % (self.env.now, self.user_id,dockless_bike_id))
 
     def lock_bike(self):
         dockless_bike_id=self.bike_id
@@ -504,7 +504,7 @@ class AutonomousUser(User):
         self.bike_id=autonomous_bike_id
 
         if self.bike_id is None:
-            print('User '+str(self.user_id)+ ' will not make the trip.')
+            print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
             return
 
         print('[%.2f] User %d was assigned the autonomous bike %d' % (self.env.now, self.user_id, autonomous_bike_id))
