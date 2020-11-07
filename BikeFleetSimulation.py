@@ -19,8 +19,9 @@ MAX_AUTONOMOUS_RADIUS= 3000
 WALKING_SPEED= 5/3.6 #m/s
 RIDING_SPEED = 15/3.6 #m/s
 AUT_DRIVING_SPEED = 10/3.6 #m/s
-BATTERY_CONSUMPTION_METER= 0.001 #Just a random number for now
-MIN_BATTERY_LEVEL=25
+BATTERY_CONSUMPTION_METER= 0.1 #Just a random number for now
+MIN_BATTERY_LEVEL= 25
+CHARGING_SPEED= 100/(0.0005*3600) #%/second  (This is 5h for 100% charge)
 #map
 
 network=Network()
@@ -30,6 +31,10 @@ stations_data=pd.read_excel('bluebikes_stations.xlsx', index_col=None)
 stations_data.drop([83],inplace=True) #This station has 0 docks
 stations_data.reset_index(drop=True, inplace=True) #reset index
 
+#charging station info -> For the moment, same than docking stations
+charging_stations_data=pd.read_excel('bluebikes_stations.xlsx', index_col=None)
+charging_stations_data.drop([83],inplace=True) #This station has 0 docks
+charging_stations_data.reset_index(drop=True, inplace=True) #reset index
 #bike information
 bikes_data = [] 
 
@@ -61,23 +66,27 @@ OD_df=pd.read_excel('output_sample.xlsx')
 
 class SimulationEngine: #Initialization and loading of data
 
-    def __init__(self, env, stations_data, OD_data, bikes_data, datainterface, demandmanager): 
+    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, datainterface, demandmanager): 
             self.env = env 
             self.stations_data=stations_data
+            self.charging_stations_data=charging_stations_data
             self.od_data=OD_data
             self.bikes_data=bikes_data
 
             self.stations = [] 
+            self.charging_stations =[]
             self.bikes = []
             self.users = []
 
             self.datainterface=datainterface 
             self.demandmanager=demandmanager
+            #self.chargemanager=chargemanager
 
             self.start() 
 
     def start(self): 
             self.init_stations()
+            self.init_charging_stations()
             self.init_bikes()
             self.init_users()
             self.init_managers()
@@ -89,6 +98,14 @@ class SimulationEngine: #Initialization and loading of data
                 station.set_capacity(station_data['Total docks']) 
                 station.set_location(station_data['Latitude'], station_data['Longitude'])
                 self.stations.append(station) 
+
+    def init_charging_stations(self):
+        #Generate and configure stations
+            for station_id, station_data in self.charging_stations_data.iterrows(): 
+                charging_station = ChargingStation(self.env, station_id)  
+                charging_station.set_capacity(station_data['Total docks']) 
+                charging_station.set_location(station_data['Latitude'], station_data['Longitude'])
+                self.charging_stations.append(charging_station)
 
     def init_bikes(self):
             #Generate and configure bikes
@@ -103,7 +120,7 @@ class SimulationEngine: #Initialization and loading of data
                     bike = DocklessBike(self.env, bike_id) 
                     bike.set_location(bike_data[1], bike_data[2])  #lat, lon
                 elif mode == 2: #Autonomous
-                    bike = AutonomousBike(self.env, bike_id) 
+                    bike = AutonomousBike(self.env, bike_id,datainterface) 
                     bike.set_location(bike_data[1], bike_data[2]) #lat, lon
                 self.bikes.append(bike) 
 
@@ -128,8 +145,11 @@ class SimulationEngine: #Initialization and loading of data
                 user.start()   
                 self.users.append(user) 
     def init_managers(self):
-        self.datainterface.set_data(self.stations,self.bikes)
+        self.datainterface.set_data(self.stations,self.charging_stations, self.bikes)
         self.demandmanager.set_data(self.bikes)
+        #self.chargemanager.set_data(self.bikes)
+        #self.chargemanager.start()
+        
 
 class Bike:
     def __init__(self,env, bike_id):
@@ -162,8 +182,7 @@ class Bike:
         route=network.get_route(a[1], a[0], b[1], b[0])
         d=route['cum_distances'][-1]
         return d
-        
-       
+             
 class StationBike(Bike):
     def __init__(self,env,bike_id):
         super().__init__(env, bike_id)  
@@ -201,10 +220,12 @@ class DocklessBike(Bike):
         self.busy=False
 
 class AutonomousBike(Bike):
-    def __init__(self,env, bike_id):
+    def __init__(self,env, bike_id,datainterface):
         super().__init__(env, bike_id)
-        self.reserved=False
-        self.battery= 100 #We will assume that all the bikes start with a full charge
+        self.datainterface=datainterface
+        self.battery= 26 #We will assume that all the bikes start with a full charge
+        self.charging_station_id = None
+        self.visited_stations=[]
 
     def go_towards(self, destination_location): #This is for the demand prediction -> maybe it's enugh with autonomous_drive()  
         distance = self.dist(self.location, destination_location) 
@@ -219,7 +240,7 @@ class AutonomousBike(Bike):
         yield self.env.timeout(time)
         self.location =user_location
         self.battery= self.battery-distance*BATTERY_CONSUMPTION_METER
-        print('battery level: ' +str(self.battery))
+        print('[%.2f] Battery level of bike %d: %.2f' % (self.env.now, self.bike_id,self.battery))
         print('[%.2f] Bike %d drove autonomously from [%.4f, %.4f] to location [%.4f, %.4f]' % (self.env.now, self.bike_id, self.location[0], self.location[1], user_location[0], user_location[1]))
 
     def drop(self):
@@ -230,6 +251,73 @@ class AutonomousBike(Bike):
         self.update_user(user_id)
         self.busy=True
         
+    def autonomous_charge(self): #Triggered when battery is below a certain SOC
+        print('autonomous_charge')
+        self.env.process(self.process())   
+
+    def process(self):
+
+        print('[%.2f] Bike %d needs to recharge. Battery level:  %.2f' % (self.env.now, self.bike_id,self.battery))
+        #Set bike as busy
+        self.busy=True
+        self.event_interact_chargingstation = self.env.event()
+
+        while not self.event_interact_chargingstation.triggered:
+            #Select charging station
+            [station,station_location,visited_stations]=self.select_charging_station(self.location,self.visited_stations)
+            self.charging_station_id=station
+
+            if self.charging_station_id is None:
+                continue #Will try again
+
+            print('[%.2f] Bike %d going to station %d for recharge' % (self.env.now, self.bike_id, self.charging_station_id))
+
+            #Drive autonomously to station
+            yield self.env.process(self.autonomous_drive(station_location))
+
+            #Lock in station
+            yield self.env.process(self.interact_charging_station(action='lock'))
+
+            charging_start_time=self.env.now
+        print('[%.2f] Bike %d started recharging' % (self.env.now, self.bike_id))
+        self.event_interact_chargingstation=self.env.event()
+
+        #wait until it charges
+        yield self.env.process(self.charging())  
+
+        #Leave station (unlock and not busy)
+        yield self.env.process(self.interact_charging_station(action='unlock'))
+
+        #Bike is free for use again
+        self.busy=False
+        print('[%.2f] Bike %d is charged and available again' % (self.env.now, self.bike_id))
+
+    def select_charging_station(self, location, visited_stations):
+        selected_station_info=self.datainterface.select_charging_station(location,visited_stations) 
+        return selected_station_info
+
+    def interact_charging_station(self,action):
+        charging_station_id=self.charging_station_id
+        if action=='lock':
+            #check if there are available bikes
+            valid = self.datainterface.charging_station_has_space(charging_station_id)
+            if valid:
+                self.datainterface.charging_station_attach_bike(charging_station_id,self.bike_id)
+                self.event_interact_chargingstation.succeed()
+            else:
+                print('[%.2f] Charging station %d had zero spaces available at arrival' %
+                (self.env.now, self.station_id))
+        else: #unlock
+            self.datainterface.charging_station_detach_bike(charging_station_id,self.bike_id)
+            self.event_interact_chargingstation.succeed()
+        
+        yield self.env.timeout(1)
+
+    def charging(self):
+        charging_time=(100-self.battery)/CHARGING_SPEED
+        yield self.env.timeout(charging_time)
+        self.battery=100
+
 class Station:
     def __init__(self,env,station_id):
         self.env=env
@@ -269,7 +357,7 @@ class Station:
             print('[%.2f] Station %d has no docks available' %
               (self.env.now, self.station_id))
 
-    def detach_bike(self, bike_id): #What hapens if no bikes?
+    def detach_bike(self): #What hapens if no bikes?
         if self.has_bikes(): 
             self.n_bikes-=1 
             bike_id=random.choice(self.bikes) 
@@ -277,7 +365,37 @@ class Station:
         else:
             print('[%.2f] Station %d has no bikes available' %
               (self.env.now, self.station_id))
-        
+class ChargingStation:
+    def __init__(self,env,station_id):
+        self.env=env
+        self.station_id=station_id
+        self.location = None
+        self.capacity = 0
+        self.n_bikes= 0
+
+        self.bikes = []
+
+    def set_location(self, lat, lon):
+        self.location = np.array([lat,lon])
+
+    def set_capacity(self, capacity):
+        self.capacity = capacity
+
+    def has_space(self):
+        return self.capacity - self.n_bikes > 0
+
+    def attach_bike(self, bike_id): #What hapens if no docks?
+        if self.has_space(): 
+            self.n_bikes+=1 
+            self.bikes.append(bike_id) 
+        else:
+            print('[%.2f] Charging station %d has no spaces available' %
+              (self.env.now, self.station_id))
+
+    def detach_bike(self, bike_id): 
+        self.n_bikes-=1 
+        self.bikes.remove(bike_id) 
+
 class User:
     def __init__(self,env,user_id, origin, destination, departure_time):
         self.env=env
@@ -408,7 +526,7 @@ class StationBasedUser(User):
                 self.bike_id = self.datainterface.station_choose_bike(station_id)
                 bike_id=self.bike_id
                 self.datainterface.bike_register_unlock(bike_id, self.user_id)
-                self.datainterface.station_detach_bike(station_id, self.bike_id)
+                self.datainterface.station_detach_bike(station_id)
             else: #lock
                 bike_id=self.bike_id
                 self.datainterface.bike_register_lock(bike_id, self.user_id)
@@ -555,9 +673,10 @@ class DataInterface:
     def __init__(self,env):
         self.env=env
 
-    def set_data(self, stations, bikes):
+    def set_data(self, stations, charging_stations, bikes):
         self.stations = stations
         self.bikes = bikes
+        self.charging_stations= charging_stations
 
     def dist(self, a, b):
         route=network.get_route(a[1], a[0], b[1], b[0])
@@ -597,7 +716,8 @@ class DataInterface:
                 break         
   
         if select_succeeded == 0: 
-            print("No bikes found in a walkable distance")
+            print('[%.2f] No bikes fount in a walkable distance' %
+              (self.env.now))
             station_id=None
             station_location=None
 
@@ -633,8 +753,8 @@ class DataInterface:
                 visited_stations.append(station_id)
                 select_succeeded = 1
                 if not e['walkable']:
-                    print("(Note) The station slected is located ot of a walkable distance from the destination")
-
+                    print('[%.2f] (Note) The station slected is located ot of a walkable distance from the destination' %
+                    (self.env.now))
                 break        
                 
         station_location=np.array([lat,lon])
@@ -671,11 +791,51 @@ class DataInterface:
                 break
 
         if select_dockless_bike_succeeded == 0:
-            print("No bikes in walkable distance")
+            print('[%.2f] No bikes in walkable distance' %
+              (self.env.now))
             dockless_bike_id=None
             bike_location=None
 
         return [dockless_bike_id,bike_location]
+
+    def select_charging_station(self,location,visited_stations):
+        values = []
+        for station in self.charging_stations:
+            station_id = station.station_id
+            has_space = station.has_space()
+            visited = station_id in visited_stations
+            distance = self.dist(location, station.location) 
+            lat=station.location[0]
+            lon=station.location[1]
+            values.append((station_id, has_space,
+                           visited, distance,  lat, lon))
+        labels = ['station_id', 'has_space',
+                  'visited', 'distance', 'lat','lon'] 
+        types = [int, int,
+                 int, float, float, float] 
+        dtype = list(zip(labels, types))
+        station_info = np.array(values, dtype=dtype)
+
+        select_succeeded = 0
+
+        for e in np.sort(station_info, order='distance'):
+            valid = e['has_space'] and not e['visited']  
+            if valid:
+                station_id = e['station_id']
+                lat=e['lat']
+                lon=e['lon']
+                visited_stations.append(station_id)
+                select_succeeded = 1  
+                station_location=np.array([lat,lon]) 
+                break         
+  
+        if select_succeeded == 0: 
+            print('[%.2f] No charging stations with available space that have not been visited yet' %
+              (self.env.now))
+            station_id=None
+            station_location=None
+
+        return [station_id, station_location, visited_stations]
 
     def bike_ride(self, bike_id, location):
         bike=self.bikes[bike_id]
@@ -693,6 +853,10 @@ class DataInterface:
         valid=station.has_docks()
         return valid  
     
+    def charging_station_has_space(self,station_id):
+        station=self.charging_stations[station_id]
+        valid=station.has_space()
+        return valid
     def station_choose_bike(self, station_id):
         station=self.stations[station_id]
         bike_id=station.choose_bike()
@@ -701,8 +865,16 @@ class DataInterface:
     def station_attach_bike(self, station_id, bike_id):
         station=self.stations[station_id]
         station.attach_bike(bike_id)
-    def station_detach_bike(self, station_id, bike_id):
+    def station_detach_bike(self, station_id):
         station=self.stations[station_id]
+        station.detach_bike()
+    
+    def charging_station_attach_bike(self,charging_station_id,bike_id):
+        station=self.charging_stations[charging_station_id]
+        station.attach_bike(bike_id)
+
+    def charging_station_detach_bike(self,charging_station_id,bike_id):
+        station=self.charging_stations[charging_station_id]
         station.detach_bike(bike_id)
     
     def bike_register_unlock(self, bike_id, user_id):
@@ -737,10 +909,24 @@ class DemandPredictionManager:
     #predictive rebalancing for autonomous
     def __init__(self,env):
         self.env=env
-class ChargeManager:
-    #makes recharging decisions
-    def __init__(self,env):
-        self.env=env
+# class ChargeManager:
+#     #makes recharging decisions
+#     def __init__(self,env):
+#         self.env=env
+
+#     def set_data(self, bikes):
+#         self.bikes = bikes
+#     def start(self):
+#         print('stating charge manager')
+#         self.env.process(self.battery_checking())
+        
+#     def battery_checking(self):
+#         print('started checking batteries')
+#         while True:
+#             for bike in self.bikes:
+#                 if bike.battery < MIN_BATTERY_LEVEL:
+#                     bike.autonomous_charge()
+            
 class DemandManager:
     #receives orders from users and decides which bike goes
     def __init__(self,env):
@@ -765,6 +951,8 @@ class DemandManager:
                 distance = self.dist(location, bike.location)
                 reachable = distance < MAX_AUTONOMOUS_RADIUS
                 battery= bike.battery > MIN_BATTERY_LEVEL
+                if battery == False and busy == False: #Otherwise it could be already on the way to chagring
+                    bike.autonomous_charge()
                 lat=bike.location[0]
                 lon=bike.location[1]
                 values.append((bike_id, busy, distance, reachable,battery, lat,lon))
@@ -802,5 +990,6 @@ class FleetManager:
 env = simpy.Environment()
 datainterface=DataInterface(env)
 demandmanager=DemandManager(env)
-city = SimulationEngine(env, stations_data, OD_df, bikes_data, datainterface, demandmanager)
+#chargemanager=ChargeManager(env)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, datainterface, demandmanager)
 env.run(until=1000)
