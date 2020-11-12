@@ -22,7 +22,8 @@ AUT_DRIVING_SPEED = 10/3.6 #m/s
 BATTERY_CONSUMPTION_METER= 0.1 #Just a random number for now
 MIN_BATTERY_LEVEL= 25
 CHARGING_SPEED= 100/(0.0005*3600) #%/second  (This is 5h for 100% charge)
-#map
+N_VANS=4
+VAN_CAPACITY= 22
 
 network=Network()
 
@@ -35,6 +36,19 @@ stations_data.reset_index(drop=True, inplace=True) #reset index
 charging_stations_data=pd.read_excel('bluebikes_stations.xlsx', index_col=None)
 charging_stations_data.drop([83],inplace=True) #This station has 0 docks
 charging_stations_data.reset_index(drop=True, inplace=True) #reset index
+
+#Rebalancing vans information
+van_data=[]
+for i in range(0,N_VANS):
+    van_id= i
+    capacity=VAN_CAPACITY
+    lat= 42.3600018
+    lon= -71.087598
+    van=[van_id,capacity,lat,lon]
+    van_data.append(van)
+
+
+
 #bike information
 bikes_data = [] 
 
@@ -66,15 +80,17 @@ OD_df=pd.read_excel('output_sample.xlsx')
 
 class SimulationEngine: #Initialization and loading of data
 
-    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, datainterface, demandmanager): 
+    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, van_data, datainterface, demandmanager): 
             self.env = env 
             self.stations_data=stations_data
             self.charging_stations_data=charging_stations_data
+            self.van_data= van_data
             self.od_data=OD_data
             self.bikes_data=bikes_data
 
             self.stations = [] 
             self.charging_stations =[]
+            self.vans=[]
             self.bikes = []
             self.users = []
 
@@ -87,6 +103,7 @@ class SimulationEngine: #Initialization and loading of data
     def start(self): 
             self.init_stations()
             self.init_charging_stations()
+            self.init_vans()
             self.init_bikes()
             self.init_users()
             self.init_managers()
@@ -106,6 +123,15 @@ class SimulationEngine: #Initialization and loading of data
                 charging_station.set_capacity(station_data['Total docks']) 
                 charging_station.set_location(station_data['Latitude'], station_data['Longitude'])
                 self.charging_stations.append(charging_station)
+    
+    def init_vans(self):
+            for van_id, van_data in enumerate(self.van_data):
+                van_id=van_data[0] 
+                van = Van(self.env, van_id)  
+                van.set_capacity(van_data[1]) 
+                van.set_location(van_data[2], van_data[3])
+                #print(van_id, van_data[1],van_data[2],van_data[3])
+                self.vans.append(van)
 
     def init_bikes(self):
             #Generate and configure bikes
@@ -390,6 +416,37 @@ class ChargingStation:
             self.bikes.append(bike_id) 
         else:
             print('[%.2f] Charging station %d has no spaces available' %
+              (self.env.now, self.station_id))
+
+    def detach_bike(self, bike_id): 
+        self.n_bikes-=1 
+        self.bikes.remove(bike_id) 
+class Van:
+    def __init__(self,env,van_id):
+        self.env=env
+        self.van_id=van_id
+        self.location = None
+        self.capacity = 0
+        self.n_bikes= 0
+
+        self.bikes = []
+
+    def set_location(self, lat, lon):
+        self.location = np.array([lat,lon])
+        print(self.van_id,self.location[0],self.location[1])
+    def set_capacity(self, capacity):
+        self.capacity = capacity
+        print(self.van_id,self.capacity)
+
+    def has_space(self):
+        return self.capacity - self.n_bikes > 0
+
+    def attach_bike(self, bike_id): #What hapens if no docks?
+        if self.has_space(): 
+            self.n_bikes+=1 
+            self.bikes.append(bike_id) 
+        else:
+            print('[%.2f] Van %d has no spaces available' %
               (self.env.now, self.station_id))
 
     def detach_bike(self, bike_id): 
@@ -991,5 +1048,5 @@ env = simpy.Environment()
 datainterface=DataInterface(env)
 demandmanager=DemandManager(env)
 #chargemanager=ChargeManager(env)
-city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, datainterface, demandmanager)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, van_data, datainterface, demandmanager)
 env.run(until=1000)
