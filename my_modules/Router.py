@@ -35,8 +35,8 @@ class Network():
     def __init__(self):
         try:
             print('Attempting to load saved network')
-            self.nodes=json.load(open('network_nodes.json'))
-            self.edges=pd.read_csv('network_edges.csv')
+            self.nodes=json.load(open('./data/network_nodes.json'))
+            self.edges=pd.read_csv('./data/network_edges.csv')
         except:
             print('Network not yet saved. Building network: takes a few minutes.')
             self.nodes, self.edges=self.build_network_for_bluebikes()
