@@ -3,11 +3,11 @@ import simpy
 import numpy as np
 import pandas as pd
 #import matplotlib.pyplot as plt
-from my_modules.Router import Network
+from .Router import Network
 #import time
 
-from my_modules.bike import Bike, StationBike, DocklessBike, AutonomousBike
-from my_modules.user import User, StationBasedUser, DocklessUser, AutonomousUser
+from .Bike import Bike, StationBike, DocklessBike, AutonomousBike
+from .User import User, StationBasedUser, DocklessUser, AutonomousUser
 
 network=Network()
 

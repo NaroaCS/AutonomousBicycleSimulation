@@ -3,10 +3,10 @@ import simpy
 import numpy as np
 import pandas as pd
 #import matplotlib.pyplot as plt
-from my_modules.Router import Network
+from .Router import Network
 #import time
 
-from my_modules.bike import Bike, AutonomousBike
+from .Bike import Bike, AutonomousBike
 
 network=Network()
 MAX_AUTONOMOUS_RADIUS= 3000

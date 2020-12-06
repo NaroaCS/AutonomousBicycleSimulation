@@ -11,13 +11,13 @@ import pandas as pd
 import time
 
 #CLASSES
-from my_modules.station import Station
-from my_modules.charging_station import ChargingStation
-from my_modules.bike import Bike, StationBike, DocklessBike, AutonomousBike
-from my_modules.user import User, StationBasedUser, DocklessUser, AutonomousUser
-from my_modules.data_interface import DataInterface
-from my_modules.van import Van
-from my_modules.demand_manager import DemandManager
+from src.Station import Station
+from src.ChargingStation import ChargingStation
+from src.Bike import Bike, StationBike, DocklessBike, AutonomousBike
+from src.User import User, StationBasedUser, DocklessUser, AutonomousUser
+from src.DataInterface import DataInterface
+from src.Van import Van
+from src.DemandManager import DemandManager
 
 
 #PARAMETERS/CONFIGURATION

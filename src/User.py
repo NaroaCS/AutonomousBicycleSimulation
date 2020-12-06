@@ -3,7 +3,7 @@ import simpy
 import numpy as np
 import pandas as pd
 #import matplotlib.pyplot as plt
-from my_modules.Router import Network
+from .Router import Network
 #import time
 
 network=Network()
