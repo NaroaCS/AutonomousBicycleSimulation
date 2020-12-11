@@ -1,12 +1,11 @@
 import simpy 
-#import random 
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
-from .Router import Network
-#import time
+from .Graph import Graph
 
-network=Network()
+#network=Network()
+network=Graph()
+
 RIDING_SPEED = 15/3.6 #m/s
 AUT_DRIVING_SPEED = 10/3.6 #m/s
 BATTERY_CONSUMPTION_METER= 0.1 #Just a random number for now

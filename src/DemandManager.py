@@ -1,14 +1,13 @@
 import simpy 
-#import random 
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
-from .Router import Network
-#import time
+#from .Router import Network
+from .Graph import Graph
+
 
 from .Bike import Bike, AutonomousBike
 
-network=Network()
+network=Graph()
 MAX_AUTONOMOUS_RADIUS= 3000
 MIN_BATTERY_LEVEL= 25
 

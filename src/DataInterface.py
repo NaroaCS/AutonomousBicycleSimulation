@@ -1,15 +1,14 @@
 import simpy 
-#import random 
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
-from .Router import Network
-#import time
+#from .Router import Network
+from .Graph import Graph
+
 
 from .Bike import Bike, StationBike, DocklessBike, AutonomousBike
 from .User import User, StationBasedUser, DocklessUser, AutonomousUser
 
-network=Network()
+network=Graph()
 
 WALK_RADIUS = 3500 #Just to try the dockless mode !
 MAX_AUTONOMOUS_RADIUS= 3000

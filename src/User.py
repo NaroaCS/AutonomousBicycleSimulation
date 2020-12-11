@@ -1,12 +1,10 @@
 import simpy 
-#import random 
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
-from .Router import Network
-#import time
+#from .Router import Network
+from .Graph import Graph
 
-network=Network()
+network=Graph()
 WALKING_SPEED= 5/3.6 #m/s
 
 class User:
