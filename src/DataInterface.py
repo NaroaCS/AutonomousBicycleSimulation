@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 #from .Router import Network
 from .Graph import Graph
+from .Location import Location
 
 
 from .Bike import Bike, StationBike, DocklessBike, AutonomousBike
@@ -25,8 +26,9 @@ class DataInterface:
         self.charging_stations= charging_stations
 
     def dist(self, a, b):
-        route=network.get_route(a[1], a[0], b[1], b[0])
-        d=route['cum_distances'][-1]
+        a = Location(a[1], a[0])
+        b = Location(b[1], b[0])
+        d = network.get_shortest_path_length(a,b)
         return d
       
     def select_start_station(self,location,visited_stations):

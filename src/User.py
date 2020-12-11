@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 #from .Router import Network
 from .Graph import Graph
+from .Location import Location
 
 network=Graph()
 WALKING_SPEED= 5/3.6 #m/s
@@ -46,8 +47,9 @@ class User:
         
     
     def dist(self, a, b):
-        route=network.get_route(a[1], a[0], b[1], b[0]) #Warning! In routing is lon,lat instead of lat,lon
-        d=route['cum_distances'][-1] #The cumulative distance is saved in thsi colum so we only need the last item
+        a = Location(a[1], a[0])
+        b = Location(b[1], b[0])
+        d = network.get_shortest_path_length(a,b)
         return d
 
 class StationBasedUser(User):

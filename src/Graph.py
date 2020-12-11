@@ -5,7 +5,7 @@ import os
 import numpy as np
 from scipy import spatial
 import pandas as pd
-from Location import Location
+from .Location import Location
 
 class Graph:
     def __init__(self):
