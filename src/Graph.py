@@ -22,7 +22,7 @@ class Graph:
         
 
     def load_graphml(self):
-        path = '../data/greater_boston_road.graphml'
+        path = './data/greater_boston_road.graphml'
         self.G = nx.read_graphml(path)
 
     def process_graph(self):
