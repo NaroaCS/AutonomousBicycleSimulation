@@ -15,11 +15,12 @@ from src.Bike import Bike, StationBike, DocklessBike, AutonomousBike
 from src.User import User, StationBasedUser, DocklessUser, AutonomousUser
 from src.DataInterface import DataInterface
 from src.Van import Van
-from src.DemandManager import DemandManager
+#from src.DemandManager import DemandManager
+from src.RebalancingManager import RebalancingManager
 
 
 #PARAMETERS/CONFIGURATION
-mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 n_bikes= 300
 
 N_VANS=4
@@ -80,7 +81,7 @@ OD_df=pd.read_excel('./data/output_sample.xlsx')
 
 class SimulationEngine: #Initialization and loading of data
 
-    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, van_data, datainterface, demandmanager): 
+    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, van_data, datainterface, rebalancingmanager): 
             self.env = env 
             self.stations_data=stations_data
             self.charging_stations_data=charging_stations_data
@@ -95,7 +96,8 @@ class SimulationEngine: #Initialization and loading of data
             self.users = []
 
             self.datainterface=datainterface 
-            self.demandmanager=demandmanager
+            #self.demandmanager=demandmanager
+            self.rebalancingmanager=rebalancingmanager
             #self.chargemanager=chargemanager
 
             self.start() 
@@ -163,16 +165,16 @@ class SimulationEngine: #Initialization and loading of data
                 destination_np=np.array(destination)
                 departure_time=row['elapsed time'] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
+                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, datainterface, rebalancingmanager)
                 elif mode == 1:
                     user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, datainterface, demandmanager)
+                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
                 user.start()   
                 self.users.append(user) 
     def init_managers(self):
         self.datainterface.set_data(self.stations,self.charging_stations, self.bikes)
-        self.demandmanager.set_data(self.bikes)
+        #self.demandmanager.set_data(self.bikes)
         #self.chargemanager.set_data(self.bikes)
         #self.chargemanager.start()
         
@@ -182,10 +184,7 @@ class Assets: #Put inside of City
     def __init__(self,env):
         self.env=env
 
-class RebalancingManager:
-    #makes rebalancing decisions for SB and dockless
-    def __init__(self,env):
-        self.env=env
+
 class DemandPredictionManager:
     #predictive rebalancing for autonomous
     def __init__(self,env):
@@ -218,7 +217,8 @@ class FleetManager:
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
 datainterface=DataInterface(env)
-demandmanager=DemandManager(env)
+#demandmanager=DemandManager(env)
+rebalancingmanager=RebalancingManager(env)
 #chargemanager=ChargeManager(env)
-city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, van_data, datainterface, demandmanager)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, van_data, datainterface, rebalancingmanager)
 env.run(until=5000)

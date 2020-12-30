@@ -11,8 +11,10 @@ from .User import User, StationBasedUser, DocklessUser, AutonomousUser
 
 network=Graph()
 
-WALK_RADIUS = 3500 #Just to try the dockless mode !
+WALK_RADIUS = 500 # 3500Just to try the dockless mode !
 MAX_AUTONOMOUS_RADIUS= 3000
+MAX_AUTONOMOUS_RADIUS= 3000
+MIN_BATTERY_LEVEL= 25
 
 
 class DataInterface:
@@ -64,7 +66,7 @@ class DataInterface:
                 break         
   
         if select_succeeded == 0: 
-            print('[%.2f] No bikes fount in a walkable distance' %
+            print('[%.2f] No bikes in a walkable distance' %
               (self.env.now))
             station_id=None
             station_location=None
@@ -78,7 +80,7 @@ class DataInterface:
             has_docks = station.has_docks()
             visited = station_id in visited_stations
             distance = self.dist(destination, station.location) 
-            walkable = distance < WALK_RADIUS # ---> Once that ou're in the bike you have to leav eit even if it's very far
+            walkable = distance < WALK_RADIUS # ---> Once that ou're in the bike you have to leave it even if it's very far
             lat=station.location[0]
             lon=station.location[1]
             values.append((station_id, has_docks,
@@ -184,6 +186,45 @@ class DataInterface:
             station_location=None
 
         return [station_id, station_location, visited_stations]
+
+    def assign_autonomous_bike(self, location):
+        values = []
+
+        for bike in self.bikes:
+            if isinstance(bike, AutonomousBike):
+                bike_id = bike.bike_id
+                busy = bike.busy
+                distance = self.dist(location, bike.location)
+                reachable = distance < MAX_AUTONOMOUS_RADIUS
+                battery= bike.battery > MIN_BATTERY_LEVEL
+                if battery == False and busy == False: #Otherwise it could be already on the way to chagring
+                    bike.autonomous_charge()
+                lat=bike.location[0]
+                lon=bike.location[1]
+                values.append((bike_id, busy, distance, reachable,battery, lat,lon))
+        labels = ['bike_id', 'busy', 'distance', 'reachable', 'battery','lat','lon']
+        types = [int, int, float, int, int, float,float]
+        dtype = list(zip(labels, types))
+        bike_info = np.array(values, dtype=dtype)
+
+        select_autonomous_bike_succeeded = 0
+
+        for e in np.sort(bike_info, order='distance'):
+            valid = not e['busy'] and e['reachable'] and e[battery]
+            if valid:
+                autonomous_bike_id = e['bike_id']
+                lat=e['lat']
+                lon=e['lon']
+                select_autonomous_bike_succeeded = 1
+                bike_location=np.array([lat,lon])
+                break
+
+        if select_autonomous_bike_succeeded == 0:
+            print("No autonomous bikes in "+ str(MAX_AUTONOMOUS_RADIUS) +" distance")
+            autonomous_bike_id=None
+            bike_location=None
+
+        return [autonomous_bike_id,bike_location]
 
     def bike_ride(self, bike_id, location):
         bike=self.bikes[bike_id]
