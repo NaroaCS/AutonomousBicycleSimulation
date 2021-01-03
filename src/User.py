@@ -85,10 +85,15 @@ class StationBasedUser(User):
                 rand_number= random.randint(1,100)
                 if rand_number <= BETA:
                     print('[%.2f] User %d  made a magic bike request' % (self.env.now, self.user_id))
-                    self.station_id= self.rebalancingmanager.magic_bike()
+                    [station, station_location, visited_stations]= self.datainterface.magic_bike(self.location, self.visited_stations)
+                    self.station_id=station
+                    if station is None:
+                        print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
+                        return
                 elif rand_number > BETA:
                     print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
                     return
+            ### HOW DO WE SAVE THE MAGIC BIKES ???? ###
 
 
             print('[%.2f] User %d selected start station [%.4f, %.4f]' % (self.env.now, self.user_id, station_location[0],station_location[1]))
@@ -106,7 +111,26 @@ class StationBasedUser(User):
         while not self.event_interact_bike.triggered:
             # 5-Select destination station
             [station, station_location, visited_stations]=self.select_end_station(self.destination,self.visited_stations)
+            self.station_id=station
 
+            
+
+            if self.station_id is None:
+                rand_number= random.randint(1,100)
+                if rand_number <= BETA:
+                    print('[%.2f] User %d  made a magic dock request' % (self.env.now, self.user_id))
+                    [station, station_location, visited_stations]= self.datainterface.magic_dock(self.location, self.visited_stations)
+                    if station is None:
+                        print('[%.2f] User %d  will end at a station out of walkable distance' % (self.env.now, self.user_id))
+                        [station, station_location, visited_stations]= self.datainterface.notwalkable_dock(self.location, self.visited_stations)
+                    
+                elif rand_number > BETA:
+                    print('[%.2f] User %d  will end at a station out of walkable distance' % (self.env.now, self.user_id))
+                    [station, station_location, visited_stations]= self.datainterface.notwalkable_dock(self.location, self.visited_stations)
+
+            ### HOW DO WE SAVE THE MAGIC docks???? ###
+            
+            self.station_id=station
             print('[%.2f] User %d selected end station %d' % (self.env.now, self.user_id, self.station_id))
 
             # 6-Ride bike
@@ -148,7 +172,7 @@ class StationBasedUser(User):
                 self.bike_id = self.datainterface.station_choose_bike(station_id)
                 bike_id=self.bike_id
                 self.datainterface.bike_register_unlock(bike_id, self.user_id)
-                self.datainterface.station_detach_bike(station_id)
+                self.datainterface.station_detach_bike(station_id, bike_id)
             else: #lock
                 bike_id=self.bike_id
                 self.datainterface.bike_register_lock(bike_id, self.user_id)

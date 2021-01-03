@@ -20,8 +20,8 @@ from src.RebalancingManager import RebalancingManager
 
 
 #PARAMETERS/CONFIGURATION
-mode=2 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
-n_bikes= 300
+mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+n_bikes= 400
 
 N_VANS=4
 VAN_CAPACITY= 22
