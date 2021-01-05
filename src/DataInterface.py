@@ -1,6 +1,7 @@
 import simpy 
 import numpy as np
 import pandas as pd
+import json
 #from .Router import Network
 from .Graph import Graph
 from .Location import Location
@@ -11,12 +12,15 @@ from .User import User, StationBasedUser, DocklessUser, AutonomousUser
 
 network=Graph()
 
-WALK_RADIUS = 500 # 3500Just to try the dockless mode !
-MAX_AUTONOMOUS_RADIUS= 3000
-MIN_BATTERY_LEVEL= 25
+with open('config.json') as config_file:
+    params = json.load(config_file)
 
-MIN_N_BIKES= 3
-MIN_N_DOCKS = 3
+WALK_RADIUS =  params['WALK_RADIUS'] #3500Just to try the dockless mode !
+MAX_AUTONOMOUS_RADIUS= params['MAX_AUTONOMOUS_RADIUS'] 
+MIN_BATTERY_LEVEL= params['MIN_BATTERY_LEVEL'] 
+
+MIN_N_BIKES= params['MIN_N_BIKES'] 
+MIN_N_DOCKS = params['MIN_N_DOCKS'] 
 
 
 class DataInterface:

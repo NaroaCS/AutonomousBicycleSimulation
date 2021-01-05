@@ -2,13 +2,19 @@ import simpy
 import random 
 import numpy as np
 import pandas as pd
+import json
+
 #from .Router import Network
 from .Graph import Graph
 from .Location import Location
 
 network=Graph()
-WALKING_SPEED= 5/3.6 #m/s
-BETA= 90  #probability of getting a magic bike or dock in %
+
+with open('config.json') as config_file:
+    params = json.load(config_file)
+
+WALKING_SPEED= params['WALKING_SPEED']/3.6 #m/s
+BETA= params['BETA']  #probability of getting a magic bike or dock in %
 
 class User:
     def __init__(self,env,user_id, origin, destination, departure_time):
@@ -55,10 +61,10 @@ class User:
         return d
 
 class StationBasedUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface,rebalancingmanager):
+    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
         super().__init__(env, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
-        self.rebalancingmanager=rebalancingmanager
+        #self.rebalancingmanager=rebalancingmanager
 
     def start(self):   
         self.station_id = None

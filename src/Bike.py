@@ -1,16 +1,21 @@
 import simpy 
 import numpy as np
 import pandas as pd
+import json 
+
 from .Graph import Graph
 from .Location import Location
 
 #network=Network()
 network=Graph()
 
-RIDING_SPEED = 15/3.6 #m/s
-AUT_DRIVING_SPEED = 10/3.6 #m/s
-BATTERY_CONSUMPTION_METER= 0.1 #Just a random number for now
-CHARGING_SPEED= 100/(0.0005*3600) #%/second  (This is 5h for 100% charge)
+with open('config.json') as config_file:
+    params = json.load(config_file)
+    
+RIDING_SPEED = params['RIDING_SPEED']/3.6 #m/s
+AUT_DRIVING_SPEED = params['AUT_DRIVING_SPEED']/3.6 #m/s
+BATTERY_CONSUMPTION_METER= params['BATTERY_CONSUMPTION_METER']#Just a random number for now
+CHARGING_SPEED= 100/(params['CHARGING_SPEED']*3600) #%/second  (This is 5h for 100% charge)
 
 class Bike:
     def __init__(self,env, bike_id):
