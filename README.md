@@ -8,7 +8,7 @@ Main file: BikeFleetSimulation.py
 
 The parameters to be configured for this simulation can be found on the file **config.json**
 
-**mode** 0 for station-based, 1 for dockless, 2 for autonomous
+**mode:** 0 for station-based, 1 for dockless, 2 for autonomous
 
 
 **n_bikes:** number of bikes in the system (fleet size)
