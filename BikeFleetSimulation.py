@@ -65,16 +65,11 @@ if mode==1 or mode==2:
         bikes_data.append(bike) 
         i+=1
 elif mode==0:
-    #For station based the initial location is defined by the id of a random station (placeholder)
-    i=0
-    while i<n_bikes:
-        #We can only set to len(stations_data)-1 because length is 340 but the last station is the 339 (First row + deleted station)
-        bike_station_id=random.randint(0,len(stations_data)-1)  #Warning! This does not check if the station is full     
-        bike=[i,bike_station_id]    
-        bikes_data.append(bike)
-        i+=1
+    #Loads data generated with BikeGeneration.py
+    bikes_data=pd.read_excel('./data/bikes_data.xlsx')
+  
 
-#Loads info from ODmatrix
+#Loads data from ODmatrix generated with UserGeneration.py
 OD_df=pd.read_excel('./data/output_sample.xlsx')
 
 
@@ -108,8 +103,8 @@ class SimulationEngine: #Initialization and loading of data
             self.init_charging_stations()
             #self.init_vans()
             self.init_bikes()
-            self.init_users()
             self.init_managers()
+            self.init_users()
 
     def init_stations(self):
         #Generate and configure stations
@@ -138,20 +133,24 @@ class SimulationEngine: #Initialization and loading of data
 
     def init_bikes(self):
             #Generate and configure bikes
-            for bike_id, bike_data in enumerate(self.bikes_data): 
-                if mode == 0: #Station Based
+            if mode == 0:
+                for index,row in self.bikes_data.iterrows():
+                    bike_id= row['bike_id']
+                    station_id=row['station_id']
                     bike = StationBike(self.env, bike_id) 
-                    station_id = bike_data[1] #station id
+                    #station_id = bike_data[1] #station id
                     self.stations[station_id].attach_bike(bike_id) #saves the bike in the station
                     bike.attach_station(station_id)  #saves the station in the bike
-                    bike.set_location(self.stations[station_id].location[0],self.stations[station_id].location[1])  
-                elif mode == 1: #Dockless
-                    bike = DocklessBike(self.env, bike_id) 
-                    bike.set_location(bike_data[1], bike_data[2])  #lat, lon
-                elif mode == 2: #Autonomous
-                    bike = AutonomousBike(self.env, bike_id,datainterface) 
-                    bike.set_location(bike_data[1], bike_data[2]) #lat, lon
-                self.bikes.append(bike) 
+                    bike.set_location(self.stations[station_id].location[0],self.stations[station_id].location[1]) 
+            else:
+                for bike_id, bike_data in enumerate(self.bikes_data): 
+                    if mode == 1: #Dockless
+                        bike = DocklessBike(self.env, bike_id) 
+                        bike.set_location(bike_data[1], bike_data[2])  #lat, lon
+                    elif mode == 2: #Autonomous
+                        bike = AutonomousBike(self.env, bike_id,self.datainterface) 
+                        bike.set_location(bike_data[1], bike_data[2]) #lat, lon
+                    self.bikes.append(bike) 
 
     def init_users(self):
             #Generate and configure users
@@ -166,11 +165,11 @@ class SimulationEngine: #Initialization and loading of data
                 destination_np=np.array(destination)
                 departure_time=row['elapsed time'] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
+                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 1:
-                    user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
+                    user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
+                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, self.datainterface)
                 user.start()   
                 self.users.append(user) 
     def init_managers(self):

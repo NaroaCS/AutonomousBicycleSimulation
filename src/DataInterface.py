@@ -116,9 +116,6 @@ class DataInterface:
               (self.env.now))
             return [None, None, visited_stations]
 
-        #take random bike from source
-        bike_id= self.station_choose_bike(source_station_id)
-        self.station_detach_bike(source_station_id,bike_id)
 
         valid_target_found = 0
         for e in np.sort(station_info, order='distance'):
@@ -137,6 +134,9 @@ class DataInterface:
               (self.env.now))
             return [None, None, visited_stations]
 
+        #take random bike from source
+        bike_id= self.station_choose_bike(source_station_id)
+        self.station_detach_bike(source_station_id,bike_id)
         
         #put that bike on target station
         self.station_attach_bike(target_station_id, bike_id)
@@ -181,7 +181,7 @@ class DataInterface:
                 visited_stations.append(station_id)
                 select_succeeded = 1
         if select_succeeded == 0: 
-            print('[%.2f] No bikes in a walkable distance' %
+            print('[%.2f] No docks in a walkable distance' %
               (self.env.now))
             station_id=None
             station_location=None      

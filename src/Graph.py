@@ -13,11 +13,12 @@ class Graph:
 
     def start(self):
         print('Loading graph')
-        self.load_graphml()
-        self.process_graph()
-        self.get_nodes_edges()
-        self.create_kdtree()
-        self.create_network()
+        if not hasattr(self, 'G'):
+            self.load_graphml()
+            self.process_graph()
+            self.get_nodes_edges()
+            self.create_kdtree()
+            self.create_network()
         print('Loaded graph')
         
 
