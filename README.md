@@ -7,6 +7,7 @@ Main file: BikeFleetSimulation.py
 ## Configuration of parameters
 
 The parameters to be configured for this simulation can be found on the file **config.json**
+
 **Important note:** If the number of bikes is changed, execute BikeGenerator.py to update bikes_data.xlsx
 
 **mode:** 0 for station-based, 1 for dockless, 2 for autonomous
