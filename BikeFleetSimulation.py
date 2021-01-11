@@ -74,7 +74,7 @@ elif mode==0:
   
 
 #Loads data from ODmatrix generated with UserGeneration.py
-OD_df=pd.read_excel('./data/output_sample.xlsx')
+OD_df=pd.read_csv('./data/output.csv')
 
 
 #DEFINITION OF CLASSES
@@ -148,6 +148,8 @@ class SimulationEngine: #Initialization and loading of data
                     self.stations[station_id].attach_bike(bike_id) #saves the bike in the station
                     bike.attach_station(station_id)  #saves the station in the bike
                     bike.set_location(self.stations[station_id].location[0],self.stations[station_id].location[1]) 
+                    
+                    self.bikes.append(bike)
             else:
                 for bike_id, bike_data in enumerate(self.bikes_data): 
                     if mode == 1: #Dockless
@@ -169,7 +171,7 @@ class SimulationEngine: #Initialization and loading of data
                 destination.append(row['end station latitude']) #destination lat
                 destination.append(row['end station longitude']) #destination lon
                 destination_np=np.array(destination)
-                departure_time=row['elapsed time'] #departure time
+                departure_time=row['elapsed_time'] #departure time
                 if mode == 0:
                     user = StationBasedUser(self.env, self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 1:
