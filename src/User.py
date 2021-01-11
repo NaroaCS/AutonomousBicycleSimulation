@@ -8,7 +8,7 @@ import json
 from .Graph import Graph
 from .Location import Location
 
-network=Graph()
+#network=Graph()
 
 with open('config.json') as config_file:
     params = json.load(config_file)
@@ -17,7 +17,7 @@ WALKING_SPEED= params['WALKING_SPEED']/3.6 #m/s
 BETA= params['BETA']  #probability of getting a magic bike or dock in %
 
 class User:
-    def __init__(self,env,user_id, origin, destination, departure_time):
+    def __init__(self,env, network, user_id, origin, destination, departure_time):
         self.env=env
         self.user_id=user_id
         self.location= None
@@ -28,6 +28,8 @@ class User:
         self.origin=origin
         self.destination=destination
         self.departure_time=departure_time
+
+        self.network = network
     
     def process(self):
 
@@ -57,12 +59,12 @@ class User:
     def dist(self, a, b):
         a = Location(a[1], a[0])
         b = Location(b[1], b[0])
-        d = network.get_shortest_path_length(a,b)
+        d = self.network.get_shortest_path_length(a,b)
         return d
 
 class StationBasedUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
-        super().__init__(env, user_id, origin, destination, departure_time)
+    def __init__(self, env, network, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, network, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
         #self.rebalancingmanager=rebalancingmanager
 
@@ -193,8 +195,8 @@ class StationBasedUser(User):
                        (self.env.now, self.station_id, 'bikes' if action == 'unlock' else 'docks'))
              
 class DocklessUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
-        super().__init__(env, user_id, origin, destination, departure_time)
+    def __init__(self, env, network, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, network, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
     def start(self):
         self.event_select_dockless_bike = self.env.event()
@@ -259,8 +261,8 @@ class DocklessUser(User):
         self.datainterface.dockless_bike_lock(dockless_bike_id)
 
 class AutonomousUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
-        super().__init__(env, user_id, origin, destination, departure_time)
+    def __init__(self, env, network, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, network, user_id, origin, destination, departure_time)
         #self.demandmanager=demandmanager
         self.datainterface=datainterface
 

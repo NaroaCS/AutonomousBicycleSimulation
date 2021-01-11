@@ -3,11 +3,11 @@ import numpy as np
 import pandas as pd
 import json 
 
-from .Graph import Graph
+#from .Graph import Graph
 from .Location import Location
 
 #network=Network()
-network=Graph()
+#network=Graph()
 
 with open('config.json') as config_file:
     params = json.load(config_file)
@@ -18,12 +18,13 @@ BATTERY_CONSUMPTION_METER= params['BATTERY_CONSUMPTION_METER']#Just a random num
 CHARGING_SPEED= 100/(params['CHARGING_SPEED']*3600/1000) #%/second  (This is 5h for 100% charge)
 
 class Bike:
-    def __init__(self,env, bike_id):
+    def __init__(self, env, network, bike_id):
         self.env=env
         self.bike_id=bike_id
         self.location=None
         self.user=None
         self.busy=False #reserved, driving autonomously, in use...
+        self.network = network
 
     def set_location(self, lat, lon):
         self.location = np.array([lat,lon])
@@ -47,13 +48,14 @@ class Bike:
     def dist(self, a, b):
         a = Location(a[1], a[0])
         b = Location(b[1], b[0])
-        d = network.get_shortest_path_length(a,b)
+        d = self.network.get_shortest_path_length(a,b)
         return d
              
 class StationBike(Bike):
-    def __init__(self,env,bike_id):
-        super().__init__(env, bike_id)  
+    def __init__(self, env, network, bike_id):
+        super().__init__(env, network, bike_id)  
         self.station_id = None
+        
 
     def attach_station(self, station_id):
         self.station_id = station_id
@@ -75,8 +77,8 @@ class StationBike(Bike):
         return self.station_id is not None
 
 class DocklessBike(Bike):
-    def __init__(self, env, bike_id):
-        super().__init__(env, bike_id)        
+    def __init__(self, env, network, bike_id):
+        super().__init__(env, network, bike_id)        
 
     def unlock(self, user_id):
         self.update_user(user_id)
@@ -87,12 +89,13 @@ class DocklessBike(Bike):
         self.busy=False
 
 class AutonomousBike(Bike):
-    def __init__(self,env, bike_id,datainterface):
-        super().__init__(env, bike_id)
+    def __init__(self, env, network, bike_id, datainterface):
+        super().__init__(env, network, bike_id)
         self.datainterface=datainterface
         self.battery= 26 #We will assume that all the bikes start with a full charge
         self.charging_station_id = None
         self.visited_stations=[]
+        
 
     def go_towards(self, destination_location): #This is for the demand prediction -> maybe it's enugh with autonomous_drive()  
         distance = self.dist(self.location, destination_location) 
@@ -173,7 +176,7 @@ class AutonomousBike(Bike):
                 self.event_interact_chargingstation.succeed()
             else:
                 print('[%.2f] Charging station %d had zero spaces available at arrival' %
-                (self.env.now, self.station_id))
+                (self.env.now, self.charging_station_id))
         else: #unlock
             self.datainterface.charging_station_detach_bike(charging_station_id,self.bike_id)
             self.event_interact_chargingstation.succeed()

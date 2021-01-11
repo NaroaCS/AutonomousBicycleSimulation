@@ -3,14 +3,14 @@ import numpy as np
 import pandas as pd
 import json
 #from .Router import Network
-from .Graph import Graph
+#from .Graph import Graph
 from .Location import Location
 
 
 from .Bike import Bike, StationBike, DocklessBike, AutonomousBike
 from .User import User, StationBasedUser, DocklessUser, AutonomousUser
 
-network=Graph()
+#network=Graph()
 
 with open('config.json') as config_file:
     params = json.load(config_file)
@@ -25,8 +25,9 @@ MIN_N_DOCKS = params['MIN_N_DOCKS']
 
 class DataInterface:
 
-    def __init__(self,env):
+    def __init__(self,env, network):
         self.env=env
+        self.network= network
 
     def set_data(self, stations, charging_stations, bikes):
         self.stations = stations
@@ -36,7 +37,7 @@ class DataInterface:
     def dist(self, a, b):
         a = Location(a[1], a[0])
         b = Location(b[1], b[0])
-        d = network.get_shortest_path_length(a,b)
+        d = self.network.get_shortest_path_length(a,b)
         return d
       
     def select_start_station(self,location,visited_stations):

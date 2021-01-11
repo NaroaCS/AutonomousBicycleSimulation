@@ -19,6 +19,12 @@ from src.DataInterface import DataInterface
 #from src.DemandManager import DemandManager
 #from src.RebalancingManager import RebalancingManager
 
+from src.Graph import Graph
+#from src.Location import Location
+
+#we generate the graph
+network=Graph()
+
 
 #PARAMETERS/CONFIGURATION
 with open('config.json') as config_file:
@@ -26,8 +32,6 @@ with open('config.json') as config_file:
 
 mode = params['mode'] # 0 for StationBased / 1 for Dockless / 2 for Autonomous
 n_bikes = params['n_bikes']
-
-#network=Network()
 
 # station information
 stations_data=pd.read_excel('./data/bluebikes_stations.xlsx', index_col=None)
@@ -77,7 +81,7 @@ OD_df=pd.read_excel('./data/output_sample.xlsx')
 
 class SimulationEngine: #Initialization and loading of data
 
-    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, datainterface): 
+    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, datainterface, network): 
             self.env = env 
             self.stations_data=stations_data
             self.charging_stations_data=charging_stations_data
@@ -95,6 +99,8 @@ class SimulationEngine: #Initialization and loading of data
             #self.demandmanager=demandmanager
             #self.rebalancingmanager=rebalancingmanager
             #self.chargemanager=chargemanager
+
+            self.network=network
 
             self.start() 
 
@@ -137,7 +143,7 @@ class SimulationEngine: #Initialization and loading of data
                 for index,row in self.bikes_data.iterrows():
                     bike_id= row['bike_id']
                     station_id=row['station_id']
-                    bike = StationBike(self.env, bike_id) 
+                    bike = StationBike(self.env, network, bike_id) 
                     #station_id = bike_data[1] #station id
                     self.stations[station_id].attach_bike(bike_id) #saves the bike in the station
                     bike.attach_station(station_id)  #saves the station in the bike
@@ -145,10 +151,10 @@ class SimulationEngine: #Initialization and loading of data
             else:
                 for bike_id, bike_data in enumerate(self.bikes_data): 
                     if mode == 1: #Dockless
-                        bike = DocklessBike(self.env, bike_id) 
+                        bike = DocklessBike(self.env, network, bike_id) 
                         bike.set_location(bike_data[1], bike_data[2])  #lat, lon
                     elif mode == 2: #Autonomous
-                        bike = AutonomousBike(self.env, bike_id,self.datainterface) 
+                        bike = AutonomousBike(self.env,network, bike_id,self.datainterface) 
                         bike.set_location(bike_data[1], bike_data[2]) #lat, lon
                     self.bikes.append(bike) 
 
@@ -165,11 +171,11 @@ class SimulationEngine: #Initialization and loading of data
                 destination_np=np.array(destination)
                 departure_time=row['elapsed time'] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, self.datainterface)
+                    user = StationBasedUser(self.env, self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 1:
-                    user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, self.datainterface)
+                    user = DocklessUser(self.env,self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, self.datainterface)
+                    user = AutonomousUser(self.env,self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 user.start()   
                 self.users.append(user) 
     def init_managers(self):
@@ -216,9 +222,9 @@ class SimulationEngine: #Initialization and loading of data
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
-datainterface=DataInterface(env)
+datainterface=DataInterface(env, network)
 #demandmanager=DemandManager(env)
 #rebalancingmanager=RebalancingManager(env)
 #chargemanager=ChargeManager(env)
-city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, datainterface)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, datainterface, network)
 env.run(until=5000)
