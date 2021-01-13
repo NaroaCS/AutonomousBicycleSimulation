@@ -5,7 +5,7 @@ import os
 import numpy as np
 from scipy import spatial
 import pandas as pd
-from Location import Location
+from .Location import Location
 
 class Graph:
     def __init__(self):
@@ -13,16 +13,17 @@ class Graph:
 
     def start(self):
         print('Loading graph')
-        self.load_graphml()
-        self.process_graph()
-        self.get_nodes_edges()
-        self.create_kdtree()
-        self.create_network()
+        if not hasattr(self, 'G'):
+            self.load_graphml()
+            self.process_graph()
+            self.get_nodes_edges()
+            self.create_kdtree()
+            self.create_network()
         print('Loaded graph')
         
 
     def load_graphml(self):
-        path = '../data/greater_boston_road.graphml'
+        path = './data/greater_boston_road.graphml'
         self.G = nx.read_graphml(path)
 
     def process_graph(self):

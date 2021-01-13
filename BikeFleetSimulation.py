@@ -6,9 +6,8 @@ import simpy
 import random 
 import numpy as np
 import pandas as pd
-#import matplotlib.pyplot as plt
-#from Router import Network
 import time
+import json
 
 #CLASSES
 from src.Station import Station
@@ -16,18 +15,23 @@ from src.ChargingStation import ChargingStation
 from src.Bike import Bike, StationBike, DocklessBike, AutonomousBike
 from src.User import User, StationBasedUser, DocklessUser, AutonomousUser
 from src.DataInterface import DataInterface
-from src.Van import Van
-from src.DemandManager import DemandManager
+#from src.Van import Van
+#from src.DemandManager import DemandManager
+#from src.RebalancingManager import RebalancingManager
+
+from src.Graph import Graph
+#from src.Location import Location
+
+#we generate the graph
+network=Graph()
 
 
 #PARAMETERS/CONFIGURATION
-mode=0 # 0 for StationBased / 1 for Dockless / 2 for Autonomous
-n_bikes= 300
+with open('config.json') as config_file:
+    params = json.load(config_file)
 
-N_VANS=4
-VAN_CAPACITY= 22
-
-#network=Network()
+mode = params['mode'] # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+n_bikes = params['n_bikes']
 
 # station information
 stations_data=pd.read_excel('./data/bluebikes_stations.xlsx', index_col=None)
@@ -40,14 +44,14 @@ charging_stations_data.drop([83],inplace=True) #This station has 0 docks
 charging_stations_data.reset_index(drop=True, inplace=True) #reset index
 
 #Rebalancing vans information
-van_data=[]
-for i in range(0,N_VANS):
-    van_id= i
-    capacity=VAN_CAPACITY
-    lat= 42.3600018
-    lon= -71.087598
-    van=[van_id,capacity,lat,lon]
-    van_data.append(van)
+# van_data=[]
+# for i in range(0,N_VANS):
+#     van_id= i
+#     capacity=VAN_CAPACITY
+#     lat= 42.3600018
+#     lon= -71.087598
+#     van=[van_id,capacity,lat,lon]
+#     van_data.append(van)
 
 
 
@@ -65,50 +69,48 @@ if mode==1 or mode==2:
         bikes_data.append(bike) 
         i+=1
 elif mode==0:
-    #For station based the initial location is defined by the id of a random station (placeholder)
-    i=0
-    while i<n_bikes:
-        #We can only set to len(stations_data)-1 because length is 340 but the last station is the 339 (First row + deleted station)
-        bike_station_id=random.randint(0,len(stations_data)-1)  #Warning! This does not check if the station is full     
-        bike=[i,bike_station_id]    
-        bikes_data.append(bike)
-        i+=1
+    #Loads data generated with BikeGeneration.py
+    bikes_data=pd.read_excel('./data/bikes_data.xlsx')
+  
 
-#Loads info from ODmatrix
-OD_df=pd.read_excel('./data/output_sample.xlsx')
+#Loads data from ODmatrix generated with UserGeneration.py
+OD_df=pd.read_csv('./data/output.csv')
 
 
 #DEFINITION OF CLASSES
 
 class SimulationEngine: #Initialization and loading of data
 
-    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, van_data, datainterface, demandmanager): 
+    def __init__(self, env, stations_data, OD_data, bikes_data, charging_stations_data, datainterface, network): 
             self.env = env 
             self.stations_data=stations_data
             self.charging_stations_data=charging_stations_data
-            self.van_data= van_data
+            #self.van_data= van_data
             self.od_data=OD_data
             self.bikes_data=bikes_data
 
             self.stations = [] 
             self.charging_stations =[]
-            self.vans=[]
+            #self.vans=[]
             self.bikes = []
             self.users = []
 
             self.datainterface=datainterface 
-            self.demandmanager=demandmanager
+            #self.demandmanager=demandmanager
+            #self.rebalancingmanager=rebalancingmanager
             #self.chargemanager=chargemanager
+
+            self.network=network
 
             self.start() 
 
     def start(self): 
             self.init_stations()
             self.init_charging_stations()
-            self.init_vans()
+            #self.init_vans()
             self.init_bikes()
-            self.init_users()
             self.init_managers()
+            self.init_users()
 
     def init_stations(self):
         #Generate and configure stations
@@ -126,31 +128,37 @@ class SimulationEngine: #Initialization and loading of data
                 charging_station.set_location(station_data['Latitude'], station_data['Longitude'])
                 self.charging_stations.append(charging_station)
     
-    def init_vans(self):
-            for van_id, van_data in enumerate(self.van_data):
-                van_id=van_data[0] 
-                van = Van(self.env, van_id)  
-                van.set_capacity(van_data[1]) 
-                van.set_location(van_data[2], van_data[3])
-                #print(van_id, van_data[1],van_data[2],van_data[3])
-                self.vans.append(van)
+    # def init_vans(self):
+    #         for van_id, van_data in enumerate(self.van_data):
+    #             van_id=van_data[0] 
+    #             van = Van(self.env, van_id)  
+    #             van.set_capacity(van_data[1]) 
+    #             van.set_location(van_data[2], van_data[3])
+    #             #print(van_id, van_data[1],van_data[2],van_data[3])
+    #             self.vans.append(van)
 
     def init_bikes(self):
             #Generate and configure bikes
-            for bike_id, bike_data in enumerate(self.bikes_data): 
-                if mode == 0: #Station Based
-                    bike = StationBike(self.env, bike_id) 
-                    station_id = bike_data[1] #station id
+            if mode == 0:
+                for index,row in self.bikes_data.iterrows():
+                    bike_id= row['bike_id']
+                    station_id=row['station_id']
+                    bike = StationBike(self.env, network, bike_id) 
+                    #station_id = bike_data[1] #station id
                     self.stations[station_id].attach_bike(bike_id) #saves the bike in the station
                     bike.attach_station(station_id)  #saves the station in the bike
-                    bike.set_location(self.stations[station_id].location[0],self.stations[station_id].location[1])  
-                elif mode == 1: #Dockless
-                    bike = DocklessBike(self.env, bike_id) 
-                    bike.set_location(bike_data[1], bike_data[2])  #lat, lon
-                elif mode == 2: #Autonomous
-                    bike = AutonomousBike(self.env, bike_id,datainterface) 
-                    bike.set_location(bike_data[1], bike_data[2]) #lat, lon
-                self.bikes.append(bike) 
+                    bike.set_location(self.stations[station_id].location[0],self.stations[station_id].location[1]) 
+                    
+                    self.bikes.append(bike)
+            else:
+                for bike_id, bike_data in enumerate(self.bikes_data): 
+                    if mode == 1: #Dockless
+                        bike = DocklessBike(self.env, network, bike_id) 
+                        bike.set_location(bike_data[1], bike_data[2])  #lat, lon
+                    elif mode == 2: #Autonomous
+                        bike = AutonomousBike(self.env,network, bike_id,self.datainterface) 
+                        bike.set_location(bike_data[1], bike_data[2]) #lat, lon
+                    self.bikes.append(bike) 
 
     def init_users(self):
             #Generate and configure users
@@ -163,35 +171,32 @@ class SimulationEngine: #Initialization and loading of data
                 destination.append(row['end station latitude']) #destination lat
                 destination.append(row['end station longitude']) #destination lon
                 destination_np=np.array(destination)
-                departure_time=row['elapsed time'] #departure time
+                departure_time=row['elapsed_time'] #departure time
                 if mode == 0:
-                    user = StationBasedUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
+                    user = StationBasedUser(self.env, self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 1:
-                    user = DocklessUser(self.env, index, origin_np, destination_np, departure_time, datainterface)
+                    user = DocklessUser(self.env,self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 elif mode == 2:
-                    user = AutonomousUser(self.env, index, origin_np, destination_np, departure_time, datainterface, demandmanager)
+                    user = AutonomousUser(self.env,self.network, index, origin_np, destination_np, departure_time, self.datainterface)
                 user.start()   
                 self.users.append(user) 
     def init_managers(self):
         self.datainterface.set_data(self.stations,self.charging_stations, self.bikes)
-        self.demandmanager.set_data(self.bikes)
+        #self.demandmanager.set_data(self.bikes)
         #self.chargemanager.set_data(self.bikes)
         #self.chargemanager.start()
         
-class Assets: #Put inside of City
-    #location of bikes, situaition of stations
-    #it is updated by user trips and the FleetManager
-    def __init__(self,env):
-        self.env=env
+# class Assets: #Put inside of City
+#     #location of bikes, situaition of stations
+#     #it is updated by user trips and the FleetManager
+#     def __init__(self,env):
+#         self.env=env
 
-class RebalancingManager:
-    #makes rebalancing decisions for SB and dockless
-    def __init__(self,env):
-        self.env=env
-class DemandPredictionManager:
-    #predictive rebalancing for autonomous
-    def __init__(self,env):
-        self.env=env
+
+# class DemandPredictionManager:
+#     #predictive rebalancing for autonomous
+#     def __init__(self,env):
+#         self.env=env
 # class ChargeManager:
 #     #makes recharging decisions
 #     def __init__(self,env):
@@ -211,16 +216,17 @@ class DemandPredictionManager:
 #                     bike.autonomous_charge()
             
 
-class FleetManager:
-    #sends the decisions to the bikes
-    #updates SystemStateData
-    def __init__(self,env):
-        self.env=env
+# class FleetManager:
+#     #sends the decisions to the bikes
+#     #updates SystemStateData
+#     def __init__(self,env):
+#         self.env=env
 
 #MAIN BODY - SIMULATION AND HISTORY GENERATION
 env = simpy.Environment()
-datainterface=DataInterface(env)
-demandmanager=DemandManager(env)
+datainterface=DataInterface(env, network)
+#demandmanager=DemandManager(env)
+#rebalancingmanager=RebalancingManager(env)
 #chargemanager=ChargeManager(env)
-city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, van_data, datainterface, demandmanager)
-env.run(until=1000)
+city = SimulationEngine(env, stations_data, OD_df, bikes_data, charging_stations_data, datainterface, network)
+env.run(until=5000)

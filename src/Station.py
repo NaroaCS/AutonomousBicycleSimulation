@@ -24,8 +24,15 @@ class Station:
     def has_bikes(self):
         return self.n_bikes > 0
 
+    #def n_bikes(self):
+        #return self.n_bikes
+
     def has_docks(self):
         return self.capacity - self.n_bikes > 0
+
+    #def n_docks(self):
+        #n_docks= self.capacity - self.n_bikes
+        #return n_docks
 
     def empty(self):
         return self.n_bikes == 0
@@ -44,10 +51,10 @@ class Station:
             print('[%.2f] Station %d has no docks available' %
               (self.env.now, self.station_id))
 
-    def detach_bike(self): #What hapens if no bikes?
+    def detach_bike(self, bike_id): #What hapens if no bikes?
         if self.has_bikes(): 
             self.n_bikes-=1 
-            bike_id=random.choice(self.bikes) 
+            #bike_id=random.choice(self.bikes) 
             self.bikes.remove(bike_id) 
         else:
             print('[%.2f] Station %d has no bikes available' %

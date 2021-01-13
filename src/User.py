@@ -1,14 +1,23 @@
 import simpy 
+import random 
 import numpy as np
 import pandas as pd
+import json
+
 #from .Router import Network
 from .Graph import Graph
+from .Location import Location
 
-network=Graph()
-WALKING_SPEED= 5/3.6 #m/s
+#network=Graph()
+
+with open('config.json') as config_file:
+    params = json.load(config_file)
+
+WALKING_SPEED= params['WALKING_SPEED']/3.6 #m/s
+BETA= params['BETA']  #probability of getting a magic bike or dock in %
 
 class User:
-    def __init__(self,env,user_id, origin, destination, departure_time):
+    def __init__(self,env, network, user_id, origin, destination, departure_time):
         self.env=env
         self.user_id=user_id
         self.location= None
@@ -19,6 +28,8 @@ class User:
         self.origin=origin
         self.destination=destination
         self.departure_time=departure_time
+
+        self.network = network
     
     def process(self):
 
@@ -46,14 +57,16 @@ class User:
         
     
     def dist(self, a, b):
-        route=network.get_route(a[1], a[0], b[1], b[0]) #Warning! In routing is lon,lat instead of lat,lon
-        d=route['cum_distances'][-1] #The cumulative distance is saved in thsi colum so we only need the last item
+        a = Location(a[1], a[0])
+        b = Location(b[1], b[0])
+        d = self.network.get_shortest_path_length(a,b)
         return d
 
 class StationBasedUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
-        super().__init__(env, user_id, origin, destination, departure_time)
+    def __init__(self, env, network, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, network, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
+        #self.rebalancingmanager=rebalancingmanager
 
     def start(self):   
         self.station_id = None
@@ -77,8 +90,19 @@ class StationBasedUser(User):
             self.station_id=station
 
             if self.station_id is None:
-                print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
-                return
+                rand_number= random.randint(1,100)
+                if rand_number <= BETA:
+                    print('[%.2f] User %d  made a magic bike request' % (self.env.now, self.user_id))
+                    [station, station_location, visited_stations]= self.datainterface.magic_bike(self.location, self.visited_stations)
+                    self.station_id=station
+                    if station is None:
+                        print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
+                        return
+                elif rand_number > BETA:
+                    print('[%.2f] User %d  will not make the trip' % (self.env.now, self.user_id))
+                    return
+            ### HOW DO WE SAVE THE MAGIC BIKES ???? ###
+
 
             print('[%.2f] User %d selected start station [%.4f, %.4f]' % (self.env.now, self.user_id, station_location[0],station_location[1]))
 
@@ -95,7 +119,26 @@ class StationBasedUser(User):
         while not self.event_interact_bike.triggered:
             # 5-Select destination station
             [station, station_location, visited_stations]=self.select_end_station(self.destination,self.visited_stations)
+            self.station_id=station
 
+            
+
+            if self.station_id is None:
+                rand_number= random.randint(1,100)
+                if rand_number <= BETA:
+                    print('[%.2f] User %d  made a magic dock request' % (self.env.now, self.user_id))
+                    [station, station_location, visited_stations]= self.datainterface.magic_dock(self.location, self.visited_stations)
+                    if station is None:
+                        print('[%.2f] User %d  will end at a station out of walkable distance' % (self.env.now, self.user_id))
+                        [station, station_location, visited_stations]= self.datainterface.notwalkable_dock(self.location, self.visited_stations)
+                    
+                elif rand_number > BETA:
+                    print('[%.2f] User %d  will end at a station out of walkable distance' % (self.env.now, self.user_id))
+                    [station, station_location, visited_stations]= self.datainterface.notwalkable_dock(self.location, self.visited_stations)
+
+            ### HOW DO WE SAVE THE MAGIC docks???? ###
+            
+            self.station_id=station
             print('[%.2f] User %d selected end station %d' % (self.env.now, self.user_id, self.station_id))
 
             # 6-Ride bike
@@ -137,7 +180,7 @@ class StationBasedUser(User):
                 self.bike_id = self.datainterface.station_choose_bike(station_id)
                 bike_id=self.bike_id
                 self.datainterface.bike_register_unlock(bike_id, self.user_id)
-                self.datainterface.station_detach_bike(station_id)
+                self.datainterface.station_detach_bike(station_id, bike_id)
             else: #lock
                 bike_id=self.bike_id
                 self.datainterface.bike_register_lock(bike_id, self.user_id)
@@ -152,8 +195,8 @@ class StationBasedUser(User):
                        (self.env.now, self.station_id, 'bikes' if action == 'unlock' else 'docks'))
              
 class DocklessUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface):
-        super().__init__(env, user_id, origin, destination, departure_time)
+    def __init__(self, env, network, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, network, user_id, origin, destination, departure_time)
         self.datainterface=datainterface
     def start(self):
         self.event_select_dockless_bike = self.env.event()
@@ -205,12 +248,12 @@ class DocklessUser(User):
     def unlock_bike(self):
         dockless_bike_id=self.bike_id
         if not self.datainterface.dockless_bike_busy(dockless_bike_id):
-            #yield self.env.timeout(1)
+            yield self.env.timeout(1)
             self.bike_id = dockless_bike_id
             self.datainterface.dockless_bike_unlock(dockless_bike_id, self.user_id)
             self.event_unlock_bike.succeed()
         else:
-            #yield self.env.timeout(3)
+            yield self.env.timeout(3)
             print('[%.2f] User %d -> Bike %d has already been rented. Looking for another one.' % (self.env.now, self.user_id,dockless_bike_id))
 
     def lock_bike(self):
@@ -218,9 +261,9 @@ class DocklessUser(User):
         self.datainterface.dockless_bike_lock(dockless_bike_id)
 
 class AutonomousUser(User):
-    def __init__(self, env, user_id, origin, destination, departure_time, datainterface, demandmanager):
-        super().__init__(env, user_id, origin, destination, departure_time)
-        self.demandmanager=demandmanager
+    def __init__(self, env, network, user_id, origin, destination, departure_time, datainterface):
+        super().__init__(env, network, user_id, origin, destination, departure_time)
+        #self.demandmanager=demandmanager
         self.datainterface=datainterface
 
     def start(self):
@@ -265,7 +308,7 @@ class AutonomousUser(User):
         yield self.env.process(self.datainterface.autonomous_bike_drive(self.bike_id, self.location))
 
     def call_autonomous_bike(self, location):  
-        assigned_bike_info=self.demandmanager.assign_autonomous_bike(location)
+        assigned_bike_info=self.datainterface.assign_autonomous_bike(location)
         return assigned_bike_info
 
     def drop_bike(self):
