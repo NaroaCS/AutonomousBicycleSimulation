@@ -2,6 +2,7 @@
 Fleet Simulation of MIT Autonomous Bicycle Project
 
 Main file: BikeFleetSimulation.py
+To update the distribution of bikes and specially after changing the number of bikes run BikeGenerator.py
 
 
 ## Configuration of parameters
