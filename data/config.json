@@ -1,0 +1,21 @@
+{
+    "MODE": 0,
+
+    "NUM_BIKES": 3000,
+
+    "WALK_RADIUS": 500,
+    "MAX_AUTONOMOUS_RADIUS": 3000,
+
+    "RIDING_SPEED": 15,
+    "AUT_DRIVING_SPEED": 10,
+    "WALKING_SPEED": 5,
+
+    "MIN_BATTERY_LEVEL": 25,
+    "BATTERY_CONSUMPTION_METER": 0.1,
+    "CHARGING_SPEED": 5,
+
+    "BETA": 90,
+    "MIN_N_BIKES": 3,
+    "MIN_N_DOCKS": 3
+
+}
