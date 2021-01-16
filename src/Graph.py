@@ -1,29 +1,28 @@
-
 import networkx as nx
 import pandana as pdna
 import os
 import numpy as np
 from scipy import spatial
 import pandas as pd
-from .Location import Location
+from Location import Location
+
 
 class Graph:
     def __init__(self):
         self.start()
 
     def start(self):
-        print('Loading graph')
-        if not hasattr(self, 'G'):
+        print("Loading graph")
+        if not hasattr(self, "G"):
             self.load_graphml()
             self.process_graph()
-            self.get_nodes_edges()
-            self.create_kdtree()
+            self.compute_nodes_edges()
+            self.create_kdtree_nodes()
             self.create_network()
-        print('Loaded graph')
-        
+        print("Loaded graph")
 
     def load_graphml(self):
-        path = './data/greater_boston_road.graphml'
+        path = "../data/greater_boston_road.graphml"
         self.G = nx.read_graphml(path)
 
     def process_graph(self):
@@ -35,54 +34,109 @@ class Graph:
         [len(x) for x in S]
         self.G = nx.relabel.convert_node_labels_to_integers(S[0])
 
-    def get_nodes_edges(self):
+    def compute_nodes_edges(self):
         # NODES AND EDGES
-        nodes_x = [float(x) for x in nx.get_node_attributes(self.G, 'x').values()]
-        nodes_y = [float(y) for y in nx.get_node_attributes(self.G, 'y').values()]
+        nodes_x = [float(x) for x in nx.get_node_attributes(self.G, "x").values()]
+        nodes_y = [float(y) for y in nx.get_node_attributes(self.G, "y").values()]
         self.nodes = np.column_stack([nodes_x, nodes_y])
-        self.edges = [float(x) for x in nx.get_edge_attributes(self.G, 'length').values()]
+        self.edges = [float(x) for x in nx.get_edge_attributes(self.G, "length").values()]
 
-    def create_kdtree(self):
-        self.kdtree = spatial.KDTree(self.nodes)
+    def create_kdtree_nodes(self):
+        self.kdtree_nodes = spatial.KDTree(self.nodes)
 
-    def get_closest_node_kdtree(self, location):
+    def closest_node_kdtree(self, location, k=1):
         if not self.kdtree_nodes:
-            self.create_kdtree()
-        distance, closest = self.kdtree_nodes.query(location.get(), 1)
+            self.create_kdtree_nodes()
+        distance, closest = self.kdtree_nodes.query(location.get_loc(), k)
+        return closest
+
+    def create_kdtree_stations(self, stations):
+        self.kdtree_stations = spatial.KDTree(stations)
+
+    def precompute_stations_nodes(self, locations):
+        pts = pd.DataFrame(locations, columns=["lon", "lat"])
+        self.stations_nodes = self.network.get_node_ids(pts.lon, pts.lat)
+        return self.stations_nodes
+
+    def precompute_nearest_stations(self, locations, maxdist, maxitems):
+        self.maxitems = maxitems
+        pts = pd.DataFrame(locations, columns=["lon", "lat"])
+        self.network.set_pois(category="stations", maxdist=maxdist, maxitems=maxitems, x_col=pts.lon, y_col=pts.lat)
+
+        self.nearest_stations = self.network.nearest_pois(distance=maxdist, category="stations", num_pois=maxitems, include_poi_ids=True)
+
+    def closest_station_kdtree(self, location, k=1):
+        if not self.kdtree_stations:
+            self.create_kdtree_stations()
+        distance, closest = self.kdtree_stations.query(location.get_loc(), k)
         return closest
 
     def create_network(self):
-        nodes_df = pd.DataFrame(self.nodes, columns=['x','y'])
+        nodes_df = pd.DataFrame(self.nodes, columns=["x", "y"])
         edges_df = nx.to_pandas_edgelist(self.G)
 
-        self.network = pdna.Network(nodes_df['x'], nodes_df['y'], edges_df['source'], edges_df['target'], edges_df[['length']])
+        self.network = pdna.Network(nodes_df["x"], nodes_df["y"], edges_df["source"], edges_df["target"], edges_df[["length"]],)
         # self.network.precompute(10000)
 
-    def get_route(self, from_lon, from_lat, to_lon, to_lat):
-        from_location = Location(from_lon, from_lat)
-        to_location = Location(to_lon, to_lat)
-        return self.get_shortest_path(from_location, to_location)
+    def route(self, from_lon, from_lat, to_lon, to_lat):
+        from_location = Location(from_lon, from_lat)  # TODO
+        to_location = Location(to_lon, to_lat)  # TODO
+        return self.shortest_path(from_location, to_location)
 
-    def get_closest_nodes(self, locations):
-        coords = np.array([loc.get() for loc in locations])
-        pts = pd.DataFrame(coords, columns=['lon', 'lat'])
+    def closest_nodes(self, locations):
+        lon = [loc.lon for loc in locations]
+        lat = [loc.lat for loc in locations]
+        return self.network.get_node_ids(lon, lat)
+
+        coords = [loc.get_loc() for loc in locations]
+        pts = pd.DataFrame(coords, columns=["lon", "lat"])
         return self.network.get_node_ids(pts.lon, pts.lat)
 
-    def get_shortest_path(self, from_location, to_location):
-        from_closest, to_closest = self.get_closest_nodes([from_location, to_location])
+    def shortest_path(self, from_location, to_location):
+        from_closest, to_closest = self.closest_nodes([from_location, to_location])
         return self.network.shortest_path(from_closest, to_closest)
 
-    def get_shortest_path_length(self, from_location, to_location):
-        from_closest, to_closest = self.get_closest_nodes([from_location, to_location])
-        return self.network.shortest_path_length(from_closest, to_closest)
-    
-    def get_shortest_paths(self, from_locations, to_locations):
+    def shortest_path_length(self, from_location, to_location):
+        # from_closest, to_closest = self.closest_nodes([from_location, to_location])
+        return self.network.shortest_path_length(from_location.node, to_location.node)
+
+    def shortest_paths_multiple(self, from_locations, to_locations):
         n_from, n_to = len(from_locations), len(to_locations)
-        closests = self.get_closest_nodes([from_locations, to_locations])
+        closests = self.closest_nodes([from_locations, to_locations])
 
         origs = [o for o in closests for d in closests]
         dests = [d for o in closests for d in closests]
-        return self.network.shortest_path_lengths(np.tile(closests[:n_from],n_to), closests[n_from:])
+        return self.network.shortest_path_lengths(np.tile(closests[:n_from], n_to), closests[n_from:])
+
+    def shortest_path_length_stations(self, from_location):
+        # OPTION A: return air-distance to k stations via kdtree
+        # distances, closests = self.kdtree_stations.query(from_location.get_loc(), 10)
+        # return closests, distances
+
+        # OPTION B: use precomputed poi and precomputed closest nodes
+        user_node = from_location.get_node()  # self.closest_nodes([from_location])
+        k = min(8, self.maxitems)
+        distances = self.nearest_stations.iloc[user_node, :k].values
+        stations_id = self.nearest_stations.iloc[user_node, self.maxitems : self.maxitems + k].values
+        distances = distances[~np.isnan(stations_id)].tolist()
+        stations_id = stations_id[~np.isnan(stations_id)].astype(int).tolist()
+        return stations_id, distances
+
+        # OPTION C: filter k air-nearest stations via kdtree + shortest-path via graph
+        k = 10
+        stations_id = self.closest_station_kdtree(from_location, k)
+        user_node = from_location.get_node()  # self.closest_nodes([from_location])
+        distances = self.network.shortest_path_lengths(np.tile(user_node, k), self.stations_nodes[stations_id])
+        # print(stations_id, self.stations_nodes[stations_id], user_node, distances)
+        stations_id, distances = sort_lists(stations_id, distances)
+        return stations_id, distances
+
+
+def sort_lists(x, y):
+    tuples = zip(*sorted(zip(x, y), reverse=False, key=lambda v: v[1]))
+    x, y = [list(tuple) for tuple in tuples]
+    return x, y
+
 
 def main():
     graph = Graph()
@@ -90,8 +144,9 @@ def main():
     from_lat = 42.361942
     to_lon = -71.087446
     to_lat = 42.360590
-    route = graph.get_route(from_lon, from_lat, to_lon, to_lat)
+    route = graph.route(from_lon, from_lat, to_lon, to_lat)
     print(route)
 
-if __name__ == '__main__':
-    main() 
+
+if __name__ == "__main__":
+    main()
