@@ -222,7 +222,8 @@ class DataInterface:
 
         # start = time.time()
         # create kd-tree and find k nearest
-        kdtree = spatial.KDTree(locations, leafsize=50)  # , compact_nodes=False, balanced_tree=False)
+        # kdtree = spatial.KDTree(locations, leafsize=50)  # , compact_nodes=False, balanced_tree=False)
+        kdtree = spatial.KDTree(locations, leafsize=50, compact_nodes=False, balanced_tree=False)
         # print("create kd-tree", time.time()-start)
         k = min(10, len(available_bikes))
         d, bikes_id = kdtree.query(location.get_loc(), k)
