@@ -114,8 +114,8 @@ class Graph:
         # return closests, distances
 
         # OPTION B: use precomputed poi and precomputed closest nodes
-        user_node = from_location.get_node()  # self.closest_nodes([from_location])
-        k = min(8, self.maxitems)
+        user_node = from_location.node  # self.closest_nodes([from_location])
+        k = min(10, self.maxitems)
         distances = self.nearest_stations.iloc[user_node, :k].values
         stations_id = self.nearest_stations.iloc[user_node, self.maxitems : self.maxitems + k].values
         distances = distances[~np.isnan(stations_id)].tolist()
@@ -125,15 +125,15 @@ class Graph:
         # OPTION C: filter k air-nearest stations via kdtree + shortest-path via graph
         k = 10
         stations_id = self.closest_station_kdtree(from_location, k)
-        user_node = from_location.get_node()  # self.closest_nodes([from_location])
+        user_node = from_location.node  # self.closest_nodes([from_location])
         distances = self.network.shortest_path_lengths(np.tile(user_node, k), self.stations_nodes[stations_id])
         # print(stations_id, self.stations_nodes[stations_id], user_node, distances)
-        stations_id, distances = sort_lists(stations_id, distances)
+        stations_id, distances = sort_lists(stations_id, distances, 1)
         return stations_id, distances
 
 
-def sort_lists(x, y):
-    tuples = zip(*sorted(zip(x, y), reverse=False, key=lambda v: v[1]))
+def sort_lists(x, y, key=0):
+    tuples = zip(*sorted(zip(x, y), reverse=False, key=lambda v: v[key]))
     x, y = [list(tuple) for tuple in tuples]
     return x, y
 
