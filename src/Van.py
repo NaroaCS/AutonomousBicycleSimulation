@@ -1,4 +1,4 @@
-# import simpy 
+# import simpy
 # import numpy as np
 # import pandas as pd
 
@@ -22,14 +22,14 @@
 #     def has_space(self):
 #         return self.capacity - self.n_bikes > 0
 
-#     def attach_bike(self, bike_id): 
-#         if self.has_space(): 
-#             self.n_bikes+=1 
-#             self.bikes.append(bike_id) 
+#     def attach_bike(self, bike_id):
+#         if self.has_space():
+#             self.n_bikes+=1
+#             self.bikes.append(bike_id)
 #         else:
 #             print('[%.2f] Van %d has no spaces available' %
 #               (self.env.now, self.station_id))
 
-#     def detach_bike(self, bike_id): 
-#         self.n_bikes-=1 
-#         self.bikes.remove(bike_id) 
+#     def detach_bike(self, bike_id):
+#         self.n_bikes-=1
+#         self.bikes.remove(bike_id)
