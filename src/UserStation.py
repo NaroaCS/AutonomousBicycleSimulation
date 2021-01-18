@@ -147,6 +147,7 @@ class UserStation:
     def select_end_station(self, destination, visited_stations):
         return self.ui.select_end_station(destination, visited_stations)
 
+    # TODO: separate into lock/unlock bike
     def interact_bike(self, action):
         # Check if there are still bikes(unlock)/docks(lock) at arrival
 

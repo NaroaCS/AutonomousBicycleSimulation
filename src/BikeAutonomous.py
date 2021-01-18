@@ -121,6 +121,7 @@ class BikeAutonomous:
     def select_charging_station(self, location, visited_stations):
         return self.ui.select_charging_station(location, visited_stations)
 
+    # TODO: separate into lock/unlock bike
     def interact_charging_station(self, action):
         if action == "lock":
             if self.ui.station_has_docks(self.station_id):
