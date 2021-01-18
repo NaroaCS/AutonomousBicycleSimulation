@@ -33,6 +33,8 @@ The parameters to be configured for this simulation can be found on the file **c
 
 **BATTERY_CONSUMPTION_METER:** battery consumption in autonomous mode [%/m]
 
+**SF:** to assign an autonomous bike to a user the battery level has to be greater than MIN_BATTERY_LEVEL + SF*(MAX_AUTONOMOUS_RADIUS * BATTERY_CONSUMPTION_METER) where SF is a safety factor >1
+
 **CHARGING_SPEED:** charging speed of the battery in hours for charing from 0 to 100% [h]
 
 
