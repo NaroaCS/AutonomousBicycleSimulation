@@ -1,6 +1,5 @@
 import networkx as nx
 import pandana as pdna
-import os
 import numpy as np
 from scipy import spatial
 import pandas as pd

@@ -1,6 +1,5 @@
 # LIBRARIES
 import simpy
-import random
 import numpy as np
 import pandas as pd
 import time
@@ -37,7 +36,7 @@ with open("../data/config.json") as f:
     config = json.load(f)
 
 stations_data = pd.read_csv("../data/bluebikes_stations_bikes.csv")
-users_data = pd.read_csv("../data/user_trips.csv", nrows=2000)  # .tail(2)  # .head(200).sample(random_state=0)
+users_data = pd.read_csv("../data/user_trips.csv", nrows=200)  # .tail(2)  # .head(200).sample(random_state=0)
 
 class SimulationEngine:
 
@@ -130,7 +129,7 @@ class SimulationEngine:
             user.start()
             self.users.append(user)
 
-        print("done")
+        print("Loaded Users")
 
     def init_managers(self):
         if self.MODE != 1:
@@ -175,8 +174,6 @@ class SimulationEngine:
 # chargemanager=ChargeManager(env)
 
 city = SimulationEngine(config, stations_data, users_data)
-
-import time
 
 start = time.time()
 city.run(until=150000)
