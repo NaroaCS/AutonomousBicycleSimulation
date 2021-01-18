@@ -1,4 +1,6 @@
 logs/
 __pycache__
-Autonomous_bike_sim.code-workspace
+*.code-workspace
 .DS_Store
+.vscode
+.venv
