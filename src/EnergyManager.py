@@ -1,5 +1,6 @@
 import logging
 
+
 class EnergyManager:
     # makes recharging decisions
     def __init__(self, env, config):

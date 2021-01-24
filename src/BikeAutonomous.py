@@ -1,6 +1,6 @@
 import logging
 
-from Battery import Battery
+from .Battery import Battery
 
 
 class BikeAutonomous:
