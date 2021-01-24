@@ -39,36 +39,32 @@ class DataInterface:
         return self.graph.shortest_path_length(a, b)
 
     def select_start_station(self, location, visited_stations):
-        stations_id, distances = self.graph.shortest_path_length_stations(location)
+        stations_id, road_distances, air_distances = self.graph.shortest_path_length_stations(location)
 
-        reason = np.zeros(3, dtype=bool)
-        for sid, dist in zip(stations_id, distances):
+        # TODO: DONE remove visited from selection criteria 
+        # TODO: DONE calculate reason for magic bikes: return if there are walkable stations 
+        # TODO: DONE adapt walkable criteria to air-distance 
+        any_walkable = False
+        for sid, dist in zip(stations_id, air_distances):
             station = self.stations[sid]
             has_bikes = station.has_bikes()
-            visited = sid in visited_stations
             walkable = dist < self.WALK_RADIUS
-            if has_bikes and not visited and walkable:
+            if has_bikes and walkable:
                 visited_stations.append(sid)
-                return sid, station.location, visited_stations, None
-            reason = np.logical_or(reason, [has_bikes, not visited, walkable])
+                return sid, station.location, visited_stations, True
+            if walkable:
+                any_walkable = True
 
-        reason_idx = [i for i, r in enumerate(reason) if not r]
-        print("REASON:", reason, reason_idx)
-        # if not any_has_bikes:
-        #     logging.info("[%.2f] No bikes available" % (self.env.now))
-        # if not any_walkable:
-        #     logging.info("[%.2f] Not in walkable distance" % (self.env.now))
-        return None, None, visited_stations, reason_idx
+        return None, None, visited_stations, any_walkable
 
     def select_end_station(self, destination, visited_stations):
-        stations_id, distances = self.graph.shortest_path_length_stations(destination)
+        stations_id, road_distances, air_distances = self.graph.shortest_path_length_stations(destination)
 
-        for sid, dist in zip(stations_id, distances):
+        for sid, dist in zip(stations_id, air_distances):
             station = self.stations[sid]
             has_docks = station.has_docks()
-            visited = sid in visited_stations
             walkable = dist < self.WALK_RADIUS
-            if has_docks and not visited and walkable:
+            if has_docks and walkable:
                 visited_stations.append(sid)
                 return sid, station.location, visited_stations
 
@@ -76,10 +72,10 @@ class DataInterface:
         return None, None, visited_stations
 
     def magic_bike(self, location, visited_stations):
-        stations_id, distances = self.graph.shortest_path_length_stations(location)
+        stations_id, road_distances, air_distances =  self.graph.shortest_path_length_stations(location)
 
         source_station_id = None
-        for sid, dist in zip(stations_id, distances):
+        for sid in stations_id:
             station = self.stations[sid]
             has_bikes = station.num_bikes > self.MAGIC_MIN_BIKES
             if has_bikes:
@@ -90,7 +86,7 @@ class DataInterface:
             logging.info("[%.2f] No stations found as source of magic bike" % (self.env.now))
             return None, None, visited_stations
 
-        for sid, dist in zip(stations_id, distances):
+        for sid, dist in zip(stations_id, air_distances):
             station = self.stations[sid]
             has_docks = station.num_docks > 0
             walkable = dist < self.WALK_RADIUS
@@ -106,10 +102,10 @@ class DataInterface:
         ##### WHERE DO WE SAVE THE nº of magic trips???? #######
 
     def magic_dock(self, location, visited_stations):
-        stations_id, distances = self.graph.shortest_path_length_stations(location)
+        stations_id, road_distances, air_distances = self.graph.shortest_path_length_stations(location)
 
         source_station_id = None
-        for sid, dist in zip(stations_id, distances):
+        for sid in stations_id:
             station = self.stations[sid]
             has_docks = station.num_docks > self.MAGIC_MIN_DOCKS
             if has_docks:
@@ -120,7 +116,7 @@ class DataInterface:
             logging.info("[%.2f] No stations found as target of magic bike" % (self.env.now))
             return None, None, visited_stations
 
-        for sid, dist in zip(stations_id, distances):
+        for sid, dist in zip(stations_id, air_distances):
             station = self.stations[sid]
             has_bikes = station.num_bikes > 0
             walkable = dist < self.WALK_RADIUS
@@ -136,17 +132,16 @@ class DataInterface:
 
     def notwalkable_dock(self, destination, visited_stations):
 
-        stations_id, distances = self.graph.shortest_path_length_stations(destination)
+        stations_id, road_distances, air_distances = self.graph.shortest_path_length_stations(destination)
 
-        for sid, dist in zip(stations_id, distances):
+        for sid in stations_id:
             station = self.stations[sid]
             has_docks = station.has_docks()
-            visited = sid in visited_stations
-            if has_docks and not visited:
+            if has_docks:
                 visited_stations.append(sid)
                 return sid, station.location, visited_stations
 
-        logging.info("[%.2f] ERROR: All stations with docks had been visited -> Think about changing this part of the code" % (self.env.now))
+        logging.info("[%.2f] ERROR: No station with docks -> Think about changing this part of the code" % (self.env.now))
         return None, None, visited_stations
 
     def select_dockless_bike(self, location):
@@ -165,23 +160,32 @@ class DataInterface:
 
         # start = time.time()
         # create kd-tree and find k nearest
-        kdtree = spatial.KDTree(locations, leafsize=50)  # , compact_nodes=False, balanced_tree=False)
+        kdtree = spatial.KDTree(locations, leafsize=50, compact_nodes=False, balanced_tree=False)
         # print("create kd-tree", time.time()-start)
         k = min(10, len(available_bikes))
-        d, bikes_id = kdtree.query(location.get_loc(), k)
+        air_distances, bikes_id = kdtree.query(location.get_loc(), k)
         # print("query kd-tree", time.time()-start)
+
+        # TODO: DONE check if nearest bike via-air is walkable => if not return None 
+        if air_distances[0] > self.WALK_RADIUS:
+            logging.info("[%.2f] No bikes in walkable distance" % (self.env.now))
+            return None, None
 
         # start = time.time()
         # get nodes in graph and estimate shortest path lengths
         user_node = location.node
         bikes_nodes = [available_bikes[i].location.node for i in bikes_id]
         # print("get nodes", time.time()-start)
+
+        # TODO: if the walkable criteria is based on air-distances, do we need the road_distance?
+        # only for sorting, because the bikes_id are selected based on kdtree (air-distances)
         distances = self.graph.network.shortest_path_lengths(np.tile(user_node, k), bikes_nodes)
         bikes_id, distances = sort_lists(bikes_id, distances, 1)
+        air_distances, distances = sort_lists(air_distances, distances, 1)
         # print("shortest path", time.time()-start)
 
         # look for walkable ones
-        for bid, dist in zip(bikes_id, distances):
+        for bid, dist in zip(bikes_id, air_distances):
             bike = available_bikes[bid]
             walkable = dist < self.WALK_RADIUS
             if walkable:
@@ -191,24 +195,21 @@ class DataInterface:
         return None, None
 
     def select_charging_station(self, location, visited_stations):
-        # has docks and not visited
-        stations_id, distances = self.graph.shortest_path_length_stations(location)
+        stations_id, road_distances, air_distances = self.graph.shortest_path_length_stations(location)
 
-        for sid, dist in zip(stations_id, distances):
+        for sid in stations_id:
             station = self.stations[sid]
             has_docks = station.has_docks()
-            visited = sid in visited_stations
-            if has_docks and not visited:
+            if has_docks:
                 visited_stations.append(sid)
                 return sid, station.location, visited_stations
 
-        logging.info("[%.2f] No charging stations with available space that have not been visited yet" % (self.env.now))
+        logging.info("[%.2f] No charging stations with available space" % (self.env.now))
         return None, None, visited_stations
 
     def call_autonomous_bike(self, location):
 
         # not busy, reachable, with battery
-        # TODO [OPTIONAL] if not busy and low battery => send to charge
 
         # import time
         # start = time.time()
@@ -222,20 +223,28 @@ class DataInterface:
 
         # start = time.time()
         # create kd-tree and find k nearest
-        # kdtree = spatial.KDTree(locations, leafsize=50)  # , compact_nodes=False, balanced_tree=False)
         kdtree = spatial.KDTree(locations, leafsize=50, compact_nodes=False, balanced_tree=False)
         # print("create kd-tree", time.time()-start)
         k = min(10, len(available_bikes))
-        d, bikes_id = kdtree.query(location.get_loc(), k)
+        air_distances, bikes_id = kdtree.query(location.get_loc(), k)
         # print("query kd-tree", time.time()-start)
+
+        # TODO: DONE check if nearest bike via-air is walkable => if not return None
+        if air_distances[0] > self.WALK_RADIUS:
+            logging.info("[%.2f] No bikes in walkable distance" % (self.env.now))
+            return None, None
 
         # start = time.time()
         # get nodes in graph and estimate shortest path lengths
         user_node = location.node
         bikes_nodes = [available_bikes[i].location.node for i in bikes_id]
         # print("get nodes", time.time()-start)
+        
+        # TODO: if the walkable criteria is based on air-distances, do we need the road_distance?
+        # only for sorting, because the bikes_id are selected based on kdtree (air-distances)
         distances = self.graph.network.shortest_path_lengths(np.tile(user_node, k), bikes_nodes)
         bikes_id, distances = sort_lists(bikes_id, distances, 1)
+        air_distances, distances = sort_lists(air_distances, distances, 1)
         # print("shortest path", time.time()-start)
 
         # look for walkable ones
