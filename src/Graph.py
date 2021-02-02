@@ -3,7 +3,7 @@ import pandana as pdna
 import numpy as np
 from scipy import spatial
 import pandas as pd
-from Location import Location
+from .Location import Location
 
 
 class Graph:
@@ -18,10 +18,9 @@ class Graph:
             self.compute_nodes_edges()
             self.create_kdtree_nodes()
             self.create_network()
-        print("Loaded graph")
 
     def load_graphml(self):
-        path = "../data/greater_boston_road.graphml"
+        path = "./data/greater_boston_road.graphml"
         self.G = nx.read_graphml(path)
 
     def process_graph(self):
@@ -78,8 +77,8 @@ class Graph:
         # self.network.precompute(10000)
 
     def route(self, from_lon, from_lat, to_lon, to_lat):
-        from_location = Location(from_lon, from_lat)  # TODO
-        to_location = Location(to_lon, to_lat)  # TODO
+        from_location = Location(from_lon, from_lat)  # TODO: remove
+        to_location = Location(to_lon, to_lat)  # TODO: remove
         return self.shortest_path(from_location, to_location)
 
     def closest_nodes(self, locations):
@@ -119,7 +118,11 @@ class Graph:
         stations_id = self.nearest_stations.iloc[user_node, self.maxitems : self.maxitems + k].values
         distances = distances[~np.isnan(stations_id)].tolist()
         stations_id = stations_id[~np.isnan(stations_id)].astype(int).tolist()
-        return stations_id, distances
+
+        user_location = np.radians(np.array(from_location.get_loc()))
+        stations_location = np.radians(self.kdtree_stations.data[stations_id])
+        air_distances = equirect(user_location[0], user_location[1], stations_location[:,0], stations_location[:,1])
+        return stations_id, distances, air_distances
 
         # OPTION C: filter k air-nearest stations via kdtree + shortest-path via graph
         k = 10
@@ -135,6 +138,14 @@ def sort_lists(x, y, key=0):
     tuples = zip(*sorted(zip(x, y), reverse=False, key=lambda v: v[key]))
     x, y = [list(tuple) for tuple in tuples]
     return x, y
+
+def equirect(lonA, latA, lonB, latB):
+    R = 6378137.0
+    x = (lonB - lonA) * np.cos( 0.5*(latB+latA) )
+    y = latB - latA
+    d = R * np.sqrt( x*x + y*y )
+    return d
+
 
 
 def main():

@@ -66,27 +66,22 @@ class UserStation:
         yield self.env.process(self.init_user())
 
         self.event_interact_bike = self.env.event()
-        while not self.event_interact_bike.triggered:
+        while not self.event_interact_bike.triggered:  # TODO: remove visited stations?? NOP
 
             # 2-Select origin station
-            self.station_id, station_location, self.visited_stations, reason = self.select_start_station(self.location, self.visited_stations)
+            self.station_id, station_location, self.visited_stations, any_walkable = self.select_start_station(self.location, self.visited_stations)
 
-            # TODO: Magic bikes // when to apply?
-            if self.station_id is None:
+            # TODO: DONE Magic bikes // REVIEW
+            if self.station_id is None and any_walkable:
                 rand_number = np.random.randint(100)
-                # if rand_number <= self.MAGIC_BETA:
-                #     logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.user_id))
-                #     [station, station_location, visited_stations,] = self.ui.magic_bike(self.location, self.visited_stations)
-                #     self.station_id = station
-                #     if station is None:
-                #         logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
-                #         return
-                # elif rand_number > self.MAGIC_BETA:
-                #     logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
-                #     return
-                logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
-                return
-            ### HOW DO WE SAVE THE MAGIC BIKES ???? ###
+                # TODO: DONE ask for magic bike in case there is walkable stations that have no bikes
+                if rand_number <= self.MAGIC_BETA:
+                    logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.id))
+                    self.station_id, station_location, self.visited_stations = self.ui.magic_bike(self.location, self.visited_stations)
+                if self.station_id is None:
+                    logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
+                    return
+            # TODO: HOW DO WE SAVE THE MAGIC BIKES ???? 
 
             logging.info("[%.2f] User %d selected start station %d" % (self.env.now, self.id, self.station_id))
 
@@ -104,24 +99,18 @@ class UserStation:
             # 5-Select destination station
             self.station_id, station_location, self.visited_stations = self.select_end_station(self.destination, self.visited_stations)
 
-            # TODO: Magic bikes
+            # TODO: DONE Magic bikes REVIEW
             if self.station_id is None:
                 rand_number = np.random.randint(100)
-                # if rand_number <= self.MAGIC_BETA:
-                #     logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.user_id))
-                #     [station, station_location, visited_stations,] = self.ui.magic_dock(self.location, self.visited_stations)
-                #     if station is None:
-                #         logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.user_id))
-                #         [station, station_location, visited_stations,] = self.ui.notwalkable_dock(self.location, self.visited_stations)
-
-                # elif rand_number > self.MAGIC_BETA:
-                #     logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.user_id))
-                #     [station, station_location, visited_stations,] = self.ui.notwalkable_dock(self.location, self.visited_stations)
-                # self.station_id = station
-                logging.info("[%.2f] User %d has no end station" % (self.env.now, self.id))
-                return
-
-            ### HOW DO WE SAVE THE MAGIC docks???? ###
+                if rand_number <= self.MAGIC_BETA:
+                    logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.user_id))
+                    self.station_id, station_location, self.visited_stations = self.ui.magic_dock(self.location, self.visited_stations)
+                if self.station_id is None:
+                    logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.user_id))
+                    self.station_id, station_location, self.visited_stations = self.ui.notwalkable_dock(self.location, self.visited_stations)
+                if self.station_id is None:
+                    logging.info("[%.2f] User %d has no end station" % (self.env.now, self.id))
+                    return
 
             logging.info("[%.2f] User %d selected end station %d" % (self.env.now, self.id, self.station_id))
 
@@ -133,6 +122,7 @@ class UserStation:
 
         # 8-Walk to destination
         yield self.env.process(self.walk_to(self.destination))
+        # TODO: estimate travel from building to nearest node
 
         # 9-Save state
         # self.save_state()
@@ -150,7 +140,6 @@ class UserStation:
     # TODO: separate into lock/unlock bike
     def interact_bike(self, action):
         # Check if there are still bikes(unlock)/docks(lock) at arrival
-
         if action == "unlock":
             if self.ui.station_has_bikes(self.station_id):
                 self.bike_id = self.ui.station_choose_bike(self.station_id)

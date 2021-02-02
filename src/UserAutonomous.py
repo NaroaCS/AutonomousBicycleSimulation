@@ -1,5 +1,6 @@
 import logging
 
+
 class UserAutonomous:
     id_count = -1
 
@@ -62,7 +63,7 @@ class UserAutonomous:
         self.bike_id, bike_location = self.call_autonomous_bike(self.location)
 
         if self.bike_id is None:
-            logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
+            logging.info("[%.2f] User %d will not make the trip" % (self.env.now, self.id))
             return
 
         logging.info("[%.2f] User %d was assigned the autonomous bike %d" % (self.env.now, self.id, self.bike_id))
@@ -77,15 +78,16 @@ class UserAutonomous:
         # 5-Lock bike
         yield self.env.process(self.lock_bike())
 
-        # 6-Charge bike if low battery
-        yield self.env.process(self.charge_bike())
-
-        # 7-Save state
+        # 6-Save state
         # self.save_state()
 
-        # 8-Finish
+        # 7-Finish
         yield self.env.timeout(10)
+        # TODO: estimate travel from building to nearest node
         logging.info("[%.2f] User %d arrived to final destination" % (self.env.now, self.id))
+
+        # 8-Charge bike if low battery
+        yield self.env.process(self.charge_bike())
 
     def autonomous_drive(self):
         yield self.env.process(self.ui.autonomous_drive(self.bike_id, self.location))

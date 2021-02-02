@@ -1,5 +1,6 @@
 import logging
 
+
 class UserDockless:
     id_count = -1
 

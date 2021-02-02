@@ -1,5 +1,6 @@
 import random
 
+
 class Station:
     id_count = -1
 
