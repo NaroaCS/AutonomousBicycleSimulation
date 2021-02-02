@@ -8,7 +8,7 @@ import os
 import sys
 import logging
 
-logging.basicConfig(filename="../app.log", filemode="w", format="%(levelname)s:%(message)s", level=logging.INFO)
+logging.basicConfig(filename="./app.log", filemode="w", format="%(levelname)s:%(message)s", level=logging.INFO)
 
 os.chdir(os.path.dirname(sys.argv[0]))
 # os.chdir("..")

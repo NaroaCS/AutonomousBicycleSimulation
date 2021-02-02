@@ -1,0 +1,1764 @@
+INFO:[28.00] User 0 initialized at location [-71.1121, 42.3724]
+INFO:[28.00] User 0 selected start station 70
+INFO:[55.00] User 1 initialized at location [-71.0605, 42.4126]
+INFO:[55.00] User 1 selected start station 136
+INFO:[71.00] User 2 initialized at location [-71.0982, 42.3603]
+INFO:[71.00] User 2 selected start station 203
+INFO:[119.00] User 3 initialized at location [-71.0865, 42.3460]
+INFO:[119.00] User 3 selected start station 55
+INFO:[128.00] User 4 initialized at location [-71.0892, 42.3498]
+INFO:[128.00] User 4 selected start station 30
+INFO:[139.00] User 5 initialized at location [-71.1229, 42.3800]
+INFO:[139.00] User 5 selected start station 157
+INFO:[152.49] User 0 walked from [-71.1121, 42.3724] to location [-71.1111, 42.3734]
+INFO:[152.49] User 0 unlocked bike 592 from station 70
+INFO:[153.00] User 6 initialized at location [-71.0952, 42.2694]
+INFO:[153.00] User 6 selected start station 208
+INFO:[153.49] User 0 selected end station 187
+INFO:[153.49] User 0 biking with bike 592 from [-71.1111, 42.3734] to location [-71.1006, 42.3635]
+INFO:[179.00] User 7 initialized at location [-71.0574, 42.3585]
+INFO:[179.00] User 7 selected start station 42
+INFO:[181.09] User 2 walked from [-71.0982, 42.3603] to location [-71.0967, 42.3614]
+INFO:[181.09] User 2 unlocked bike 1774 from station 203
+INFO:[182.09] User 2 selected end station 87
+INFO:[182.09] User 2 biking with bike 1774 from [-71.0967, 42.3614] to location [-71.0627, 42.3524]
+INFO:[204.00] User 8 initialized at location [-71.0749, 42.3458]
+INFO:[204.00] User 8 selected start station 96
+INFO:[207.56] User 4 walked from [-71.0892, 42.3498] to location [-71.0898, 42.3508]
+INFO:[207.56] User 4 unlocked bike 258 from station 30
+INFO:[208.56] User 4 selected end station 185
+INFO:[208.56] User 4 biking with bike 258 from [-71.0898, 42.3508] to location [-71.0970, 42.3487]
+INFO:[211.00] User 9 initialized at location [-71.0885, 42.3462]
+INFO:[211.00] User 9 selected start station 55
+INFO:[213.00] User 10 initialized at location [-71.0861, 42.3480]
+INFO:[213.00] User 10 selected start station 55
+INFO:[213.38] User 3 walked from [-71.0865, 42.3460] to location [-71.0868, 42.3474]
+INFO:[213.38] User 3 unlocked bike 469 from station 55
+INFO:[214.38] User 3 selected end station 68
+INFO:[214.38] User 3 biking with bike 469 from [-71.0868, 42.3474] to location [-71.1007, 42.3457]
+INFO:[227.00] User 11 initialized at location [-71.1128, 42.2995]
+INFO:[227.00] User 11 selected start station 138
+INFO:[231.00] User 12 initialized at location [-71.0921, 42.3598]
+INFO:[231.00] User 12 selected start station 212
+INFO:[231.00] User 12 walked from [-71.0921, 42.3598] to location [-71.0932, 42.3581]
+INFO:[231.00] User 12 unlocked bike 1857 from station 212
+INFO:[232.00] User 12 selected end station 117
+INFO:[232.00] User 12 biking with bike 1857 from [-71.0932, 42.3581] to location [-71.0973, 42.3492]
+INFO:[260.00] User 13 initialized at location [-71.0749, 42.3360]
+INFO:[260.00] User 13 selected start station 46
+INFO:[260.10] User 1 walked from [-71.0605, 42.4126] to location [-71.0584, 42.4125]
+INFO:[260.10] User 1 unlocked bike 1185 from station 136
+INFO:[261.10] User 1 selected end station 61
+INFO:[261.10] User 1 biking with bike 1185 from [-71.0584, 42.4125] to location [-71.0655, 42.3965]
+INFO:[276.64] User 7 walked from [-71.0574, 42.3585] to location [-71.0576, 42.3589]
+INFO:[276.64] User 7 unlocked bike 357 from station 42
+INFO:[277.64] User 7 selected end station 38
+INFO:[277.64] User 7 biking with bike 357 from [-71.0576, 42.3589] to location [-71.0863, 42.3661]
+INFO:[288.50] User 10 walked from [-71.0861, 42.3480] to location [-71.0868, 42.3474]
+INFO:[288.50] User 10 unlocked bike 466 from station 55
+INFO:[289.50] User 10 selected end station 278
+INFO:[289.50] User 10 biking with bike 466 from [-71.0868, 42.3474] to location [-71.1073, 42.3462]
+INFO:[335.14] User 5 walked from [-71.1229, 42.3800] to location [-71.1199, 42.3790]
+INFO:[335.14] User 5 unlocked bike 1371 from station 157
+INFO:[336.00] User 14 initialized at location [-71.1096, 42.3485]
+INFO:[336.00] User 14 selected start station 23
+INFO:[336.14] User 5 selected end station 191
+INFO:[336.14] User 5 biking with bike 1371 from [-71.1199, 42.3790] to location [-71.1190, 42.3867]
+INFO:[336.30] User 6 walked from [-71.0952, 42.2694] to location [-71.0936, 42.2679]
+INFO:[336.30] User 6 unlocked bike 1807 from station 208
+INFO:[337.30] User 6 selected end station 208
+INFO:[337.30] User 6 biking with bike 1807 from [-71.0936, 42.2679] to location [-71.0936, 42.2679]
+INFO:[337.30] User 6 locked bike 1807 in station 208
+INFO:[342.09] User 8 walked from [-71.0749, 42.3458] to location [-71.0765, 42.3447]
+INFO:[342.09] User 8 unlocked bike 805 from station 96
+INFO:[343.09] User 8 selected end station 298
+INFO:[343.09] User 8 biking with bike 805 from [-71.0765, 42.3447] to location [-71.0815, 42.3389]
+INFO:[354.26] User 13 walked from [-71.0749, 42.3360] to location [-71.0731, 42.3364]
+INFO:[354.26] User 13 unlocked bike 395 from station 46
+INFO:[355.26] User 13 selected end station 325
+INFO:[355.26] User 13 biking with bike 395 from [-71.0731, 42.3364] to location [-71.0740, 42.3385]
+INFO:[370.00] User 15 initialized at location [-71.1196, 42.3386]
+INFO:[370.00] User 15 selected start station 202
+INFO:[371.31] User 4 locked bike 258 in station 185
+INFO:[381.80] User 9 walked from [-71.0885, 42.3462] to location [-71.0868, 42.3474]
+INFO:[381.80] User 9 unlocked bike 465 from station 55
+INFO:[382.80] User 9 selected end station 278
+INFO:[382.80] User 9 biking with bike 465 from [-71.0868, 42.3474] to location [-71.1073, 42.3462]
+INFO:[426.66] User 13 locked bike 395 in station 325
+INFO:[444.32] User 4 walked from [-71.0970, 42.3487] to location [-71.0982, 42.3482]
+INFO:[452.00] User 16 initialized at location [-71.0602, 42.3732]
+INFO:[452.00] User 16 selected start station 313
+INFO:[454.32] User 4 arrived to final location [-71.0982, 42.3482]
+INFO:[462.00] User 17 initialized at location [-71.0849, 42.3492]
+INFO:[462.00] User 17 selected start station 226
+INFO:[511.79] User 14 walked from [-71.1096, 42.3485] to location [-71.1083, 42.3504]
+INFO:[511.79] User 14 unlocked bike 212 from station 23
+INFO:[512.79] User 14 selected end station 185
+INFO:[512.79] User 14 biking with bike 212 from [-71.1083, 42.3504] to location [-71.0970, 42.3487]
+INFO:[521.61] User 6 walked from [-71.0936, 42.2679] to location [-71.0954, 42.2695]
+INFO:[523.47] User 15 walked from [-71.1196, 42.3386] to location [-71.1213, 42.3398]
+INFO:[523.47] User 15 unlocked bike 1761 from station 202
+INFO:[523.89] User 3 locked bike 469 in station 68
+INFO:[524.47] User 15 selected end station 256
+INFO:[524.47] User 15 biking with bike 1761 from [-71.1213, 42.3398] to location [-71.0824, 42.3179]
+INFO:[531.61] User 6 arrived to final location [-71.0954, 42.2695]
+INFO:[531.82] User 11 walked from [-71.1128, 42.2995] to location [-71.1142, 42.3009]
+INFO:[531.82] User 11 unlocked bike 1199 from station 138
+INFO:[532.31] User 0 locked bike 592 in station 187
+INFO:[532.82] User 11 selected end station 14
+INFO:[532.82] User 11 biking with bike 1199 from [-71.1142, 42.3009] to location [-71.1169, 42.2788]
+INFO:[535.27] User 5 locked bike 1371 in station 191
+INFO:[537.00] User 18 initialized at location [-71.0923, 42.3581]
+INFO:[537.00] User 19 initialized at location [-71.0927, 42.3735]
+INFO:[537.00] User 18 selected start station 212
+INFO:[537.00] User 19 selected start station 71
+INFO:[542.62] User 13 walked from [-71.0740, 42.3385] to location [-71.0760, 42.3401]
+INFO:[552.62] User 13 arrived to final location [-71.0760, 42.3401]
+INFO:[557.45] User 8 locked bike 805 in station 298
+INFO:[557.98] User 17 walked from [-71.0849, 42.3492] to location [-71.0860, 42.3487]
+INFO:[557.98] User 17 unlocked bike 2009 from station 226
+INFO:[558.98] User 17 selected end station 203
+INFO:[558.98] User 17 biking with bike 2009 from [-71.0860, 42.3487] to location [-71.0967, 42.3614]
+INFO:[596.79] User 12 locked bike 1857 in station 117
+INFO:[597.65] User 18 walked from [-71.0923, 42.3581] to location [-71.0932, 42.3581]
+INFO:[597.65] User 18 unlocked bike 1848 from station 212
+INFO:[598.65] User 18 selected end station 214
+INFO:[598.65] User 18 biking with bike 1848 from [-71.0932, 42.3581] to location [-71.0912, 42.3621]
+INFO:[600.00] User 20 initialized at location [-71.1067, 42.3342]
+INFO:[600.00] User 20 selected start station 232
+INFO:[609.65] User 19 walked from [-71.0927, 42.3735] to location [-71.0944, 42.3730]
+INFO:[609.65] User 19 unlocked bike 595 from station 71
+INFO:[610.65] User 19 selected end station 55
+INFO:[610.65] User 19 biking with bike 595 from [-71.0944, 42.3730] to location [-71.0868, 42.3474]
+INFO:[616.00] User 21 initialized at location [-71.0944, 42.3612]
+INFO:[616.00] User 21 selected start station 214
+INFO:[634.67] User 5 walked from [-71.1190, 42.3867] to location [-71.1207, 42.3867]
+INFO:[637.00] User 22 initialized at location [-71.1066, 42.3483]
+INFO:[637.00] User 22 selected start station 239
+INFO:[644.67] User 5 arrived to final location [-71.1207, 42.3867]
+INFO:[659.69] User 3 walked from [-71.1007, 42.3457] to location [-71.0993, 42.3472]
+INFO:[660.00] User 23 initialized at location [-71.1199, 42.3503]
+INFO:[660.00] User 23 selected start station 98
+INFO:[669.69] User 3 arrived to final location [-71.0993, 42.3472]
+INFO:[670.21] User 8 walked from [-71.0815, 42.3389] to location [-71.0798, 42.3402]
+INFO:[680.21] User 8 arrived to final location [-71.0798, 42.3402]
+INFO:[725.08] User 16 walked from [-71.0602, 42.3732] to location [-71.0603, 42.3718]
+INFO:[725.08] User 16 unlocked bike 2797 from station 313
+INFO:[726.08] User 16 selected end station 18
+INFO:[726.08] User 16 biking with bike 2797 from [-71.0603, 42.3718] to location [-71.0514, 42.3599]
+INFO:[728.70] User 10 locked bike 466 in station 278
+INFO:[736.00] User 24 initialized at location [-71.0665, 42.3273]
+INFO:[736.00] User 24 selected start station 227
+INFO:[745.37] User 20 walked from [-71.1067, 42.3342] to location [-71.1045, 42.3339]
+INFO:[745.37] User 20 unlocked bike 2062 from station 232
+INFO:[745.69] User 24 walked from [-71.0665, 42.3273] to location [-71.0665, 42.3266]
+INFO:[745.69] User 24 unlocked bike 2014 from station 227
+INFO:[746.37] User 20 selected end station 257
+INFO:[746.37] User 20 biking with bike 2062 from [-71.1045, 42.3339] to location [-71.0880, 42.3362]
+INFO:[746.69] User 24 selected end station 225
+INFO:[746.69] User 24 biking with bike 2014 from [-71.0665, 42.3266] to location [-71.1467, 42.3573]
+INFO:[752.61] User 0 walked from [-71.1006, 42.3635] to location [-71.1011, 42.3660]
+INFO:[757.76] User 14 locked bike 212 in station 185
+INFO:[759.00] User 25 initialized at location [-71.0876, 42.3485]
+INFO:[759.00] User 25 selected start station 55
+INFO:[759.38] User 21 walked from [-71.0944, 42.3612] to location [-71.0912, 42.3621]
+INFO:[759.38] User 21 unlocked bike 1876 from station 214
+INFO:[760.38] User 21 selected end station 213
+INFO:[760.38] User 21 biking with bike 1876 from [-71.0912, 42.3621] to location [-71.1013, 42.3596]
+INFO:[762.61] User 0 arrived to final location [-71.1011, 42.3660]
+INFO:[766.04] User 22 walked from [-71.1066, 42.3483] to location [-71.1053, 42.3472]
+INFO:[766.04] User 22 unlocked bike 2120 from station 239
+INFO:[767.00] User 26 initialized at location [-71.0637, 42.3969]
+INFO:[767.00] User 26 selected start station 61
+INFO:[767.04] User 22 selected end station 155
+INFO:[767.04] User 22 biking with bike 2120 from [-71.1053, 42.3472] to location [-71.1302, 42.3495]
+INFO:[776.46] User 1 locked bike 1185 in station 61
+INFO:[789.91] User 18 locked bike 1848 in station 214
+INFO:[821.39] User 12 walked from [-71.0973, 42.3492] to location [-71.0950, 42.3502]
+INFO:[822.00] User 9 locked bike 465 in station 278
+INFO:[828.71] User 1 walked from [-71.0655, 42.3965] to location [-71.0645, 42.3971]
+INFO:[831.39] User 12 arrived to final location [-71.0950, 42.3502]
+INFO:[832.00] User 27 initialized at location [-71.1070, 42.3900]
+INFO:[832.00] User 27 selected start station 272
+INFO:[838.71] User 1 arrived to final location [-71.0645, 42.3971]
+INFO:[842.00] User 28 initialized at location [-71.0927, 42.3672]
+INFO:[842.00] User 28 selected start station 234
+INFO:[844.88] User 23 walked from [-71.1199, 42.3503] to location [-71.1213, 42.3515]
+INFO:[844.88] User 23 unlocked bike 824 from station 98
+INFO:[845.88] User 23 selected end station 117
+INFO:[845.88] User 23 biking with bike 824 from [-71.1213, 42.3515] to location [-71.0973, 42.3492]
+INFO:[862.44] User 10 walked from [-71.1073, 42.3462] to location [-71.1078, 42.3483]
+INFO:[872.44] User 10 arrived to final location [-71.1078, 42.3483]
+INFO:[884.53] User 26 walked from [-71.0637, 42.3969] to location [-71.0655, 42.3965]
+INFO:[884.53] User 26 unlocked bike 511 from station 61
+INFO:[885.53] User 26 selected end station 125
+INFO:[885.53] User 26 biking with bike 511 from [-71.0655, 42.3965] to location [-71.0832, 42.3876]
+INFO:[888.37] User 14 walked from [-71.0970, 42.3487] to location [-71.0941, 42.3485]
+INFO:[889.84] User 25 walked from [-71.0876, 42.3485] to location [-71.0868, 42.3474]
+INFO:[889.84] User 25 unlocked bike 468 from station 55
+INFO:[890.84] User 25 selected end station 96
+INFO:[890.84] User 25 biking with bike 468 from [-71.0868, 42.3474] to location [-71.0765, 42.3447]
+INFO:[898.37] User 14 arrived to final location [-71.0941, 42.3485]
+INFO:[923.12] User 9 walked from [-71.1073, 42.3462] to location [-71.1069, 42.3474]
+INFO:[930.24] User 27 walked from [-71.1070, 42.3900] to location [-71.1086, 42.3904]
+INFO:[930.24] User 27 unlocked bike 2399 from station 272
+INFO:[931.24] User 27 selected end station 270
+INFO:[931.24] User 27 biking with bike 2399 from [-71.1086, 42.3904] to location [-71.0981, 42.3868]
+INFO:[933.12] User 9 arrived to final location [-71.1069, 42.3474]
+INFO:[934.29] User 18 walked from [-71.0912, 42.3621] to location [-71.0939, 42.3612]
+INFO:[939.54] User 28 walked from [-71.0927, 42.3672] to location [-71.0917, 42.3663]
+INFO:[939.54] User 28 unlocked bike 2081 from station 234
+INFO:[940.54] User 28 selected end station 73
+INFO:[940.54] User 28 biking with bike 2081 from [-71.0917, 42.3663] to location [-71.0765, 42.3670]
+INFO:[944.29] User 18 arrived to final location [-71.0939, 42.3612]
+INFO:[993.57] User 21 locked bike 1876 in station 213
+INFO:[996.50] User 7 locked bike 357 in station 38
+INFO:[1013.83] User 17 locked bike 2009 in station 203
+INFO:[1042.00] User 29 initialized at location [-71.0891, 42.3432]
+INFO:[1042.00] User 29 selected start station 230
+INFO:[1067.29] User 2 locked bike 1774 in station 87
+INFO:[1090.11] User 29 walked from [-71.0891, 42.3432] to location [-71.0902, 42.3418]
+INFO:[1090.11] User 29 unlocked bike 2042 from station 230
+INFO:[1091.11] User 29 selected end station 54
+INFO:[1091.11] User 29 biking with bike 2042 from [-71.0902, 42.3418] to location [-71.0973, 42.3447]
+INFO:[1121.00] User 30 initialized at location [-71.0958, 42.3567]
+INFO:[1121.00] User 30 selected start station 212
+INFO:[1124.89] User 7 walked from [-71.0863, 42.3661] to location [-71.0848, 42.3658]
+INFO:[1134.89] User 7 arrived to final location [-71.0848, 42.3658]
+INFO:[1145.00] User 31 initialized at location [-71.0938, 42.3602]
+INFO:[1145.00] User 31 selected start station 203
+INFO:[1155.23] User 16 locked bike 2797 in station 18
+INFO:[1162.75] User 25 locked bike 468 in station 96
+INFO:[1164.73] User 21 walked from [-71.1013, 42.3596] to location [-71.0996, 42.3581]
+INFO:[1168.55] User 20 locked bike 2062 in station 257
+INFO:[1171.38] User 11 locked bike 1199 in station 14
+INFO:[1171.45] User 17 walked from [-71.0967, 42.3614] to location [-71.0960, 42.3592]
+INFO:[1171.55] User 27 locked bike 2399 in station 270
+INFO:[1174.73] User 21 arrived to final location [-71.0996, 42.3581]
+INFO:[1181.45] User 17 arrived to final location [-71.0960, 42.3592]
+INFO:[1213.20] User 2 walked from [-71.0627, 42.3524] to location [-71.0640, 42.3535]
+INFO:[1223.20] User 2 arrived to final location [-71.0640, 42.3535]
+INFO:[1294.82] User 16 walked from [-71.0514, 42.3599] to location [-71.0541, 42.3594]
+INFO:[1297.00] User 32 initialized at location [-71.1049, 42.3383]
+INFO:[1297.00] User 32 selected start station 194
+INFO:[1301.62] User 31 walked from [-71.0938, 42.3602] to location [-71.0967, 42.3614]
+INFO:[1301.62] User 31 unlocked bike 2009 from station 203
+INFO:[1302.62] User 31 selected end station 30
+INFO:[1302.62] User 31 biking with bike 2009 from [-71.0967, 42.3614] to location [-71.0898, 42.3508]
+INFO:[1304.47] User 11 walked from [-71.1169, 42.2788] to location [-71.1170, 42.2805]
+INFO:[1304.82] User 16 arrived to final location [-71.0541, 42.3594]
+INFO:[1307.99] User 25 walked from [-71.0765, 42.3447] to location [-71.0775, 42.3457]
+INFO:[1314.47] User 11 arrived to final location [-71.1170, 42.2805]
+INFO:[1317.99] User 25 arrived to final location [-71.0775, 42.3457]
+INFO:[1326.40] User 28 locked bike 2081 in station 73
+INFO:[1327.28] User 20 walked from [-71.0880, 42.3362] to location [-71.0858, 42.3374]
+INFO:[1331.29] User 23 locked bike 824 in station 117
+INFO:[1337.28] User 20 arrived to final location [-71.0858, 42.3374]
+INFO:[1338.35] User 29 locked bike 2042 in station 54
+INFO:[1352.00] User 33 initialized at location [-71.0868, 42.3422]
+INFO:[1352.00] User 33 selected start station 88
+INFO:[1355.31] User 22 locked bike 2120 in station 155
+INFO:[1362.00] User 34 initialized at location [-71.0572, 42.3500]
+INFO:[1362.00] User 34 selected start station 86
+INFO:[1368.90] User 32 walked from [-71.1049, 42.3383] to location [-71.1065, 42.3386]
+INFO:[1368.90] User 32 unlocked bike 1714 from station 194
+INFO:[1369.90] User 32 selected end station 148
+INFO:[1369.90] User 32 biking with bike 1714 from [-71.1065, 42.3386] to location [-71.0596, 42.3598]
+INFO:[1387.81] User 19 locked bike 595 in station 55
+INFO:[1403.01] User 23 walked from [-71.0973, 42.3492] to location [-71.0957, 42.3489]
+INFO:[1412.59] User 29 walked from [-71.0973, 42.3447] to location [-71.0970, 42.3442]
+INFO:[1413.01] User 23 arrived to final location [-71.0957, 42.3489]
+INFO:[1421.54] User 30 walked from [-71.0958, 42.3567] to location [-71.0932, 42.3581]
+INFO:[1421.54] User 30 unlocked bike 1860 from station 212
+INFO:[1422.54] User 30 selected end station 30
+INFO:[1422.54] User 30 biking with bike 1860 from [-71.0932, 42.3581] to location [-71.0898, 42.3508]
+INFO:[1422.59] User 29 arrived to final location [-71.0970, 42.3442]
+INFO:[1429.29] User 33 walked from [-71.0868, 42.3422] to location [-71.0858, 42.3437]
+INFO:[1429.29] User 33 unlocked bike 747 from station 88
+INFO:[1430.29] User 33 selected end station 234
+INFO:[1430.29] User 33 biking with bike 747 from [-71.0858, 42.3437] to location [-71.0917, 42.3663]
+INFO:[1430.93] User 28 walked from [-71.0765, 42.3670] to location [-71.0740, 42.3667]
+INFO:[1440.93] User 28 arrived to final location [-71.0740, 42.3667]
+INFO:[1458.46] User 26 locked bike 511 in station 125
+INFO:[1461.00] User 35 initialized at location [-71.1235, 42.3386]
+INFO:[1461.00] User 35 selected start station 202
+INFO:[1472.00] User 36 initialized at location [-71.0970, 42.3483]
+INFO:[1472.00] User 36 selected start station 185
+INFO:[1503.86] User 27 walked from [-71.0981, 42.3868] to location [-71.1014, 42.3863]
+INFO:[1511.00] User 37 initialized at location [-71.0959, 42.3502]
+INFO:[1511.00] User 37  will not make the trip
+INFO:[1513.86] User 27 arrived to final location [-71.1014, 42.3863]
+INFO:[1517.38] User 36 walked from [-71.0970, 42.3483] to location [-71.0970, 42.3487]
+INFO:[1517.38] User 36 unlocked bike 212 from station 185
+INFO:[1518.38] User 36 selected end station 97
+INFO:[1518.38] User 36 biking with bike 212 from [-71.0970, 42.3487] to location [-71.1190, 42.3517]
+INFO:[1574.66] User 26 walked from [-71.0832, 42.3876] to location [-71.0812, 42.3878]
+INFO:[1584.66] User 26 arrived to final location [-71.0812, 42.3878]
+INFO:[1594.11] User 19 walked from [-71.0868, 42.3474] to location [-71.0895, 42.3462]
+INFO:[1597.75] User 34 walked from [-71.0572, 42.3500] to location [-71.0594, 42.3514]
+INFO:[1597.75] User 34 unlocked bike 728 from station 86
+INFO:[1598.75] User 34 selected end station 85
+INFO:[1598.75] User 34 biking with bike 728 from [-71.0594, 42.3514] to location [-71.0725, 42.3715]
+INFO:[1599.00] User 38 initialized at location [-71.0982, 42.3603]
+INFO:[1599.00] User 38 selected start station 203
+INFO:[1602.00] User 39 initialized at location [-71.0839, 42.3617]
+INFO:[1602.00] User 39 selected start station 233
+INFO:[1602.00] User 39 walked from [-71.0839, 42.3617] to location [-71.0831, 42.3622]
+INFO:[1602.00] User 39 unlocked bike 2069 from station 233
+INFO:[1603.00] User 39 selected end station 247
+INFO:[1603.00] User 39 biking with bike 2069 from [-71.0831, 42.3622] to location [-71.0807, 42.3465]
+INFO:[1604.11] User 19 arrived to final location [-71.0895, 42.3462]
+INFO:[1623.00] User 40 initialized at location [-71.1077, 42.3473]
+INFO:[1623.00] User 40 selected start station 278
+INFO:[1627.69] User 31 locked bike 2009 in station 30
+INFO:[1631.14] User 30 locked bike 1860 in station 30
+INFO:[1633.64] User 15 locked bike 1761 in station 256
+INFO:[1664.89] User 35 walked from [-71.1235, 42.3386] to location [-71.1213, 42.3398]
+INFO:[1664.89] User 35 unlocked bike 1766 from station 202
+INFO:[1665.89] User 35 selected end station 98
+INFO:[1665.89] User 35 biking with bike 1766 from [-71.1213, 42.3398] to location [-71.1213, 42.3515]
+INFO:[1690.26] User 22 walked from [-71.1302, 42.3495] to location [-71.1338, 42.3495]
+INFO:[1693.21] User 40 walked from [-71.1077, 42.3473] to location [-71.1073, 42.3462]
+INFO:[1693.21] User 40 unlocked bike 466 from station 278
+INFO:[1694.21] User 40 selected end station 98
+INFO:[1694.21] User 40 biking with bike 466 from [-71.1073, 42.3462] to location [-71.1213, 42.3515]
+INFO:[1700.26] User 22 arrived to final location [-71.1338, 42.3495]
+INFO:[1709.09] User 38 walked from [-71.0982, 42.3603] to location [-71.0967, 42.3614]
+INFO:[1709.09] User 38 unlocked bike 1767 from station 203
+INFO:[1710.09] User 38 selected end station 238
+INFO:[1710.09] User 38 biking with bike 1767 from [-71.0967, 42.3614] to location [-71.1238, 42.3523]
+INFO:[1711.71] User 30 walked from [-71.0898, 42.3508] to location [-71.0892, 42.3497]
+INFO:[1721.71] User 30 arrived to final location [-71.0892, 42.3497]
+INFO:[1763.95] User 31 walked from [-71.0898, 42.3508] to location [-71.0907, 42.3503]
+INFO:[1766.00] User 41 initialized at location [-71.0794, 42.3478]
+INFO:[1766.00] User 41 selected start station 247
+INFO:[1773.95] User 31 arrived to final location [-71.0907, 42.3503]
+INFO:[1792.00] User 42 initialized at location [-71.1071, 42.3791]
+INFO:[1792.00] User 42 selected start station 1
+INFO:[1821.00] User 43 initialized at location [-71.1491, 42.3501]
+INFO:[1821.00] User 43 selected start station 57
+INFO:[1832.46] User 15 walked from [-71.0824, 42.3179] to location [-71.0818, 42.3159]
+INFO:[1836.00] User 44 initialized at location [-71.1013, 42.3754]
+INFO:[1836.00] User 44 selected start station 177
+INFO:[1842.46] User 15 arrived to final location [-71.0818, 42.3159]
+INFO:[1861.40] User 41 walked from [-71.0794, 42.3478] to location [-71.0807, 42.3465]
+INFO:[1861.40] User 41 unlocked bike 2192 from station 247
+INFO:[1862.40] User 41 selected end station 305
+INFO:[1862.40] User 41 biking with bike 2192 from [-71.0807, 42.3465] to location [-71.1001, 42.3626]
+INFO:[1867.00] User 45 initialized at location [-71.0631, 42.3186]
+INFO:[1867.00] User 45 selected start station 306
+INFO:[1912.20] User 43 walked from [-71.1491, 42.3501] to location [-71.1503, 42.3489]
+INFO:[1912.20] User 43 unlocked bike 478 from station 57
+INFO:[1913.20] User 43 selected end station 225
+INFO:[1913.20] User 43 biking with bike 478 from [-71.1503, 42.3489] to location [-71.1467, 42.3573]
+INFO:[1916.00] User 46 initialized at location [-71.1050, 42.3323]
+INFO:[1916.00] User 46 selected start station 56
+INFO:[1925.30] User 42 walked from [-71.1071, 42.3791] to location [-71.1088, 42.3803]
+INFO:[1925.30] User 42 unlocked bike 20 from station 1
+INFO:[1926.30] User 42 selected end station 237
+INFO:[1926.30] User 42 biking with bike 20 from [-71.1088, 42.3803] to location [-71.1234, 42.4045]
+INFO:[1948.42] User 36 locked bike 212 in station 97
+INFO:[2016.00] User 35 locked bike 1766 in station 98
+INFO:[2050.66] User 45 walked from [-71.0631, 42.3186] to location [-71.0654, 42.3173]
+INFO:[2050.66] User 45 unlocked bike 2731 from station 306
+INFO:[2051.66] User 45 selected end station 123
+INFO:[2051.66] User 45 biking with bike 2731 from [-71.0654, 42.3173] to location [-71.0620, 42.3206]
+INFO:[2068.07] User 40 locked bike 466 in station 98
+INFO:[2069.33] User 44 walked from [-71.1013, 42.3754] to location [-71.1002, 42.3744]
+INFO:[2069.33] User 44 unlocked bike 1547 from station 177
+INFO:[2070.33] User 44 selected end station 109
+INFO:[2070.33] User 44 biking with bike 1547 from [-71.1002, 42.3744] to location [-71.1107, 42.3883]
+INFO:[2072.00] User 47 initialized at location [-71.0616, 42.3644]
+INFO:[2072.00] User 47 selected start station 331
+INFO:[2115.00] User 48 initialized at location [-71.1363, 42.3599]
+INFO:[2115.00] User 48 selected start station 58
+INFO:[2120.25] User 33 locked bike 747 in station 234
+INFO:[2128.17] User 46 walked from [-71.1050, 42.3323] to location [-71.1041, 42.3346]
+INFO:[2128.17] User 46 unlocked bike 473 from station 56
+INFO:[2129.17] User 46 selected end station 237
+INFO:[2129.17] User 46 biking with bike 473 from [-71.1041, 42.3346] to location [-71.1234, 42.4045]
+INFO:[2134.00] User 49 initialized at location [-71.1034, 42.3339]
+INFO:[2134.00] User 49 selected start station 232
+INFO:[2154.19] User 36 walked from [-71.1190, 42.3517] to location [-71.1179, 42.3492]
+INFO:[2164.19] User 36 arrived to final location [-71.1179, 42.3492]
+INFO:[2173.00] User 50 initialized at location [-71.1086, 42.3651]
+INFO:[2173.00] User 50 selected start station 75
+INFO:[2173.15] User 45 locked bike 2731 in station 123
+INFO:[2185.31] User 43 locked bike 478 in station 225
+INFO:[2201.88] User 35 walked from [-71.1213, 42.3515] to location [-71.1204, 42.3498]
+INFO:[2211.88] User 35 arrived to final location [-71.1204, 42.3498]
+INFO:[2220.24] User 49 walked from [-71.1034, 42.3339] to location [-71.1045, 42.3339]
+INFO:[2220.24] User 49 unlocked bike 2063 from station 232
+INFO:[2221.24] User 49 selected end station 107
+INFO:[2221.24] User 49 biking with bike 2063 from [-71.1045, 42.3339] to location [-71.1233, 42.3416]
+INFO:[2231.39] User 40 walked from [-71.1213, 42.3515] to location [-71.1217, 42.3500]
+INFO:[2241.39] User 40 arrived to final location [-71.1217, 42.3500]
+INFO:[2257.00] User 51 initialized at location [-71.1219, 42.3390]
+INFO:[2257.00] User 51 selected start station 202
+INFO:[2286.09] User 33 walked from [-71.0917, 42.3663] to location [-71.0939, 42.3674]
+INFO:[2296.09] User 33 arrived to final location [-71.0939, 42.3674]
+INFO:[2311.83] User 48 walked from [-71.1363, 42.3599] to location [-71.1378, 42.3615]
+INFO:[2311.83] User 48 unlocked bike 486 from station 58
+INFO:[2312.83] User 48 selected end station 5
+INFO:[2312.83] User 48 biking with bike 486 from [-71.1378, 42.3615] to location [-71.1039, 42.3496]
+INFO:[2323.10] User 47 walked from [-71.0616, 42.3644] to location [-71.0645, 42.3659]
+INFO:[2323.10] User 47 unlocked bike 2957 from station 331
+INFO:[2324.10] User 47 selected end station 330
+INFO:[2324.10] User 47 biking with bike 2957 from [-71.0645, 42.3659] to location [-71.0963, 42.3376]
+INFO:[2362.96] User 51 walked from [-71.1219, 42.3390] to location [-71.1213, 42.3398]
+INFO:[2362.96] User 51 unlocked bike 1765 from station 202
+INFO:[2363.96] User 51 selected end station 66
+INFO:[2363.96] User 51 biking with bike 1765 from [-71.1213, 42.3398] to location [-71.1163, 42.3327]
+INFO:[2364.03] User 45 walked from [-71.0620, 42.3206] to location [-71.0647, 42.3203]
+INFO:[2369.35] User 34 locked bike 728 in station 85
+INFO:[2370.35] User 34 walked from [-71.0725, 42.3715] to location [-71.0717, 42.3716]
+INFO:[2370.91] User 39 locked bike 2069 in station 247
+INFO:[2374.03] User 45 arrived to final location [-71.0647, 42.3203]
+INFO:[2380.35] User 34 arrived to final location [-71.0717, 42.3716]
+INFO:[2382.63] User 43 walked from [-71.1467, 42.3573] to location [-71.1495, 42.3578]
+INFO:[2385.00] User 52 initialized at location [-71.0619, 42.3227]
+INFO:[2385.00] User 52 selected start station 123
+INFO:[2385.70] User 50 walked from [-71.1086, 42.3651] to location [-71.1055, 42.3664]
+INFO:[2385.70] User 50 unlocked bike 628 from station 75
+INFO:[2386.70] User 50 selected end station 177
+INFO:[2386.70] User 50 biking with bike 628 from [-71.1055, 42.3664] to location [-71.1002, 42.3744]
+INFO:[2392.63] User 43 arrived to final location [-71.1495, 42.3578]
+INFO:[2405.00] User 53 initialized at location [-71.0612, 42.3212]
+INFO:[2405.00] User 53 selected start station 123
+INFO:[2445.00] User 54 initialized at location [-71.0650, 42.3197]
+INFO:[2445.00] User 54 selected start station 306
+INFO:[2450.08] User 38 locked bike 1767 in station 238
+INFO:[2490.00] User 55 initialized at location [-71.0528, 42.3522]
+INFO:[2490.00] User 55 selected start station 248
+INFO:[2497.24] User 53 walked from [-71.0612, 42.3212] to location [-71.0620, 42.3206]
+INFO:[2497.24] User 53 unlocked bike 1064 from station 123
+INFO:[2498.24] User 53 selected end station 205
+INFO:[2498.24] User 53 biking with bike 1064 from [-71.0620, 42.3206] to location [-71.0834, 42.3414]
+INFO:[2514.00] User 56 initialized at location [-71.0911, 42.3595]
+INFO:[2514.00] User 56 selected start station 212
+INFO:[2542.65] User 32 locked bike 1714 in station 148
+INFO:[2549.00] User 57 initialized at location [-71.0622, 42.3217]
+INFO:[2549.00] User 57 selected start station 123
+INFO:[2549.13] User 41 locked bike 2192 in station 305
+INFO:[2555.00] User 58 initialized at location [-71.0702, 42.3699]
+INFO:[2555.00] User 58 selected start station 128
+INFO:[2555.00] User 58 walked from [-71.0702, 42.3699] to location [-71.0700, 42.3699]
+INFO:[2555.00] User 58 unlocked bike 1113 from station 128
+INFO:[2556.00] User 58 selected end station 41
+INFO:[2556.00] User 58 biking with bike 1113 from [-71.0700, 42.3699] to location [-71.0780, 42.3179]
+INFO:[2564.00] User 59 initialized at location [-71.0660, 42.3523]
+INFO:[2564.00] User 59 selected start station 282
+INFO:[2568.00] User 60 initialized at location [-71.1193, 42.3331]
+INFO:[2568.00] User 60 selected start station 65
+INFO:[2570.55] User 39 walked from [-71.0807, 42.3465] to location [-71.0825, 42.3464]
+INFO:[2579.92] User 52 walked from [-71.0619, 42.3227] to location [-71.0620, 42.3206]
+INFO:[2579.92] User 52 unlocked bike 1065 from station 123
+INFO:[2580.55] User 39 arrived to final location [-71.0825, 42.3464]
+INFO:[2580.92] User 52 selected end station 205
+INFO:[2580.92] User 52 biking with bike 1065 from [-71.0620, 42.3206] to location [-71.0834, 42.3414]
+INFO:[2610.06] User 51 locked bike 1765 in station 66
+INFO:[2610.93] User 50 locked bike 628 in station 177
+INFO:[2626.51] User 44 locked bike 1547 in station 109
+INFO:[2648.70] User 41 walked from [-71.1001, 42.3626] to location [-71.0989, 42.3621]
+INFO:[2653.71] User 50 walked from [-71.1002, 42.3744] to location [-71.1014, 42.3730]
+INFO:[2658.70] User 41 arrived to final location [-71.0989, 42.3621]
+INFO:[2663.71] User 50 arrived to final location [-71.1014, 42.3730]
+INFO:[2664.89] User 54 walked from [-71.0650, 42.3197] to location [-71.0654, 42.3173]
+INFO:[2664.89] User 54 unlocked bike 2734 from station 306
+INFO:[2665.89] User 54 selected end station 205
+INFO:[2665.89] User 54 biking with bike 2734 from [-71.0654, 42.3173] to location [-71.0834, 42.3414]
+INFO:[2688.70] User 24 locked bike 2014 in station 225
+INFO:[2716.36] User 56 walked from [-71.0911, 42.3595] to location [-71.0932, 42.3581]
+INFO:[2716.36] User 56 unlocked bike 1852 from station 212
+INFO:[2717.36] User 56 selected end station 214
+INFO:[2717.36] User 56 biking with bike 1852 from [-71.0932, 42.3581] to location [-71.0912, 42.3621]
+INFO:[2720.34] User 38 walked from [-71.1238, 42.3523] to location [-71.1229, 42.3506]
+INFO:[2722.87] User 55 walked from [-71.0528, 42.3522] to location [-71.0532, 42.3547]
+INFO:[2722.87] User 55 unlocked bike 2195 from station 248
+INFO:[2723.87] User 55 selected end station 179
+INFO:[2723.87] User 55 biking with bike 2195 from [-71.0532, 42.3547] to location [-71.1001, 42.3229]
+INFO:[2730.34] User 38 arrived to final location [-71.1229, 42.3506]
+INFO:[2731.02] User 49 locked bike 2063 in station 107
+INFO:[2732.70] User 51 walked from [-71.1163, 42.3327] to location [-71.1173, 42.3343]
+INFO:[2735.41] User 42 locked bike 20 in station 237
+INFO:[2742.70] User 51 arrived to final location [-71.1173, 42.3343]
+INFO:[2743.92] User 57 walked from [-71.0622, 42.3217] to location [-71.0620, 42.3206]
+INFO:[2743.92] User 57 unlocked bike 2731 from station 123
+INFO:[2744.92] User 57 selected end station 48
+INFO:[2744.92] User 57 biking with bike 2731 from [-71.0620, 42.3206] to location [-71.0651, 42.3079]
+INFO:[2747.03] User 59 walked from [-71.0660, 42.3523] to location [-71.0663, 42.3511]
+INFO:[2747.03] User 59 unlocked bike 2501 from station 282
+INFO:[2748.03] User 59 selected end station 190
+INFO:[2748.03] User 59 biking with bike 2501 from [-71.0663, 42.3511] to location [-71.0765, 42.3707]
+INFO:[2749.00] User 32 walked from [-71.0596, 42.3598] to location [-71.0597, 42.3612]
+INFO:[2759.00] User 32 arrived to final location [-71.0597, 42.3612]
+INFO:[2763.22] User 60 walked from [-71.1193, 42.3331] to location [-71.1205, 42.3338]
+INFO:[2763.22] User 60 unlocked bike 546 from station 65
+INFO:[2764.22] User 60 selected end station 202
+INFO:[2764.22] User 60 biking with bike 546 from [-71.1205, 42.3338] to location [-71.1213, 42.3398]
+INFO:[2832.95] User 42 walked from [-71.1234, 42.4045] to location [-71.1241, 42.4032]
+INFO:[2837.47] User 49 walked from [-71.1233, 42.3416] to location [-71.1217, 42.3420]
+INFO:[2842.95] User 42 arrived to final location [-71.1241, 42.4032]
+INFO:[2847.47] User 49 arrived to final location [-71.1217, 42.3420]
+INFO:[2885.00] User 61 initialized at location [-71.1132, 42.2987]
+INFO:[2885.00] User 61 selected start station 172
+INFO:[2886.02] User 24 walked from [-71.1467, 42.3573] to location [-71.1502, 42.3576]
+INFO:[2896.02] User 24 arrived to final location [-71.1502, 42.3576]
+INFO:[2908.62] User 56 locked bike 1852 in station 214
+INFO:[2927.22] User 44 walked from [-71.1107, 42.3883] to location [-71.1134, 42.3874]
+INFO:[2937.22] User 44 arrived to final location [-71.1134, 42.3874]
+INFO:[2973.13] User 60 locked bike 546 in station 202
+INFO:[3015.00] User 62 initialized at location [-71.1028, 42.3637]
+INFO:[3015.00] User 62 selected start station 76
+INFO:[3032.00] User 63 initialized at location [-71.1135, 42.3029]
+INFO:[3032.00] User 63 selected start station 138
+INFO:[3036.00] User 64 initialized at location [-71.1363, 42.3366]
+INFO:[3036.00] User 64 selected start station 32
+INFO:[3053.00] User 56 walked from [-71.0912, 42.3621] to location [-71.0945, 42.3611]
+INFO:[3063.00] User 56 arrived to final location [-71.0945, 42.3611]
+INFO:[3118.16] User 62 walked from [-71.1028, 42.3637] to location [-71.1031, 42.3651]
+INFO:[3118.16] User 62 unlocked bike 635 from station 76
+INFO:[3119.16] User 62 selected end station 212
+INFO:[3119.16] User 62 biking with bike 635 from [-71.1031, 42.3651] to location [-71.0932, 42.3581]
+INFO:[3149.52] User 57 locked bike 2731 in station 48
+INFO:[3175.00] User 65 initialized at location [-71.0966, 42.3482]
+INFO:[3175.00] User 65 selected start station 185
+INFO:[3175.00] User 65 walked from [-71.0966, 42.3482] to location [-71.0970, 42.3487]
+INFO:[3175.00] User 65 unlocked bike 1622 from station 185
+INFO:[3176.00] User 65 selected end station 97
+INFO:[3176.00] User 65 biking with bike 1622 from [-71.0970, 42.3487] to location [-71.1190, 42.3517]
+INFO:[3230.80] User 60 walked from [-71.1213, 42.3398] to location [-71.1225, 42.3384]
+INFO:[3237.82] User 61 walked from [-71.1132, 42.2987] to location [-71.1160, 42.2961]
+INFO:[3237.82] User 61 unlocked bike 1508 from station 172
+INFO:[3238.82] User 61 selected end station 252
+INFO:[3238.82] User 61 biking with bike 1508 from [-71.1160, 42.2961] to location [-71.1278, 42.2871]
+INFO:[3240.80] User 60 arrived to final location [-71.1225, 42.3384]
+INFO:[3265.18] User 63 walked from [-71.1135, 42.3029] to location [-71.1142, 42.3009]
+INFO:[3265.18] User 63 unlocked bike 1198 from station 138
+INFO:[3266.18] User 63 selected end station 253
+INFO:[3266.18] User 63 biking with bike 1198 from [-71.1142, 42.3009] to location [-71.1282, 42.2863]
+INFO:[3266.49] User 48 locked bike 486 in station 5
+INFO:[3286.72] User 53 locked bike 1064 in station 205
+INFO:[3304.63] User 64 walked from [-71.1363, 42.3366] to location [-71.1389, 42.3383]
+INFO:[3304.63] User 64 unlocked bike 273 from station 32
+INFO:[3305.63] User 64 selected end station 91
+INFO:[3305.63] User 64 biking with bike 273 from [-71.1389, 42.3383] to location [-71.1506, 42.3355]
+INFO:[3351.00] User 66 initialized at location [-71.0899, 42.3665]
+INFO:[3351.00] User 66 selected start station 234
+INFO:[3353.12] User 48 walked from [-71.1039, 42.3496] to location [-71.1021, 42.3507]
+INFO:[3355.00] User 67 initialized at location [-71.1073, 42.3477]
+INFO:[3355.00] User 67 selected start station 278
+INFO:[3363.12] User 48 arrived to final location [-71.1021, 42.3507]
+INFO:[3369.39] User 52 locked bike 1065 in station 205
+INFO:[3393.22] User 62 locked bike 635 in station 212
+INFO:[3401.01] User 57 walked from [-71.0651, 42.3079] to location [-71.0651, 42.3052]
+INFO:[3410.14] User 59 locked bike 2501 in station 190
+INFO:[3411.01] User 57 arrived to final location [-71.0651, 42.3052]
+INFO:[3434.48] User 66 walked from [-71.0899, 42.3665] to location [-71.0917, 42.3663]
+INFO:[3434.48] User 66 unlocked bike 2080 from station 234
+INFO:[3435.48] User 66 selected end station 33
+INFO:[3435.48] User 66 biking with bike 2080 from [-71.0917, 42.3663] to location [-71.1057, 42.3784]
+INFO:[3455.13] User 67 walked from [-71.1073, 42.3477] to location [-71.1073, 42.3462]
+INFO:[3455.13] User 67 unlocked bike 2467 from station 278
+INFO:[3456.13] User 67 selected end station 117
+INFO:[3456.13] User 67 biking with bike 2467 from [-71.1073, 42.3462] to location [-71.0973, 42.3492]
+INFO:[3461.00] User 68 initialized at location [-71.0880, 42.3384]
+INFO:[3461.00] User 68 selected start station 257
+INFO:[3499.62] User 47 locked bike 2957 in station 330
+INFO:[3503.24] User 68 walked from [-71.0880, 42.3384] to location [-71.0880, 42.3362]
+INFO:[3503.24] User 68 unlocked bike 2260 from station 257
+INFO:[3504.24] User 68 selected end station 93
+INFO:[3504.24] User 68 biking with bike 2260 from [-71.0880, 42.3362] to location [-71.1006, 42.3401]
+INFO:[3550.88] User 64 locked bike 273 in station 91
+INFO:[3559.46] User 54 locked bike 2734 in station 205
+INFO:[3560.19] User 53 walked from [-71.0834, 42.3414] to location [-71.0859, 42.3413]
+INFO:[3565.96] User 52 walked from [-71.0834, 42.3414] to location [-71.0823, 42.3440]
+INFO:[3566.88] User 59 walked from [-71.0765, 42.3707] to location [-71.0777, 42.3719]
+INFO:[3570.19] User 53 arrived to final location [-71.0859, 42.3413]
+INFO:[3575.96] User 52 arrived to final location [-71.0823, 42.3440]
+INFO:[3576.88] User 59 arrived to final location [-71.0777, 42.3719]
+INFO:[3580.00] User 69 initialized at location [-71.1300, 42.3625]
+INFO:[3580.00] User 69 selected start station 0
+INFO:[3592.00] User 70 initialized at location [-71.0991, 42.3590]
+INFO:[3592.00] User 70 selected start station 213
+INFO:[3596.57] User 62 walked from [-71.0932, 42.3581] to location [-71.0907, 42.3594]
+INFO:[3604.58] User 47 walked from [-71.0963, 42.3376] to location [-71.0946, 42.3395]
+INFO:[3606.04] User 65 locked bike 1622 in station 97
+INFO:[3606.57] User 62 arrived to final location [-71.0907, 42.3594]
+INFO:[3608.00] User 71 initialized at location [-71.0874, 42.3458]
+INFO:[3608.00] User 71 selected start station 55
+INFO:[3609.00] User 72 initialized at location [-71.1002, 42.3660]
+INFO:[3609.00] User 72 selected start station 187
+INFO:[3614.58] User 47 arrived to final location [-71.0946, 42.3395]
+INFO:[3622.00] User 73 initialized at location [-71.1187, 42.3703]
+INFO:[3622.00] User 73 selected start station 165
+INFO:[3629.00] User 74 initialized at location [-71.0836, 42.3428]
+INFO:[3629.00] User 74 selected start station 205
+INFO:[3668.10] User 67 locked bike 2467 in station 117
+INFO:[3678.64] User 69 walked from [-71.1300, 42.3625] to location [-71.1292, 42.3638]
+INFO:[3678.64] User 69 unlocked bike 8 from station 0
+INFO:[3679.64] User 69 selected end station 231
+INFO:[3679.64] User 69 biking with bike 8 from [-71.1292, 42.3638] to location [-71.1665, 42.3506]
+INFO:[3690.10] User 61 locked bike 1508 in station 252
+INFO:[3694.00] User 75 initialized at location [-71.0938, 42.3485]
+INFO:[3694.00] User 75 selected start station 185
+INFO:[3695.71] User 54 walked from [-71.0834, 42.3414] to location [-71.0829, 42.3434]
+INFO:[3705.71] User 54 arrived to final location [-71.0829, 42.3434]
+INFO:[3709.01] User 74 walked from [-71.0836, 42.3428] to location [-71.0834, 42.3414]
+INFO:[3709.01] User 74 unlocked bike 1064 from station 205
+INFO:[3710.01] User 74 selected end station 86
+INFO:[3710.01] User 74 biking with bike 1064 from [-71.0834, 42.3414] to location [-71.0594, 42.3514]
+INFO:[3724.14] User 64 walked from [-71.1506, 42.3355] to location [-71.1522, 42.3375]
+INFO:[3734.14] User 64 arrived to final location [-71.1522, 42.3375]
+INFO:[3741.97] User 63 locked bike 1198 in station 253
+INFO:[3760.00] User 76 initialized at location [-71.1001, 42.3657]
+INFO:[3760.00] User 76 selected start station 187
+INFO:[3762.17] User 70 walked from [-71.0991, 42.3590] to location [-71.1013, 42.3596]
+INFO:[3762.17] User 70 unlocked bike 1864 from station 213
+INFO:[3763.17] User 70 selected end station 113
+INFO:[3763.17] User 70 biking with bike 1864 from [-71.1013, 42.3596] to location [-71.1081, 42.3618]
+INFO:[3786.49] User 71 walked from [-71.0874, 42.3458] to location [-71.0868, 42.3474]
+INFO:[3786.49] User 71 unlocked bike 467 from station 55
+INFO:[3787.49] User 71 selected end station 86
+INFO:[3787.49] User 71 biking with bike 467 from [-71.0868, 42.3474] to location [-71.0594, 42.3514]
+INFO:[3807.00] User 77 initialized at location [-71.0863, 42.3488]
+INFO:[3807.00] User 77 selected start station 226
+INFO:[3807.00] User 77 walked from [-71.0863, 42.3488] to location [-71.0860, 42.3487]
+INFO:[3807.00] User 77 unlocked bike 2003 from station 226
+INFO:[3808.00] User 77 selected end station 187
+INFO:[3808.00] User 77 biking with bike 2003 from [-71.0860, 42.3487] to location [-71.1006, 42.3635]
+INFO:[3814.00] User 78 initialized at location [-71.0503, 42.3499]
+INFO:[3814.00] User 79 initialized at location [-71.0996, 42.3651]
+INFO:[3814.00] User 78 selected start station 105
+INFO:[3814.00] User 79 selected start station 187
+INFO:[3828.30] User 72 walked from [-71.1002, 42.3660] to location [-71.1006, 42.3635]
+INFO:[3828.30] User 72 unlocked bike 1639 from station 187
+INFO:[3829.30] User 72 selected end station 264
+INFO:[3829.30] User 72 biking with bike 1639 from [-71.1006, 42.3635] to location [-71.0993, 42.3686]
+INFO:[3839.07] User 73 walked from [-71.1187, 42.3703] to location [-71.1171, 42.3692]
+INFO:[3839.07] User 73 unlocked bike 1433 from station 165
+INFO:[3840.07] User 73 selected end station 2
+INFO:[3840.07] User 73 biking with bike 1433 from [-71.1171, 42.3692] to location [-71.1040, 42.3810]
+INFO:[3855.77] User 68 locked bike 2260 in station 93
+INFO:[3856.75] User 67 walked from [-71.0973, 42.3492] to location [-71.0957, 42.3498]
+INFO:[3857.27] User 65 walked from [-71.1190, 42.3517] to location [-71.1168, 42.3499]
+INFO:[3866.75] User 67 arrived to final location [-71.0957, 42.3498]
+INFO:[3867.27] User 65 arrived to final location [-71.1168, 42.3499]
+INFO:[3880.41] User 63 walked from [-71.1282, 42.2863] to location [-71.1287, 42.2844]
+INFO:[3889.91] User 66 locked bike 2080 in station 33
+INFO:[3890.41] User 63 arrived to final location [-71.1287, 42.2844]
+INFO:[3893.00] User 80 initialized at location [-71.0868, 42.3422]
+INFO:[3893.00] User 80 selected start station 88
+INFO:[3917.00] User 81 initialized at location [-71.0595, 42.3635]
+INFO:[3917.00] User 81 selected start station 47
+INFO:[3920.91] User 61 walked from [-71.1278, 42.2871] to location [-71.1249, 42.2856]
+INFO:[3930.91] User 61 arrived to final location [-71.1249, 42.2856]
+INFO:[3933.75] User 70 locked bike 1864 in station 113
+INFO:[3953.50] User 75 walked from [-71.0938, 42.3485] to location [-71.0970, 42.3487]
+INFO:[3953.50] User 75 unlocked bike 1611 from station 185
+INFO:[3954.50] User 75 selected end station 57
+INFO:[3954.50] User 75 biking with bike 1611 from [-71.0970, 42.3487] to location [-71.1503, 42.3489]
+INFO:[3956.65] User 66 walked from [-71.1057, 42.3784] to location [-71.1054, 42.3795]
+INFO:[3966.65] User 66 arrived to final location [-71.1054, 42.3795]
+INFO:[3970.29] User 80 walked from [-71.0868, 42.3422] to location [-71.0858, 42.3437]
+INFO:[3970.29] User 80 unlocked bike 750 from station 88
+INFO:[3971.29] User 80 selected end station 87
+INFO:[3971.29] User 80 biking with bike 750 from [-71.0858, 42.3437] to location [-71.0627, 42.3524]
+INFO:[3976.91] User 72 locked bike 1639 in station 264
+INFO:[4052.68] User 78 walked from [-71.0503, 42.3499] to location [-71.0493, 42.3510]
+INFO:[4052.68] User 78 unlocked bike 888 from station 105
+INFO:[4053.68] User 78 selected end station 103
+INFO:[4053.68] User 78 biking with bike 888 from [-71.0493, 42.3510] to location [-71.0575, 42.3604]
+INFO:[4065.00] User 82 initialized at location [-71.1510, 42.3480]
+INFO:[4065.00] User 82 selected start station 57
+INFO:[4071.34] User 79 walked from [-71.0996, 42.3651] to location [-71.1006, 42.3635]
+INFO:[4071.34] User 79 unlocked bike 1636 from station 187
+INFO:[4072.34] User 79 selected end station 38
+INFO:[4072.34] User 79 biking with bike 1636 from [-71.1006, 42.3635] to location [-71.0863, 42.3661]
+INFO:[4077.29] User 81 walked from [-71.0595, 42.3635] to location [-71.0574, 42.3625]
+INFO:[4077.29] User 81 unlocked bike 402 from station 47
+INFO:[4078.29] User 81 selected end station 313
+INFO:[4078.29] User 81 biking with bike 402 from [-71.0574, 42.3625] to location [-71.0603, 42.3718]
+INFO:[4083.01] User 76 walked from [-71.1001, 42.3657] to location [-71.1006, 42.3635]
+INFO:[4083.01] User 76 unlocked bike 1633 from station 187
+INFO:[4084.01] User 76 selected end station 186
+INFO:[4084.01] User 76 biking with bike 1633 from [-71.1006, 42.3635] to location [-71.0858, 42.3696]
+INFO:[4087.34] User 68 walked from [-71.1006, 42.3401] to location [-71.0984, 42.3413]
+INFO:[4097.34] User 68 arrived to final location [-71.0984, 42.3413]
+INFO:[4114.00] User 83 initialized at location [-71.0982, 42.3754]
+INFO:[4114.00] User 83 selected start station 177
+INFO:[4117.16] User 55 locked bike 2195 in station 179
+INFO:[4128.00] User 84 initialized at location [-71.1007, 42.3753]
+INFO:[4128.00] User 84 selected start station 177
+INFO:[4129.00] User 85 initialized at location [-71.1512, 42.3484]
+INFO:[4129.00] User 85 selected start station 57
+INFO:[4159.53] User 72 walked from [-71.0993, 42.3686] to location [-71.1000, 42.3662]
+INFO:[4164.21] User 70 walked from [-71.1081, 42.3618] to location [-71.1053, 42.3635]
+INFO:[4169.53] User 72 arrived to final location [-71.1000, 42.3662]
+INFO:[4174.21] User 70 arrived to final location [-71.1053, 42.3635]
+INFO:[4179.09] User 85 walked from [-71.1512, 42.3484] to location [-71.1503, 42.3489]
+INFO:[4179.09] User 85 unlocked bike 477 from station 57
+INFO:[4180.09] User 85 selected end station 91
+INFO:[4180.09] User 85 biking with bike 477 from [-71.1503, 42.3489] to location [-71.1506, 42.3355]
+INFO:[4187.07] User 55 walked from [-71.1001, 42.3229] to location [-71.1017, 42.3232]
+INFO:[4197.07] User 55 arrived to final location [-71.1017, 42.3232]
+INFO:[4198.32] User 82 walked from [-71.1510, 42.3480] to location [-71.1503, 42.3489]
+INFO:[4198.32] User 82 unlocked bike 479 from station 57
+INFO:[4199.32] User 82 selected end station 91
+INFO:[4199.32] User 82 biking with bike 479 from [-71.1503, 42.3489] to location [-71.1506, 42.3355]
+INFO:[4233.00] User 86 initialized at location [-71.0811, 42.3386]
+INFO:[4233.00] User 86 selected start station 298
+INFO:[4233.00] User 86 walked from [-71.0811, 42.3386] to location [-71.0815, 42.3389]
+INFO:[4233.00] User 86 unlocked bike 2658 from station 298
+INFO:[4234.00] User 86 selected end station 25
+INFO:[4234.00] User 86 biking with bike 2658 from [-71.0815, 42.3389] to location [-71.1110, 42.3992]
+INFO:[4237.19] User 58 locked bike 1113 in station 41
+INFO:[4318.75] User 46 locked bike 473 in station 237
+INFO:[4319.75] User 46 walked from [-71.1234, 42.4045] to location [-71.1239, 42.4049]
+INFO:[4329.75] User 46 arrived to final location [-71.1239, 42.4049]
+INFO:[4329.82] User 84 walked from [-71.1007, 42.3753] to location [-71.1002, 42.3744]
+INFO:[4329.82] User 84 unlocked bike 1548 from station 177
+INFO:[4330.82] User 84 selected end station 1
+INFO:[4330.82] User 84 biking with bike 1548 from [-71.1002, 42.3744] to location [-71.1088, 42.3803]
+INFO:[4332.25] User 73 locked bike 1433 in station 2
+INFO:[4339.06] User 74 locked bike 1064 in station 86
+INFO:[4361.38] User 73 walked from [-71.1040, 42.3810] to location [-71.1035, 42.3804]
+INFO:[4364.44] User 58 walked from [-71.0780, 42.3179] to location [-71.0791, 42.3166]
+INFO:[4370.06] User 77 locked bike 2003 in station 187
+INFO:[4371.06] User 77 walked from [-71.1006, 42.3635] to location [-71.1013, 42.3633]
+INFO:[4371.38] User 73 arrived to final location [-71.1035, 42.3804]
+INFO:[4371.63] User 78 locked bike 888 in station 103
+INFO:[4373.21] User 81 locked bike 402 in station 313
+INFO:[4374.44] User 58 arrived to final location [-71.0791, 42.3166]
+INFO:[4381.06] User 77 arrived to final location [-71.1013, 42.3633]
+INFO:[4400.52] User 71 locked bike 467 in station 86
+INFO:[4430.61] User 83 walked from [-71.0982, 42.3754] to location [-71.1002, 42.3744]
+INFO:[4430.61] User 83 unlocked bike 1552 from station 177
+INFO:[4431.61] User 83 selected end station 242
+INFO:[4431.61] User 83 biking with bike 1552 from [-71.1002, 42.3744] to location [-71.1034, 42.3793]
+INFO:[4453.74] User 79 locked bike 1636 in station 38
+INFO:[4459.22] User 74 walked from [-71.0594, 42.3514] to location [-71.0579, 42.3504]
+INFO:[4467.48] User 78 walked from [-71.0575, 42.3604] to location [-71.0563, 42.3608]
+INFO:[4469.22] User 74 arrived to final location [-71.0579, 42.3504]
+INFO:[4477.48] User 78 arrived to final location [-71.0563, 42.3608]
+INFO:[4538.06] User 80 locked bike 750 in station 87
+INFO:[4541.95] User 79 walked from [-71.0863, 42.3661] to location [-71.0876, 42.3654]
+INFO:[4551.00] User 87 initialized at location [-71.1083, 42.3718]
+INFO:[4551.00] User 87 selected start station 70
+INFO:[4551.95] User 79 arrived to final location [-71.0876, 42.3654]
+INFO:[4558.99] User 76 locked bike 1633 in station 186
+INFO:[4568.66] User 84 locked bike 1548 in station 1
+INFO:[4575.77] User 71 walked from [-71.0594, 42.3514] to location [-71.0571, 42.3512]
+INFO:[4585.77] User 71 arrived to final location [-71.0571, 42.3512]
+INFO:[4600.01] User 85 locked bike 477 in station 91
+INFO:[4613.07] User 81 walked from [-71.0603, 42.3718] to location [-71.0609, 42.3745]
+INFO:[4619.24] User 82 locked bike 479 in station 91
+INFO:[4621.03] User 69 locked bike 8 in station 231
+INFO:[4623.07] User 81 arrived to final location [-71.0609, 42.3745]
+INFO:[4624.49] User 83 locked bike 1552 in station 242
+INFO:[4627.00] User 88 initialized at location [-71.0835, 42.3421]
+INFO:[4627.00] User 88 selected start station 205
+INFO:[4646.00] User 89 initialized at location [-71.1009, 42.3652]
+INFO:[4646.00] User 89 selected start station 187
+INFO:[4705.74] User 76 walked from [-71.0858, 42.3696] to location [-71.0861, 42.3714]
+INFO:[4706.74] User 83 walked from [-71.1034, 42.3793] to location [-71.1020, 42.3797]
+INFO:[4715.74] User 76 arrived to final location [-71.0861, 42.3714]
+INFO:[4716.74] User 83 arrived to final location [-71.1020, 42.3797]
+INFO:[4728.10] User 80 walked from [-71.0627, 42.3524] to location [-71.0607, 42.3536]
+INFO:[4729.99] User 84 walked from [-71.1088, 42.3803] to location [-71.1069, 42.3800]
+INFO:[4738.10] User 80 arrived to final location [-71.0607, 42.3536]
+INFO:[4739.99] User 84 arrived to final location [-71.1069, 42.3800]
+INFO:[4743.79] User 87 walked from [-71.1083, 42.3718] to location [-71.1111, 42.3734]
+INFO:[4743.79] User 87 unlocked bike 593 from station 70
+INFO:[4744.79] User 87 selected end station 186
+INFO:[4744.79] User 87 biking with bike 593 from [-71.1111, 42.3734] to location [-71.0858, 42.3696]
+INFO:[4748.00] User 90 initialized at location [-71.1210, 42.3497]
+INFO:[4748.00] User 90 selected start station 98
+INFO:[4781.60] User 88 walked from [-71.0835, 42.3421] to location [-71.0834, 42.3414]
+INFO:[4781.60] User 88 unlocked bike 1065 from station 205
+INFO:[4782.60] User 88 selected end station 316
+INFO:[4782.60] User 88 biking with bike 1065 from [-71.0834, 42.3414] to location [-71.1603, 42.3490]
+INFO:[4793.19] User 89 walked from [-71.1009, 42.3652] to location [-71.1006, 42.3635]
+INFO:[4793.19] User 89 unlocked bike 1638 from station 187
+INFO:[4794.19] User 89 selected end station 53
+INFO:[4794.19] User 89 biking with bike 1638 from [-71.1006, 42.3635] to location [-71.0824, 42.3488]
+INFO:[4798.00] User 91 initialized at location [-71.1009, 42.3661]
+INFO:[4798.00] User 91 selected start station 187
+INFO:[4824.67] User 69 walked from [-71.1665, 42.3506] to location [-71.1647, 42.3493]
+INFO:[4825.53] User 82 walked from [-71.1506, 42.3355] to location [-71.1503, 42.3342]
+INFO:[4834.67] User 69 arrived to final location [-71.1647, 42.3493]
+INFO:[4835.53] User 82 arrived to final location [-71.1503, 42.3342]
+INFO:[4900.97] User 85 walked from [-71.1506, 42.3355] to location [-71.1500, 42.3333]
+INFO:[4910.32] User 90 walked from [-71.1210, 42.3497] to location [-71.1213, 42.3515]
+INFO:[4910.32] User 90 unlocked bike 1766 from station 98
+INFO:[4910.97] User 85 arrived to final location [-71.1500, 42.3333]
+INFO:[4911.32] User 90 selected end station 238
+INFO:[4911.32] User 90 biking with bike 1766 from [-71.1213, 42.3515] to location [-71.1238, 42.3523]
+INFO:[4972.14] User 90 locked bike 1766 in station 238
+INFO:[5017.30] User 91 walked from [-71.1009, 42.3661] to location [-71.1006, 42.3635]
+INFO:[5017.30] User 91 unlocked bike 2003 from station 187
+INFO:[5018.30] User 91 selected end station 164
+INFO:[5018.30] User 91 biking with bike 2003 from [-71.1006, 42.3635] to location [-71.1251, 42.3803]
+INFO:[5046.65] User 75 locked bike 1611 in station 57
+INFO:[5092.00] User 92 initialized at location [-71.0784, 42.3948]
+INFO:[5092.00] User 92 selected start station 22
+INFO:[5136.00] User 93 initialized at location [-71.0907, 42.3624]
+INFO:[5136.00] User 93 selected start station 16
+INFO:[5166.17] User 90 walked from [-71.1238, 42.3523] to location [-71.1264, 42.3514]
+INFO:[5176.17] User 90 arrived to final location [-71.1264, 42.3514]
+INFO:[5180.97] User 75 walked from [-71.1503, 42.3489] to location [-71.1522, 42.3480]
+INFO:[5190.97] User 75 arrived to final location [-71.1522, 42.3480]
+INFO:[5241.94] User 93 walked from [-71.0907, 42.3624] to location [-71.0882, 42.3625]
+INFO:[5241.94] User 93 unlocked bike 145 from station 16
+INFO:[5242.94] User 93 selected end station 235
+INFO:[5242.94] User 93 biking with bike 145 from [-71.0882, 42.3625] to location [-71.0804, 42.3616]
+INFO:[5340.36] User 87 locked bike 593 in station 186
+INFO:[5403.30] User 92 walked from [-71.0784, 42.3948] to location [-71.0775, 42.3922]
+INFO:[5403.30] User 92 unlocked bike 206 from station 22
+INFO:[5404.30] User 92 selected end station 139
+INFO:[5404.30] User 92 biking with bike 206 from [-71.0775, 42.3922] to location [-71.0904, 42.3911]
+INFO:[5416.15] User 93 locked bike 145 in station 235
+INFO:[5451.26] User 89 locked bike 1638 in station 53
+INFO:[5508.27] User 87 walked from [-71.0858, 42.3696] to location [-71.0858, 42.3715]
+INFO:[5518.27] User 87 arrived to final location [-71.0858, 42.3715]
+INFO:[5552.00] User 94 initialized at location [-71.0836, 42.3495]
+INFO:[5552.00] User 94 selected start station 226
+INFO:[5565.21] User 93 walked from [-71.0804, 42.3616] to location [-71.0832, 42.3614]
+INFO:[5575.21] User 93 arrived to final location [-71.0832, 42.3614]
+INFO:[5619.20] User 89 walked from [-71.0824, 42.3488] to location [-71.0830, 42.3510]
+INFO:[5624.00] User 95 initialized at location [-71.0940, 42.3675]
+INFO:[5624.00] User 95 selected start station 160
+INFO:[5629.20] User 89 arrived to final location [-71.0830, 42.3510]
+INFO:[5647.98] User 94 walked from [-71.0836, 42.3495] to location [-71.0860, 42.3487]
+INFO:[5647.98] User 94 unlocked bike 2006 from station 226
+INFO:[5648.98] User 94 selected end station 98
+INFO:[5648.98] User 94 biking with bike 2006 from [-71.0860, 42.3487] to location [-71.1213, 42.3515]
+INFO:[5681.28] User 91 locked bike 2003 in station 164
+INFO:[5784.59] User 92 locked bike 206 in station 139
+INFO:[5824.54] User 95 walked from [-71.0940, 42.3675] to location [-71.0952, 42.3660]
+INFO:[5824.54] User 95 unlocked bike 1403 from station 160
+INFO:[5825.54] User 95 selected end station 187
+INFO:[5825.54] User 95 biking with bike 1403 from [-71.0952, 42.3660] to location [-71.1006, 42.3635]
+INFO:[5891.00] User 96 initialized at location [-71.0941, 42.3485]
+INFO:[5891.00] User 96 selected start station 185
+INFO:[5912.88] User 91 walked from [-71.1251, 42.3803] to location [-71.1228, 42.3780]
+INFO:[5922.88] User 91 arrived to final location [-71.1228, 42.3780]
+INFO:[5997.81] User 95 locked bike 1403 in station 187
+INFO:[6020.61] User 96 walked from [-71.0941, 42.3485] to location [-71.0970, 42.3487]
+INFO:[6020.61] User 96 unlocked bike 1616 from station 185
+INFO:[6021.61] No docks in a walkable distance
+INFO:[6021.61] User 96 has no end station
+INFO:[6069.08] User 92 walked from [-71.0904, 42.3911] to location [-71.0893, 42.3891]
+INFO:[6079.08] User 92 arrived to final location [-71.0893, 42.3891]
+INFO:[6159.18] User 86 locked bike 2658 in station 25
+INFO:[6211.00] User 97 initialized at location [-71.0934, 42.3576]
+INFO:[6211.00] User 97 selected start station 212
+INFO:[6211.00] User 97 walked from [-71.0934, 42.3576] to location [-71.0932, 42.3581]
+INFO:[6211.00] User 97 unlocked bike 1847 from station 212
+INFO:[6212.00] User 97 selected end station 185
+INFO:[6212.00] User 97 biking with bike 1847 from [-71.0932, 42.3581] to location [-71.0970, 42.3487]
+INFO:[6285.85] User 95 walked from [-71.1006, 42.3635] to location [-71.0996, 42.3655]
+INFO:[6295.85] User 95 arrived to final location [-71.0996, 42.3655]
+INFO:[6383.00] User 94 locked bike 2006 in station 98
+INFO:[6426.01] User 86 walked from [-71.1110, 42.3992] to location [-71.1145, 42.3986]
+INFO:[6436.01] User 86 arrived to final location [-71.1145, 42.3986]
+INFO:[6475.00] User 98 initialized at location [-71.1008, 42.3506]
+INFO:[6475.00] User 98 selected start station 268
+INFO:[6490.44] User 88 locked bike 1065 in station 316
+INFO:[6551.43] User 98 walked from [-71.1008, 42.3506] to location [-71.1006, 42.3495]
+INFO:[6551.43] User 98 unlocked bike 2364 from station 268
+INFO:[6552.43] User 98 selected end station 65
+INFO:[6552.43] User 98 biking with bike 2364 from [-71.1006, 42.3495] to location [-71.1205, 42.3338]
+INFO:[6578.70] User 97 locked bike 1847 in station 185
+INFO:[6585.35] User 88 walked from [-71.1603, 42.3490] to location [-71.1599, 42.3498]
+INFO:[6595.35] User 88 arrived to final location [-71.1599, 42.3498]
+INFO:[6596.02] User 97 walked from [-71.0970, 42.3487] to location [-71.0976, 42.3492]
+INFO:[6606.02] User 97 arrived to final location [-71.0976, 42.3492]
+INFO:[6627.61] User 94 walked from [-71.1213, 42.3515] to location [-71.1202, 42.3493]
+INFO:[6637.61] User 94 arrived to final location [-71.1202, 42.3493]
+INFO:[6906.00] User 99 initialized at location [-71.0869, 42.3500]
+INFO:[6906.00] User 99 selected start station 226
+INFO:[7008.00] User 100 initialized at location [-71.0879, 42.3469]
+INFO:[7008.00] User 100 selected start station 55
+INFO:[7050.43] User 99 walked from [-71.0869, 42.3500] to location [-71.0860, 42.3487]
+INFO:[7050.43] User 99 unlocked bike 2005 from station 226
+INFO:[7051.43] User 99 selected end station 185
+INFO:[7051.43] User 99 biking with bike 2005 from [-71.0860, 42.3487] to location [-71.0970, 42.3487]
+INFO:[7070.37] User 100 walked from [-71.0879, 42.3469] to location [-71.0868, 42.3474]
+INFO:[7070.37] User 100 unlocked bike 595 from station 55
+INFO:[7071.37] User 100 selected end station 2
+INFO:[7071.37] User 100 biking with bike 595 from [-71.0868, 42.3474] to location [-71.1040, 42.3810]
+INFO:[7237.00] User 101 initialized at location [-71.0289, 42.3800]
+INFO:[7237.00] User 101 selected start station 83
+INFO:[7242.00] User 102 initialized at location [-71.0317, 42.3805]
+INFO:[7242.00] User 102 selected start station 147
+INFO:[7296.65] User 99 locked bike 2005 in station 185
+INFO:[7313.49] User 98 locked bike 2364 in station 65
+INFO:[7349.91] User 101 walked from [-71.0289, 42.3800] to location [-71.0274, 42.3798]
+INFO:[7349.91] User 101 unlocked bike 702 from station 83
+INFO:[7350.91] User 101 selected end station 36
+INFO:[7350.91] User 101 biking with bike 702 from [-71.0274, 42.3798] to location [-71.0106, 42.3852]
+INFO:[7427.26] User 99 walked from [-71.0970, 42.3487] to location [-71.0941, 42.3485]
+INFO:[7437.26] User 99 arrived to final location [-71.0941, 42.3485]
+INFO:[7475.39] User 102 walked from [-71.0317, 42.3805] to location [-71.0302, 42.3824]
+INFO:[7475.39] User 102 unlocked bike 1275 from station 147
+INFO:[7476.39] User 102 selected end station 36
+INFO:[7476.39] User 102 biking with bike 1275 from [-71.0302, 42.3824] to location [-71.0106, 42.3852]
+INFO:[7516.52] User 98 walked from [-71.1205, 42.3338] to location [-71.1194, 42.3325]
+INFO:[7526.52] User 98 arrived to final location [-71.1194, 42.3325]
+INFO:[7644.00] User 103 initialized at location [-71.0605, 42.3509]
+INFO:[7644.00] User 103 selected start station 87
+INFO:[7662.00] User 104 initialized at location [-71.0622, 42.3519]
+INFO:[7662.00] User 104 selected start station 87
+INFO:[7725.00] User 105 initialized at location [-71.1025, 42.3340]
+INFO:[7725.00] User 105 selected start station 232
+INFO:[7729.86] User 101 locked bike 702 in station 36
+INFO:[7752.00] User 106 initialized at location [-71.0581, 42.3513]
+INFO:[7752.00] User 106 selected start station 86
+INFO:[7765.28] User 104 walked from [-71.0622, 42.3519] to location [-71.0627, 42.3524]
+INFO:[7765.28] User 104 unlocked bike 738 from station 87
+INFO:[7766.28] User 104 selected end station 205
+INFO:[7766.28] User 104 biking with bike 738 from [-71.0627, 42.3524] to location [-71.0834, 42.3414]
+INFO:[7850.29] User 103 walked from [-71.0605, 42.3509] to location [-71.0627, 42.3524]
+INFO:[7850.29] User 103 unlocked bike 734 from station 87
+INFO:[7851.29] User 103 selected end station 55
+INFO:[7851.29] User 103 biking with bike 734 from [-71.0627, 42.3524] to location [-71.0868, 42.3474]
+INFO:[7855.68] User 105 walked from [-71.1025, 42.3340] to location [-71.1045, 42.3339]
+INFO:[7855.68] User 105 unlocked bike 2058 from station 232
+INFO:[7856.68] User 105 selected end station 202
+INFO:[7856.68] User 105 biking with bike 2058 from [-71.1045, 42.3339] to location [-71.1213, 42.3398]
+INFO:[7860.00] User 107 initialized at location [-71.0672, 42.3587]
+INFO:[7860.00] User 107 selected start station 81
+INFO:[7868.13] User 106 walked from [-71.0581, 42.3513] to location [-71.0594, 42.3514]
+INFO:[7868.13] User 106 unlocked bike 724 from station 86
+INFO:[7869.13] User 106 selected end station 55
+INFO:[7869.13] User 106 biking with bike 724 from [-71.0594, 42.3514] to location [-71.0868, 42.3474]
+INFO:[7935.56] User 101 walked from [-71.0106, 42.3852] to location [-71.0113, 42.3833]
+INFO:[7945.56] User 101 arrived to final location [-71.0113, 42.3833]
+INFO:[7957.71] User 102 locked bike 1275 in station 36
+INFO:[8104.00] User 108 initialized at location [-71.1126, 42.3227]
+INFO:[8104.00] User 108 selected start station 173
+INFO:[8139.86] User 100 locked bike 595 in station 2
+INFO:[8157.98] User 102 walked from [-71.0106, 42.3852] to location [-71.0133, 42.3854]
+INFO:[8167.98] User 102 arrived to final location [-71.0133, 42.3854]
+INFO:[8192.99] User 107 walked from [-71.0672, 42.3587] to location [-71.0712, 42.3608]
+INFO:[8192.99] User 107 unlocked bike 686 from station 81
+INFO:[8193.99] User 107 selected end station 184
+INFO:[8193.99] User 107 biking with bike 686 from [-71.0712, 42.3608] to location [-71.0850, 42.3624]
+INFO:[8312.00] User 109 initialized at location [-71.1044, 42.3543]
+INFO:[8312.00] User 109 selected start station 215
+INFO:[8321.31] User 105 locked bike 2058 in station 202
+INFO:[8337.71] User 104 locked bike 738 in station 205
+INFO:[8351.18] User 103 locked bike 734 in station 55
+INFO:[8366.78] User 105 walked from [-71.1213, 42.3398] to location [-71.1203, 42.3389]
+INFO:[8376.78] User 105 arrived to final location [-71.1203, 42.3389]
+INFO:[8386.21] User 108 walked from [-71.1126, 42.3227] to location [-71.1098, 42.3218]
+INFO:[8386.21] User 108 unlocked bike 1518 from station 173
+INFO:[8387.21] User 108 selected end station 20
+INFO:[8387.21] User 108 biking with bike 1518 from [-71.1098, 42.3218] to location [-71.1212, 42.2927]
+INFO:[8394.10] User 104 walked from [-71.0834, 42.3414] to location [-71.0831, 42.3427]
+INFO:[8404.10] User 104 arrived to final location [-71.0831, 42.3427]
+INFO:[8425.00] User 110 initialized at location [-71.0850, 42.3683]
+INFO:[8425.00] User 110 selected start station 38
+INFO:[8446.56] User 103 walked from [-71.0868, 42.3474] to location [-71.0859, 42.3459]
+INFO:[8456.56] User 103 arrived to final location [-71.0859, 42.3459]
+INFO:[8471.59] User 107 locked bike 686 in station 184
+INFO:[8475.61] User 100 walked from [-71.1040, 42.3810] to location [-71.1021, 42.3812]
+INFO:[8482.16] User 106 locked bike 724 in station 55
+INFO:[8485.61] User 100 arrived to final location [-71.1021, 42.3812]
+INFO:[8493.00] User 111 initialized at location [-71.0568, 42.3614]
+INFO:[8493.00] User 111 selected start station 47
+INFO:[8497.39] User 109 walked from [-71.1044, 42.3543] to location [-71.1039, 42.3556]
+INFO:[8497.39] User 109 unlocked bike 1895 from station 215
+INFO:[8498.39] User 109 selected end station 267
+INFO:[8498.39] User 109 biking with bike 1895 from [-71.1039, 42.3556] to location [-71.1039, 42.3578]
+INFO:[8540.70] User 107 walked from [-71.0850, 42.3624] to location [-71.0834, 42.3631]
+INFO:[8550.70] User 107 arrived to final location [-71.0834, 42.3631]
+INFO:[8627.15] User 111 walked from [-71.0568, 42.3614] to location [-71.0574, 42.3625]
+INFO:[8627.15] User 111 unlocked bike 405 from station 47
+INFO:[8628.15] User 111 selected end station 72
+INFO:[8628.15] User 111 biking with bike 405 from [-71.0574, 42.3625] to location [-71.0653, 42.3613]
+INFO:[8636.00] User 112 initialized at location [-71.0992, 42.3760]
+INFO:[8636.00] User 112 selected start station 177
+INFO:[8664.55] User 110 walked from [-71.0850, 42.3683] to location [-71.0863, 42.3661]
+INFO:[8664.55] User 110 unlocked bike 330 from station 38
+INFO:[8665.55] User 110 selected end station 8
+INFO:[8665.55] User 110 biking with bike 330 from [-71.0863, 42.3661] to location [-71.1439, 42.3936]
+INFO:[8670.13] User 106 walked from [-71.0868, 42.3474] to location [-71.0857, 42.3459]
+INFO:[8680.13] User 106 arrived to final location [-71.0857, 42.3459]
+INFO:[8796.34] User 111 locked bike 405 in station 72
+INFO:[8831.00] User 113 initialized at location [-71.0871, 42.3424]
+INFO:[8831.00] User 113 selected start station 88
+INFO:[8838.73] User 109 locked bike 1895 in station 267
+INFO:[8847.41] User 111 walked from [-71.0653, 42.3613] to location [-71.0661, 42.3608]
+INFO:[8857.41] User 111 arrived to final location [-71.0661, 42.3608]
+INFO:[8860.42] User 109 walked from [-71.1039, 42.3578] to location [-71.1030, 42.3570]
+INFO:[8870.42] User 109 arrived to final location [-71.1030, 42.3570]
+INFO:[8883.16] User 112 walked from [-71.0992, 42.3760] to location [-71.1002, 42.3744]
+INFO:[8883.16] User 112 unlocked bike 1549 from station 177
+INFO:[8884.16] User 112 selected end station 198
+INFO:[8884.16] User 112 biking with bike 1549 from [-71.1002, 42.3744] to location [-71.0706, 42.3809]
+INFO:[8972.52] User 113 walked from [-71.0871, 42.3424] to location [-71.0858, 42.3437]
+INFO:[8972.52] User 113 unlocked bike 745 from station 88
+INFO:[8973.52] User 113 selected end station 88
+INFO:[8973.52] User 113 biking with bike 745 from [-71.0858, 42.3437] to location [-71.0858, 42.3437]
+INFO:[8973.52] User 113 locked bike 745 in station 88
+INFO:[9100.00] User 114 initialized at location [-71.0541, 42.3638]
+INFO:[9100.00] User 114 selected start station 110
+INFO:[9116.05] User 113 walked from [-71.0858, 42.3437] to location [-71.0873, 42.3418]
+INFO:[9126.05] User 113 arrived to final location [-71.0873, 42.3418]
+INFO:[9233.65] User 108 locked bike 1518 in station 20
+INFO:[9281.85] User 114 walked from [-71.0541, 42.3638] to location [-71.0561, 42.3628]
+INFO:[9281.85] User 114 unlocked bike 946 from station 110
+INFO:[9282.85] User 114 selected end station 150
+INFO:[9282.85] User 114 biking with bike 946 from [-71.0561, 42.3628] to location [-71.0810, 42.3079]
+INFO:[9395.13] User 108 walked from [-71.1212, 42.2927] to location [-71.1227, 42.2907]
+INFO:[9405.13] User 108 arrived to final location [-71.1227, 42.2907]
+INFO:[9644.66] User 112 locked bike 1549 in station 198
+INFO:[9842.36] User 112 walked from [-71.0706, 42.3809] to location [-71.0705, 42.3833]
+INFO:[9852.36] User 112 arrived to final location [-71.0705, 42.3833]
+INFO:[10159.48] User 110 locked bike 330 in station 8
+INFO:[10231.33] User 110 walked from [-71.1439, 42.3936] to location [-71.1449, 42.3944]
+INFO:[10241.33] User 110 arrived to final location [-71.1449, 42.3944]
+INFO:[10302.00] User 115 initialized at location [-71.1021, 42.3648]
+INFO:[10302.00] User 115 selected start station 187
+INFO:[10370.04] User 115 walked from [-71.1021, 42.3648] to location [-71.1006, 42.3635]
+INFO:[10370.04] User 115 unlocked bike 1635 from station 187
+INFO:[10371.04] User 115 selected end station 204
+INFO:[10371.04] User 115 biking with bike 1635 from [-71.1006, 42.3635] to location [-71.1226, 42.3912]
+INFO:[10407.00] User 116 initialized at location [-71.0877, 42.3445]
+INFO:[10407.00] User 116 selected start station 88
+INFO:[10616.83] User 116 walked from [-71.0877, 42.3445] to location [-71.0858, 42.3437]
+INFO:[10616.83] User 116 unlocked bike 749 from station 88
+INFO:[10617.83] User 116 selected end station 232
+INFO:[10617.83] User 116 biking with bike 749 from [-71.0858, 42.3437] to location [-71.1045, 42.3339]
+INFO:[10970.52] User 114 locked bike 946 in station 150
+INFO:[11088.04] User 116 locked bike 749 in station 232
+INFO:[11121.00] User 117 initialized at location [-71.1491, 42.3556]
+INFO:[11121.00] User 117 selected start station 225
+INFO:[11197.79] User 116 walked from [-71.1045, 42.3339] to location [-71.1053, 42.3358]
+INFO:[11207.79] User 116 arrived to final location [-71.1053, 42.3358]
+INFO:[11215.86] User 114 walked from [-71.0810, 42.3079] to location [-71.0785, 42.3089]
+INFO:[11225.86] User 114 arrived to final location [-71.0785, 42.3089]
+INFO:[11238.00] User 118 initialized at location [-71.1056, 42.3637]
+INFO:[11238.00] User 118 selected start station 113
+INFO:[11313.43] User 115 locked bike 1635 in station 204
+INFO:[11359.30] User 115 walked from [-71.1226, 42.3912] to location [-71.1225, 42.3903]
+INFO:[11369.30] User 115 arrived to final location [-71.1225, 42.3903]
+INFO:[11453.06] User 117 walked from [-71.1491, 42.3556] to location [-71.1467, 42.3573]
+INFO:[11453.06] User 117 unlocked bike 2014 from station 225
+INFO:[11454.06] User 117 selected end station 225
+INFO:[11454.06] User 117 biking with bike 2014 from [-71.1467, 42.3573] to location [-71.1467, 42.3573]
+INFO:[11454.06] User 117 locked bike 2014 in station 225
+INFO:[11467.46] User 118 walked from [-71.1056, 42.3637] to location [-71.1081, 42.3618]
+INFO:[11467.46] User 118 unlocked bike 973 from station 113
+INFO:[11468.46] User 118 selected end station 264
+INFO:[11468.46] User 118 biking with bike 973 from [-71.1081, 42.3618] to location [-71.0993, 42.3686]
+INFO:[11724.82] User 117 walked from [-71.1467, 42.3573] to location [-71.1503, 42.3571]
+INFO:[11734.82] User 117 arrived to final location [-71.1503, 42.3571]
+INFO:[11767.72] User 118 locked bike 973 in station 264
+INFO:[11977.53] User 118 walked from [-71.0993, 42.3686] to location [-71.1006, 42.3664]
+INFO:[11979.00] User 119 initialized at location [-71.1233, 42.3795]
+INFO:[11979.00] User 119 selected start station 164
+INFO:[11987.53] User 118 arrived to final location [-71.1006, 42.3664]
+INFO:[12095.00] User 120 initialized at location [-71.1253, 42.3896]
+INFO:[12095.00] User 120 selected start station 204
+INFO:[12103.80] User 119 walked from [-71.1233, 42.3795] to location [-71.1251, 42.3803]
+INFO:[12103.80] User 119 unlocked bike 1426 from station 164
+INFO:[12104.80] User 119 selected end station 4
+INFO:[12104.80] User 119 biking with bike 1426 from [-71.1251, 42.3803] to location [-71.1487, 42.3750]
+INFO:[12264.00] User 121 initialized at location [-71.0986, 42.3500]
+INFO:[12264.00] User 121 selected start station 117
+INFO:[12326.11] User 120 walked from [-71.1253, 42.3896] to location [-71.1226, 42.3912]
+INFO:[12326.11] User 120 unlocked bike 1779 from station 204
+INFO:[12327.11] User 120 selected end station 118
+INFO:[12327.11] User 120 biking with bike 1779 from [-71.1226, 42.3912] to location [-71.1480, 42.3979]
+INFO:[12359.91] User 121 walked from [-71.0986, 42.3500] to location [-71.0973, 42.3492]
+INFO:[12359.91] User 121 unlocked bike 1857 from station 117
+INFO:[12360.91] User 121 selected end station 98
+INFO:[12360.91] User 121 biking with bike 1857 from [-71.0973, 42.3492] to location [-71.1213, 42.3515]
+INFO:[12637.38] User 119 locked bike 1426 in station 4
+INFO:[12846.32] User 121 locked bike 1857 in station 98
+INFO:[12869.40] User 120 locked bike 1779 in station 118
+INFO:[12870.40] User 120 walked from [-71.1480, 42.3979] to location [-71.1499, 42.3993]
+INFO:[12873.55] User 119 walked from [-71.1487, 42.3750] to location [-71.1517, 42.3756]
+INFO:[12879.00] User 122 initialized at location [-71.1199, 42.3503]
+INFO:[12879.00] User 122 selected start station 98
+INFO:[12880.40] User 120 arrived to final location [-71.1499, 42.3993]
+INFO:[12883.55] User 119 arrived to final location [-71.1517, 42.3756]
+INFO:[12911.80] User 121 walked from [-71.1213, 42.3515] to location [-71.1223, 42.3511]
+INFO:[12921.80] User 121 arrived to final location [-71.1223, 42.3511]
+INFO:[13063.88] User 122 walked from [-71.1199, 42.3503] to location [-71.1213, 42.3515]
+INFO:[13063.88] User 122 unlocked bike 822 from station 98
+INFO:[13064.88] User 122 selected end station 318
+INFO:[13064.88] User 122 biking with bike 822 from [-71.1213, 42.3515] to location [-71.1413, 42.3429]
+INFO:[13364.00] User 123 initialized at location [-71.1386, 42.3473]
+INFO:[13364.00] User 123 selected start station 101
+INFO:[13548.41] User 123 walked from [-71.1386, 42.3473] to location [-71.1400, 42.3484]
+INFO:[13548.41] User 123 unlocked bike 846 from station 101
+INFO:[13549.41] User 123 selected end station 61
+INFO:[13549.41] User 123 biking with bike 846 from [-71.1400, 42.3484] to location [-71.0655, 42.3965]
+INFO:[13596.97] User 122 locked bike 822 in station 318
+INFO:[13835.00] User 124 initialized at location [-71.1161, 42.3693]
+INFO:[13835.00] User 124 selected start station 165
+INFO:[13884.54] User 122 walked from [-71.1413, 42.3429] to location [-71.1388, 42.3447]
+INFO:[13894.54] User 122 arrived to final location [-71.1388, 42.3447]
+INFO:[13962.00] User 124 walked from [-71.1161, 42.3693] to location [-71.1171, 42.3692]
+INFO:[13962.00] User 124 unlocked bike 1435 from station 165
+INFO:[13963.00] User 124 selected end station 164
+INFO:[13963.00] User 124 biking with bike 1435 from [-71.1171, 42.3692] to location [-71.1251, 42.3803]
+INFO:[14082.00] User 125 initialized at location [-71.0997, 42.3384]
+INFO:[14082.00] User 125 selected start station 170
+INFO:[14305.00] User 126 initialized at location [-71.0781, 42.3414]
+INFO:[14305.00] User 126 selected start station 274
+INFO:[14309.07] User 125 walked from [-71.0997, 42.3384] to location [-71.0989, 42.3366]
+INFO:[14309.07] User 125 unlocked bike 1492 from station 170
+INFO:[14310.07] User 125 selected end station 68
+INFO:[14310.07] User 125 biking with bike 1492 from [-71.0989, 42.3366] to location [-71.1007, 42.3457]
+INFO:[14350.59] User 124 locked bike 1435 in station 164
+INFO:[14387.86] User 126 walked from [-71.0781, 42.3414] to location [-71.0768, 42.3413]
+INFO:[14387.86] User 126 unlocked bike 2413 from station 274
+INFO:[14388.86] User 126 selected end station 46
+INFO:[14388.86] User 126 biking with bike 2413 from [-71.0768, 42.3413] to location [-71.0731, 42.3364]
+INFO:[14562.20] User 126 locked bike 2413 in station 46
+INFO:[14641.63] User 124 walked from [-71.1251, 42.3803] to location [-71.1232, 42.3817]
+INFO:[14642.64] User 125 locked bike 1492 in station 68
+INFO:[14651.63] User 124 arrived to final location [-71.1232, 42.3817]
+INFO:[14673.56] User 126 walked from [-71.0731, 42.3364] to location [-71.0720, 42.3378]
+INFO:[14683.56] User 126 arrived to final location [-71.0720, 42.3378]
+INFO:[14702.99] User 125 walked from [-71.1007, 42.3457] to location [-71.1004, 42.3462]
+INFO:[14712.99] User 125 arrived to final location [-71.1004, 42.3462]
+INFO:[15631.00] User 127 initialized at location [-71.0818, 42.3680]
+INFO:[15631.00] User 127 selected start station 295
+INFO:[15680.31] User 123 locked bike 846 in station 61
+INFO:[15897.73] User 123 walked from [-71.0655, 42.3965] to location [-71.0668, 42.3941]
+INFO:[15907.73] User 123 arrived to final location [-71.0668, 42.3941]
+INFO:[15931.70] User 127 walked from [-71.0818, 42.3680] to location [-71.0828, 42.3654]
+INFO:[15931.70] User 127 unlocked bike 2631 from station 295
+INFO:[15932.70] User 127 selected end station 30
+INFO:[15932.70] User 127 biking with bike 2631 from [-71.0828, 42.3654] to location [-71.0898, 42.3508]
+INFO:[16486.37] User 127 locked bike 2631 in station 30
+INFO:[16567.00] User 128 initialized at location [-71.1383, 42.3383]
+INFO:[16567.00] User 128 selected start station 32
+INFO:[16567.00] User 128 walked from [-71.1383, 42.3383] to location [-71.1389, 42.3383]
+INFO:[16567.00] User 128 unlocked bike 277 from station 32
+INFO:[16568.00] User 128 selected end station 88
+INFO:[16568.00] User 128 biking with bike 277 from [-71.1389, 42.3383] to location [-71.0858, 42.3437]
+INFO:[16652.39] User 127 walked from [-71.0898, 42.3508] to location [-71.0879, 42.3488]
+INFO:[16662.39] User 127 arrived to final location [-71.0879, 42.3488]
+INFO:[17021.00] User 129 initialized at location [-71.0891, 42.3485]
+INFO:[17021.00] User 129 selected start station 30
+INFO:[17071.00] User 130 initialized at location [-71.0876, 42.3485]
+INFO:[17071.00] User 130 selected start station 55
+INFO:[17186.02] User 129 walked from [-71.0891, 42.3485] to location [-71.0898, 42.3508]
+INFO:[17186.02] User 129 unlocked bike 259 from station 30
+INFO:[17187.02] User 129 selected end station 300
+INFO:[17187.02] User 129 biking with bike 259 from [-71.0898, 42.3508] to location [-71.0633, 42.3550]
+INFO:[17201.84] User 130 walked from [-71.0876, 42.3485] to location [-71.0868, 42.3474]
+INFO:[17201.84] User 130 unlocked bike 734 from station 55
+INFO:[17202.84] User 130 selected end station 87
+INFO:[17202.84] User 130 biking with bike 734 from [-71.0868, 42.3474] to location [-71.0627, 42.3524]
+INFO:[17474.00] User 131 initialized at location [-71.1370, 42.3478]
+INFO:[17474.00] User 131 selected start station 101
+INFO:[17556.00] User 132 initialized at location [-71.1178, 42.3009]
+INFO:[17556.00] User 132 selected start station 138
+INFO:[17686.64] User 131 walked from [-71.1370, 42.3478] to location [-71.1400, 42.3484]
+INFO:[17686.64] User 131 unlocked bike 849 from station 101
+INFO:[17687.64] User 131 selected end station 0
+INFO:[17687.64] User 131 biking with bike 849 from [-71.1400, 42.3484] to location [-71.1292, 42.3638]
+INFO:[17702.72] User 130 locked bike 734 in station 87
+INFO:[17705.12] User 132 walked from [-71.1178, 42.3009] to location [-71.1142, 42.3009]
+INFO:[17705.12] User 132 unlocked bike 1203 from station 138
+INFO:[17706.12] User 132 selected end station 298
+INFO:[17706.12] User 132 biking with bike 1203 from [-71.1142, 42.3009] to location [-71.0815, 42.3389]
+INFO:[17741.60] User 128 locked bike 277 in station 88
+INFO:[17810.22] User 130 walked from [-71.0627, 42.3524] to location [-71.0634, 42.3535]
+INFO:[17820.22] User 130 arrived to final location [-71.0634, 42.3535]
+INFO:[17821.81] User 129 locked bike 259 in station 300
+INFO:[17871.77] User 129 walked from [-71.0633, 42.3550] to location [-71.0627, 42.3546]
+INFO:[17881.77] User 129 arrived to final location [-71.0627, 42.3546]
+INFO:[17884.12] User 128 walked from [-71.0858, 42.3437] to location [-71.0879, 42.3427]
+INFO:[17894.12] User 128 arrived to final location [-71.0879, 42.3427]
+INFO:[17949.00] User 133 initialized at location [-71.0997, 42.3889]
+INFO:[17949.00] User 133 selected start station 270
+INFO:[18065.00] User 134 initialized at location [-71.0995, 42.3425]
+INFO:[18065.00] User 134 selected start station 188
+INFO:[18074.00] User 135 initialized at location [-71.0699, 42.3430]
+INFO:[18074.00] User 135 selected start station 328
+INFO:[18117.00] User 136 initialized at location [-71.0614, 42.3643]
+INFO:[18117.00] User 136 selected start station 47
+INFO:[18181.00] User 137 initialized at location [-71.1227, 42.3800]
+INFO:[18181.00] User 137 selected start station 157
+INFO:[18213.60] User 133 walked from [-71.0997, 42.3889] to location [-71.0981, 42.3868]
+INFO:[18213.60] User 133 unlocked bike 2382 from station 270
+INFO:[18214.60] User 133 selected end station 158
+INFO:[18214.60] User 133 biking with bike 2382 from [-71.0981, 42.3868] to location [-71.1209, 42.3732]
+INFO:[18254.00] User 138 initialized at location [-71.1078, 42.3648]
+INFO:[18254.00] User 138 selected start station 75
+INFO:[18259.08] User 135 walked from [-71.0699, 42.3430] to location [-71.0689, 42.3416]
+INFO:[18259.08] User 135 unlocked bike 2923 from station 328
+INFO:[18260.08] User 135 selected end station 46
+INFO:[18260.08] User 135 biking with bike 2923 from [-71.0689, 42.3416] to location [-71.0731, 42.3364]
+INFO:[18267.36] User 131 locked bike 849 in station 0
+INFO:[18340.45] User 134 walked from [-71.0995, 42.3425] to location [-71.1024, 42.3437]
+INFO:[18340.45] User 134 unlocked bike 1646 from station 188
+INFO:[18341.45] User 134 selected end station 194
+INFO:[18341.45] User 134 biking with bike 1646 from [-71.1024, 42.3437] to location [-71.1065, 42.3386]
+INFO:[18344.00] User 139 initialized at location [-71.1051, 42.3553]
+INFO:[18344.00] User 139 selected start station 215
+INFO:[18364.23] User 136 walked from [-71.0614, 42.3643] to location [-71.0574, 42.3625]
+INFO:[18364.23] User 136 unlocked bike 404 from station 47
+INFO:[18365.23] User 136 selected end station 279
+INFO:[18365.23] User 136 biking with bike 404 from [-71.0574, 42.3625] to location [-71.0526, 42.3441]
+INFO:[18374.00] User 140 initialized at location [-71.1075, 42.3272]
+INFO:[18374.00] User 140 selected start station 259
+INFO:[18377.14] User 137 walked from [-71.1227, 42.3800] to location [-71.1199, 42.3790]
+INFO:[18377.14] User 137 unlocked bike 1367 from station 157
+INFO:[18378.14] User 137 selected end station 157
+INFO:[18378.14] User 137 biking with bike 1367 from [-71.1199, 42.3790] to location [-71.1199, 42.3790]
+INFO:[18378.14] User 137 locked bike 1367 in station 157
+INFO:[18404.40] User 139 walked from [-71.1051, 42.3553] to location [-71.1039, 42.3556]
+INFO:[18404.40] User 139 unlocked bike 1893 from station 215
+INFO:[18405.40] User 139 selected end station 184
+INFO:[18405.40] User 139 biking with bike 1893 from [-71.1039, 42.3556] to location [-71.0850, 42.3624]
+INFO:[18441.00] User 141 initialized at location [-71.0915, 42.3298]
+INFO:[18441.00] User 141 selected start station 26
+INFO:[18447.88] User 135 locked bike 2923 in station 46
+INFO:[18462.63] User 131 walked from [-71.1292, 42.3638] to location [-71.1322, 42.3628]
+INFO:[18466.70] User 138 walked from [-71.1078, 42.3648] to location [-71.1055, 42.3664]
+INFO:[18466.70] User 138 unlocked bike 627 from station 75
+INFO:[18467.70] User 138 selected end station 164
+INFO:[18467.70] User 138 biking with bike 627 from [-71.1055, 42.3664] to location [-71.1251, 42.3803]
+INFO:[18472.63] User 131 arrived to final location [-71.1322, 42.3628]
+INFO:[18504.00] User 142 initialized at location [-71.0668, 42.3270]
+INFO:[18504.00] User 142 selected start station 227
+INFO:[18513.69] User 142 walked from [-71.0668, 42.3270] to location [-71.0665, 42.3266]
+INFO:[18513.69] User 142 unlocked bike 2013 from station 227
+INFO:[18514.69] User 142 selected end station 296
+INFO:[18514.69] User 142 biking with bike 2013 from [-71.0665, 42.3266] to location [-71.0696, 42.3454]
+INFO:[18515.00] User 143 initialized at location [-71.0769, 42.3409]
+INFO:[18515.00] User 143 selected start station 325
+INFO:[18519.14] User 134 locked bike 1646 in station 194
+INFO:[18521.32] User 141 walked from [-71.0915, 42.3298] to location [-71.0902, 42.3295]
+INFO:[18521.32] User 141 unlocked bike 232 from station 26
+INFO:[18522.32] User 141 selected end station 88
+INFO:[18522.32] User 141 biking with bike 232 from [-71.0902, 42.3295] to location [-71.0858, 42.3437]
+INFO:[18535.00] User 144 initialized at location [-71.0644, 42.3513]
+INFO:[18535.00] User 144 selected start station 282
+INFO:[18549.88] User 140 walked from [-71.1075, 42.3272] to location [-71.1109, 42.3276]
+INFO:[18549.88] User 140 unlocked bike 2278 from station 259
+INFO:[18550.88] User 140 selected end station 194
+INFO:[18550.88] User 140 biking with bike 2278 from [-71.1109, 42.3276] to location [-71.1065, 42.3386]
+INFO:[18571.00] User 145 initialized at location [-71.0644, 42.3432]
+INFO:[18571.00] User 145 selected start station 154
+INFO:[18575.28] User 137 walked from [-71.1199, 42.3790] to location [-71.1227, 42.3800]
+INFO:[18579.00] User 146 initialized at location [-71.1257, 42.3787]
+INFO:[18579.00] User 146 selected start station 164
+INFO:[18584.00] User 147 initialized at location [-71.1031, 42.3475]
+INFO:[18584.00] User 147 selected start station 239
+INFO:[18585.28] User 137 arrived to final location [-71.1227, 42.3800]
+INFO:[18604.00] User 148 initialized at location [-71.0681, 42.3594]
+INFO:[18604.00] User 148 selected start station 72
+INFO:[18624.82] User 144 walked from [-71.0644, 42.3513] to location [-71.0663, 42.3511]
+INFO:[18624.82] User 144 unlocked bike 2505 from station 282
+INFO:[18625.82] User 144 selected end station 19
+INFO:[18625.82] User 144 biking with bike 2505 from [-71.0663, 42.3511] to location [-71.0582, 42.3553]
+INFO:[18658.82] User 135 walked from [-71.0731, 42.3364] to location [-71.0722, 42.3348]
+INFO:[18668.82] User 135 arrived to final location [-71.0722, 42.3348]
+INFO:[18708.92] User 134 walked from [-71.1065, 42.3386] to location [-71.1083, 42.3401]
+INFO:[18718.92] User 134 arrived to final location [-71.1083, 42.3401]
+INFO:[18734.42] User 145 walked from [-71.0644, 42.3432] to location [-71.0638, 42.3452]
+INFO:[18734.42] User 145 unlocked bike 1340 from station 154
+INFO:[18735.42] User 145 selected end station 16
+INFO:[18735.42] User 145 biking with bike 1340 from [-71.0638, 42.3452] to location [-71.0882, 42.3625]
+INFO:[18739.00] User 149 initialized at location [-71.1067, 42.3922]
+INFO:[18739.00] User 149 selected start station 272
+INFO:[18768.01] User 147 walked from [-71.1031, 42.3475] to location [-71.1053, 42.3472]
+INFO:[18768.01] User 147 unlocked bike 2124 from station 239
+INFO:[18769.01] User 147 selected end station 23
+INFO:[18769.01] User 147 biking with bike 2124 from [-71.1053, 42.3472] to location [-71.1083, 42.3504]
+INFO:[18778.82] User 143 walked from [-71.0769, 42.3409] to location [-71.0740, 42.3385]
+INFO:[18778.82] User 143 unlocked bike 395 from station 325
+INFO:[18779.82] User 143 selected end station 27
+INFO:[18779.82] User 143 biking with bike 395 from [-71.0740, 42.3385] to location [-71.0698, 42.3561]
+INFO:[18847.00] User 150 initialized at location [-71.0920, 42.3273]
+INFO:[18847.00] User 150 selected start station 26
+INFO:[18859.94] User 144 locked bike 2505 in station 19
+INFO:[18864.37] User 139 locked bike 1893 in station 184
+INFO:[18881.65] User 148 walked from [-71.0681, 42.3594] to location [-71.0653, 42.3613]
+INFO:[18881.65] User 148 unlocked bike 405 from station 72
+INFO:[18882.65] User 148 selected end station 212
+INFO:[18882.65] User 148 biking with bike 405 from [-71.0653, 42.3613] to location [-71.0932, 42.3581]
+INFO:[18891.10] User 147 locked bike 2124 in station 23
+INFO:[18918.29] User 146 walked from [-71.1257, 42.3787] to location [-71.1251, 42.3803]
+INFO:[18918.29] User 146 unlocked bike 1428 from station 164
+INFO:[18918.70] User 140 locked bike 2278 in station 194
+INFO:[18919.00] User 151 initialized at location [-71.1126, 42.2999]
+INFO:[18919.00] User 151 selected start station 138
+INFO:[18919.29] User 146 selected end station 8
+INFO:[18919.29] User 146 biking with bike 1428 from [-71.1251, 42.3803] to location [-71.1439, 42.3936]
+INFO:[18919.70] User 140 walked from [-71.1065, 42.3386] to location [-71.1062, 42.3390]
+INFO:[18921.00] User 152 initialized at location [-71.0646, 42.3599]
+INFO:[18921.00] User 152 selected start station 72
+INFO:[18922.00] User 153 initialized at location [-71.0818, 42.3500]
+INFO:[18922.00] User 153 selected start station 53
+INFO:[18923.26] User 133 locked bike 2382 in station 158
+INFO:[18924.26] User 133 walked from [-71.1209, 42.3732] to location [-71.1206, 42.3730]
+INFO:[18929.70] User 140 arrived to final location [-71.1062, 42.3390]
+INFO:[18934.26] User 133 arrived to final location [-71.1206, 42.3730]
+INFO:[18953.18] User 144 walked from [-71.0582, 42.3553] to location [-71.0569, 42.3550]
+INFO:[18955.64] User 136 locked bike 404 in station 279
+INFO:[18958.25] User 149 walked from [-71.1067, 42.3922] to location [-71.1086, 42.3904]
+INFO:[18958.25] User 149 unlocked bike 2396 from station 272
+INFO:[18959.25] User 149 selected end station 130
+INFO:[18959.25] User 149 biking with bike 2396 from [-71.1086, 42.3904] to location [-71.1169, 42.3895]
+INFO:[18963.18] User 144 arrived to final location [-71.0569, 42.3550]
+INFO:[18989.82] User 153 walked from [-71.0818, 42.3500] to location [-71.0824, 42.3488]
+INFO:[18989.82] User 153 unlocked bike 453 from station 53
+INFO:[18990.82] User 153 selected end station 248
+INFO:[18990.82] User 153 biking with bike 453 from [-71.0824, 42.3488] to location [-71.0532, 42.3547]
+INFO:[18999.35] User 132 locked bike 1203 in station 298
+INFO:[19005.00] User 154 initialized at location [-71.0796, 42.3492]
+INFO:[19005.00] User 154 selected start station 52
+INFO:[19005.00] User 154 walked from [-71.0796, 42.3492] to location [-71.0795, 42.3496]
+INFO:[19005.00] User 154 unlocked bike 449 from station 52
+INFO:[19006.00] User 154 selected end station 133
+INFO:[19006.00] User 154 biking with bike 449 from [-71.0795, 42.3496] to location [-71.0446, 42.3534]
+INFO:[19006.61] User 152 walked from [-71.0646, 42.3599] to location [-71.0653, 42.3613]
+INFO:[19006.61] User 152 unlocked bike 601 from station 72
+INFO:[19007.61] User 152 selected end station 261
+INFO:[19007.61] User 152 biking with bike 601 from [-71.0653, 42.3613] to location [-71.0482, 42.3532]
+INFO:[19016.39] User 139 walked from [-71.0850, 42.3624] to location [-71.0823, 42.3624]
+INFO:[19023.62] User 138 locked bike 627 in station 164
+INFO:[19026.39] User 139 arrived to final location [-71.0823, 42.3624]
+INFO:[19059.79] User 132 walked from [-71.0815, 42.3389] to location [-71.0804, 42.3396]
+INFO:[19061.66] User 147 walked from [-71.1083, 42.3504] to location [-71.1073, 42.3496]
+INFO:[19064.00] User 155 initialized at location [-71.0958, 42.2767]
+INFO:[19064.00] User 155  will not make the trip
+INFO:[19069.41] User 141 locked bike 232 in station 88
+INFO:[19069.79] User 132 arrived to final location [-71.0804, 42.3396]
+INFO:[19071.66] User 147 arrived to final location [-71.1073, 42.3496]
+INFO:[19080.00] User 156 initialized at location [-71.1485, 42.3992]
+INFO:[19080.00] User 156 selected start station 118
+INFO:[19080.00] User 156 walked from [-71.1485, 42.3992] to location [-71.1480, 42.3979]
+INFO:[19080.00] User 156 unlocked bike 1021 from station 118
+INFO:[19081.00] User 156 selected end station 8
+INFO:[19081.00] User 156 biking with bike 1021 from [-71.1480, 42.3979] to location [-71.1439, 42.3936]
+INFO:[19110.29] User 150 walked from [-71.0920, 42.3273] to location [-71.0902, 42.3295]
+INFO:[19110.29] User 150 unlocked bike 235 from station 26
+INFO:[19111.29] User 150 selected end station 227
+INFO:[19111.29] User 150 biking with bike 235 from [-71.0902, 42.3295] to location [-71.0665, 42.3266]
+INFO:[19116.92] User 138 walked from [-71.1251, 42.3803] to location [-71.1238, 42.3800]
+INFO:[19126.92] User 138 arrived to final location [-71.1238, 42.3800]
+INFO:[19165.80] User 142 locked bike 2013 in station 296
+INFO:[19180.29] User 141 walked from [-71.0858, 42.3437] to location [-71.0883, 42.3431]
+INFO:[19188.63] User 156 locked bike 1021 in station 8
+INFO:[19190.29] User 141 arrived to final location [-71.0883, 42.3431]
+INFO:[19200.75] User 149 locked bike 2396 in station 130
+INFO:[19221.29] User 142 walked from [-71.0696, 42.3454] to location [-71.0689, 42.3445]
+INFO:[19223.82] User 151 walked from [-71.1126, 42.2999] to location [-71.1142, 42.3009]
+INFO:[19223.82] User 151 unlocked bike 1193 from station 138
+INFO:[19224.82] User 151 selected end station 154
+INFO:[19224.82] User 151 biking with bike 1193 from [-71.1142, 42.3009] to location [-71.0638, 42.3452]
+INFO:[19229.72] User 136 walked from [-71.0526, 42.3441] to location [-71.0517, 42.3416]
+INFO:[19231.29] User 142 arrived to final location [-71.0689, 42.3445]
+INFO:[19239.51] User 149 walked from [-71.1169, 42.3895] to location [-71.1170, 42.3889]
+INFO:[19239.72] User 136 arrived to final location [-71.0517, 42.3416]
+INFO:[19249.51] User 149 arrived to final location [-71.1170, 42.3889]
+INFO:[19260.47] User 156 walked from [-71.1439, 42.3936] to location [-71.1447, 42.3957]
+INFO:[19270.47] User 156 arrived to final location [-71.1447, 42.3957]
+INFO:[19323.00] User 157 initialized at location [-71.1254, 42.3404]
+INFO:[19323.00] User 157 selected start station 107
+INFO:[19371.90] User 143 locked bike 395 in station 27
+INFO:[19440.79] User 152 locked bike 601 in station 261
+INFO:[19445.10] User 143 walked from [-71.0698, 42.3561] to location [-71.0702, 42.3571]
+INFO:[19455.10] User 143 arrived to final location [-71.0702, 42.3571]
+INFO:[19458.00] User 158 initialized at location [-71.0875, 42.3417]
+INFO:[19458.00] User 158 selected start station 88
+INFO:[19477.65] User 148 locked bike 405 in station 212
+INFO:[19478.65] User 148 walked from [-71.0932, 42.3581] to location [-71.0938, 42.3575]
+INFO:[19488.65] User 148 arrived to final location [-71.0938, 42.3575]
+INFO:[19501.00] User 159 initialized at location [-71.0763, 42.3440]
+INFO:[19501.00] User 159 selected start station 96
+INFO:[19504.00] User 160 initialized at location [-71.0608, 42.3648]
+INFO:[19504.00] User 160 selected start station 331
+INFO:[19512.28] User 152 walked from [-71.0482, 42.3532] to location [-71.0477, 42.3533]
+INFO:[19518.00] User 161 initialized at location [-71.0745, 42.3439]
+INFO:[19518.00] User 161 selected start station 96
+INFO:[19522.28] User 152 arrived to final location [-71.0477, 42.3533]
+INFO:[19527.00] User 162 initialized at location [-71.0469, 42.3373]
+INFO:[19527.00] User 162 selected start station 311
+INFO:[19547.64] User 157 walked from [-71.1254, 42.3404] to location [-71.1233, 42.3416]
+INFO:[19547.64] User 157 unlocked bike 906 from station 107
+INFO:[19548.64] User 157 selected end station 222
+INFO:[19548.64] User 157 biking with bike 906 from [-71.1233, 42.3416] to location [-71.0712, 42.3677]
+INFO:[19575.65] User 145 locked bike 1340 in station 16
+INFO:[19583.11] User 159 walked from [-71.0763, 42.3440] to location [-71.0765, 42.3447]
+INFO:[19583.11] User 159 unlocked bike 807 from station 96
+INFO:[19584.11] User 159 selected end station 281
+INFO:[19584.11] User 159 biking with bike 807 from [-71.0765, 42.3447] to location [-71.0724, 42.3495]
+INFO:[19585.30] User 146 locked bike 1428 in station 8
+INFO:[19586.30] User 146 walked from [-71.1439, 42.3936] to location [-71.1433, 42.3932]
+INFO:[19596.30] User 146 arrived to final location [-71.1433, 42.3932]
+INFO:[19599.52] User 158 walked from [-71.0875, 42.3417] to location [-71.0858, 42.3437]
+INFO:[19599.52] User 158 unlocked bike 741 from station 88
+INFO:[19600.52] User 158 selected end station 168
+INFO:[19600.52] User 158 biking with bike 741 from [-71.0858, 42.3437] to location [-71.1029, 42.3374]
+INFO:[19608.00] User 163 initialized at location [-71.1044, 42.3705]
+INFO:[19608.00] User 163 selected start station 3
+INFO:[19610.65] User 153 locked bike 453 in station 248
+INFO:[19632.53] User 163 walked from [-71.1044, 42.3705] to location [-71.1044, 42.3708]
+INFO:[19632.53] User 163 unlocked bike 29 from station 3
+INFO:[19633.53] User 163 selected end station 158
+INFO:[19633.53] User 163 biking with bike 29 from [-71.1044, 42.3708] to location [-71.1209, 42.3732]
+INFO:[19655.13] User 150 locked bike 235 in station 227
+INFO:[19681.06] User 153 walked from [-71.0532, 42.3547] to location [-71.0541, 42.3550]
+INFO:[19682.58] User 145 walked from [-71.0882, 42.3625] to location [-71.0901, 42.3612]
+INFO:[19691.06] User 153 arrived to final location [-71.0541, 42.3550]
+INFO:[19691.09] User 161 walked from [-71.0745, 42.3439] to location [-71.0765, 42.3447]
+INFO:[19691.09] User 161 unlocked bike 806 from station 96
+INFO:[19692.09] User 161 selected end station 240
+INFO:[19692.09] User 161 biking with bike 806 from [-71.0765, 42.3447] to location [-71.0678, 42.3518]
+INFO:[19692.58] User 145 arrived to final location [-71.0901, 42.3612]
+INFO:[19699.00] User 164 initialized at location [-71.1238, 42.3404]
+INFO:[19699.00] User 164 selected start station 107
+INFO:[19736.00] User 165 initialized at location [-71.0681, 42.3707]
+INFO:[19736.00] User 165 selected start station 128
+INFO:[19747.20] User 159 locked bike 807 in station 281
+INFO:[19771.80] User 162 walked from [-71.0469, 42.3373] to location [-71.0462, 42.3360]
+INFO:[19771.80] User 162 unlocked bike 2773 from station 311
+INFO:[19772.80] User 162 selected end station 248
+INFO:[19772.80] User 162 biking with bike 2773 from [-71.0462, 42.3360] to location [-71.0532, 42.3547]
+INFO:[19797.88] User 154 locked bike 449 in station 133
+INFO:[19801.08] User 160 walked from [-71.0608, 42.3648] to location [-71.0645, 42.3659]
+INFO:[19801.08] User 160 unlocked bike 2951 from station 331
+INFO:[19802.08] User 160 selected end station 166
+INFO:[19802.08] User 160 biking with bike 2951 from [-71.0645, 42.3659] to location [-71.0566, 42.3770]
+INFO:[19806.93] User 165 walked from [-71.0681, 42.3707] to location [-71.0700, 42.3699]
+INFO:[19806.93] User 165 unlocked bike 1109 from station 128
+INFO:[19807.93] No docks in a walkable distance
+INFO:[19807.93] User 165 has no end station
+INFO:[19832.00] User 166 initialized at location [-71.0649, 42.3209]
+INFO:[19832.00] User 166 selected start station 123
+INFO:[19835.70] User 150 walked from [-71.0665, 42.3266] to location [-71.0687, 42.3255]
+INFO:[19845.70] User 150 arrived to final location [-71.0687, 42.3255]
+INFO:[19855.15] User 164 walked from [-71.1238, 42.3404] to location [-71.1233, 42.3416]
+INFO:[19855.15] User 164 unlocked bike 911 from station 107
+INFO:[19856.15] User 164 selected end station 54
+INFO:[19856.15] User 164 biking with bike 911 from [-71.1233, 42.3416] to location [-71.0973, 42.3447]
+INFO:[19859.00] User 167 initialized at location [-71.0631, 42.3719]
+INFO:[19859.00] User 167 selected start station 313
+INFO:[19863.16] User 154 walked from [-71.0446, 42.3534] to location [-71.0457, 42.3541]
+INFO:[19873.16] User 154 arrived to final location [-71.0457, 42.3541]
+INFO:[19914.00] User 168 initialized at location [-71.0582, 42.3512]
+INFO:[19914.00] User 168 selected start station 86
+INFO:[19944.88] User 161 locked bike 806 in station 240
+INFO:[19945.00] User 169 initialized at location [-71.0682, 42.3243]
+INFO:[19945.00] User 169 selected start station 227
+INFO:[19964.61] User 168 walked from [-71.0582, 42.3512] to location [-71.0594, 42.3514]
+INFO:[19964.61] User 168 unlocked bike 727 from station 86
+INFO:[19965.61] User 168 selected end station 247
+INFO:[19965.61] User 168 biking with bike 727 from [-71.0594, 42.3514] to location [-71.0807, 42.3465]
+INFO:[19966.80] User 159 walked from [-71.0724, 42.3495] to location [-71.0701, 42.3486]
+INFO:[19976.80] User 159 arrived to final location [-71.0701, 42.3486]
+INFO:[19995.56] User 161 walked from [-71.0678, 42.3518] to location [-71.0675, 42.3504]
+INFO:[20005.56] User 161 arrived to final location [-71.0675, 42.3504]
+INFO:[20019.65] User 163 locked bike 29 in station 158
+INFO:[20020.65] User 163 walked from [-71.1209, 42.3732] to location [-71.1209, 42.3736]
+INFO:[20030.65] User 163 arrived to final location [-71.1209, 42.3736]
+INFO:[20032.00] User 170 initialized at location [-71.1231, 42.3807]
+INFO:[20032.00] User 170 selected start station 164
+INFO:[20039.76] User 166 walked from [-71.0649, 42.3209] to location [-71.0620, 42.3206]
+INFO:[20039.76] User 166 unlocked bike 1063 from station 123
+INFO:[20040.76] User 166 selected end station 153
+INFO:[20040.76] User 166 biking with bike 1063 from [-71.0620, 42.3206] to location [-71.0621, 42.3494]
+INFO:[20041.17] User 158 locked bike 741 in station 168
+INFO:[20071.55] User 167 walked from [-71.0631, 42.3719] to location [-71.0603, 42.3718]
+INFO:[20071.55] User 167 unlocked bike 2800 from station 313
+INFO:[20072.55] User 167 selected end station 282
+INFO:[20072.55] User 167 biking with bike 2800 from [-71.0603, 42.3718] to location [-71.0663, 42.3511]
+INFO:[20073.24] User 158 walked from [-71.1029, 42.3374] to location [-71.1044, 42.3365]
+INFO:[20083.00] User 171 initialized at location [-71.1220, 42.3523]
+INFO:[20083.00] User 171 selected start station 98
+INFO:[20083.24] User 158 arrived to final location [-71.1044, 42.3365]
+INFO:[20100.00] User 172 initialized at location [-71.0698, 42.3598]
+INFO:[20100.00] User 172 selected start station 81
+INFO:[20147.47] User 171 walked from [-71.1220, 42.3523] to location [-71.1213, 42.3515]
+INFO:[20147.47] User 171 unlocked bike 823 from station 98
+INFO:[20148.47] User 171 selected end station 98
+INFO:[20148.47] User 171 biking with bike 823 from [-71.1213, 42.3515] to location [-71.1213, 42.3515]
+INFO:[20148.47] User 171 locked bike 823 in station 98
+INFO:[20157.00] User 173 initialized at location [-71.1263, 42.3419]
+INFO:[20157.00] User 173 selected start station 107
+INFO:[20175.22] User 170 walked from [-71.1231, 42.3807] to location [-71.1251, 42.3803]
+INFO:[20175.22] User 170 unlocked bike 1425 from station 164
+INFO:[20176.22] User 170 selected end station 168
+INFO:[20176.22] User 170 biking with bike 1425 from [-71.1251, 42.3803] to location [-71.1029, 42.3374]
+INFO:[20226.27] User 169 walked from [-71.0682, 42.3243] to location [-71.0665, 42.3266]
+INFO:[20226.27] User 169 unlocked bike 2019 from station 227
+INFO:[20227.27] User 169 selected end station 104
+INFO:[20227.27] User 169 biking with bike 2019 from [-71.0665, 42.3266] to location [-71.0376, 42.3481]
+INFO:[20265.82] User 172 walked from [-71.0698, 42.3598] to location [-71.0712, 42.3608]
+INFO:[20265.82] User 172 unlocked bike 685 from station 81
+INFO:[20266.82] No docks in a walkable distance
+INFO:[20266.82] User 172 has no end station
+INFO:[20270.00] User 174 initialized at location [-71.0554, 42.3409]
+INFO:[20270.00] User 174 selected start station 64
+INFO:[20282.00] User 175 initialized at location [-71.0746, 42.3374]
+INFO:[20282.00] User 175 selected start station 46
+INFO:[20306.00] User 176 initialized at location [-71.1227, 42.3793]
+INFO:[20306.00] User 176 selected start station 157
+INFO:[20310.00] User 160 locked bike 2951 in station 166
+INFO:[20334.35] User 171 walked from [-71.1213, 42.3515] to location [-71.1195, 42.3505]
+INFO:[20344.35] User 171 arrived to final location [-71.1195, 42.3505]
+INFO:[20355.80] User 175 walked from [-71.0746, 42.3374] to location [-71.0731, 42.3364]
+INFO:[20355.80] User 175 unlocked bike 394 from station 46
+INFO:[20356.80] User 175 selected end station 108
+INFO:[20356.80] User 175 biking with bike 394 from [-71.0731, 42.3364] to location [-71.0774, 42.3499]
+INFO:[20361.53] User 173 walked from [-71.1263, 42.3419] to location [-71.1233, 42.3416]
+INFO:[20361.53] User 173 unlocked bike 910 from station 107
+INFO:[20362.53] User 173 selected end station 234
+INFO:[20362.53] User 173 biking with bike 910 from [-71.1233, 42.3416] to location [-71.0917, 42.3663]
+INFO:[20364.00] User 177 initialized at location [-71.1017, 42.3704]
+INFO:[20364.00] User 177 selected start station 3
+INFO:[20371.00] User 178 initialized at location [-71.0632, 42.3660]
+INFO:[20371.00] User 178  will not make the trip
+INFO:[20383.00] User 179 initialized at location [-71.0524, 42.3366]
+INFO:[20383.00] User 179 selected start station 310
+INFO:[20390.00] User 180 initialized at location [-71.0499, 42.3388]
+INFO:[20390.00] User 180 selected start station 310
+INFO:[20411.00] User 181 initialized at location [-71.1256, 42.3419]
+INFO:[20411.00] User 181 selected start station 107
+INFO:[20414.00] User 182 initialized at location [-71.0961, 42.3685]
+INFO:[20414.00] User 182 selected start station 160
+INFO:[20424.71] User 164 locked bike 911 in station 54
+INFO:[20433.71] User 168 locked bike 727 in station 247
+INFO:[20456.18] User 160 walked from [-71.0566, 42.3770] to location [-71.0585, 42.3774]
+INFO:[20460.74] User 162 locked bike 2773 in station 248
+INFO:[20466.18] User 160 arrived to final location [-71.0585, 42.3774]
+INFO:[20470.00] User 183 initialized at location [-71.0644, 42.3452]
+INFO:[20470.00] User 183 selected start station 154
+INFO:[20472.99] User 180 walked from [-71.0499, 42.3388] to location [-71.0514, 42.3391]
+INFO:[20472.99] User 180 unlocked bike 2765 from station 310
+INFO:[20473.99] User 180 selected end station 11
+INFO:[20473.99] User 180 biking with bike 2765 from [-71.0514, 42.3391] to location [-71.0689, 42.3366]
+INFO:[20476.21] User 176 walked from [-71.1227, 42.3793] to location [-71.1199, 42.3790]
+INFO:[20476.21] User 176 unlocked bike 1369 from station 157
+INFO:[20477.21] User 176 selected end station 156
+INFO:[20477.21] User 176 biking with bike 1369 from [-71.1199, 42.3790] to location [-71.1219, 42.3722]
+INFO:[20479.00] User 184 initialized at location [-71.0789, 42.3718]
+INFO:[20479.00] User 184 selected start station 190
+INFO:[20505.51] User 174 walked from [-71.0554, 42.3409] to location [-71.0575, 42.3428]
+INFO:[20505.51] User 174 unlocked bike 540 from station 64
+INFO:[20506.51] User 174 selected end station 325
+INFO:[20506.51] User 174 biking with bike 540 from [-71.0575, 42.3428] to location [-71.0740, 42.3385]
+INFO:[20520.00] User 185 initialized at location [-71.0794, 42.3721]
+INFO:[20520.00] User 185 selected start station 190
+INFO:[20526.00] User 186 initialized at location [-71.0449, 42.3367]
+INFO:[20526.00] User 186 selected start station 311
+INFO:[20527.00] User 187 initialized at location [-71.0593, 42.3736]
+INFO:[20527.00] User 187 selected start station 313
+INFO:[20528.00] User 188 initialized at location [-71.0524, 42.3187]
+INFO:[20528.00] User 188 selected start station 286
+INFO:[20546.79] User 162 walked from [-71.0532, 42.3547] to location [-71.0542, 42.3546]
+INFO:[20547.11] User 183 walked from [-71.0644, 42.3452] to location [-71.0638, 42.3452]
+INFO:[20547.11] User 183 unlocked bike 1339 from station 154
+INFO:[20548.11] User 183 selected end station 46
+INFO:[20548.11] User 183 biking with bike 1339 from [-71.0638, 42.3452] to location [-71.0731, 42.3364]
+INFO:[20551.62] User 168 walked from [-71.0807, 42.3465] to location [-71.0801, 42.3457]
+INFO:[20556.79] User 162 arrived to final location [-71.0542, 42.3546]
+INFO:[20561.62] User 168 arrived to final location [-71.0801, 42.3457]
+INFO:[20564.11] User 164 walked from [-71.0973, 42.3447] to location [-71.0995, 42.3438]
+INFO:[20566.00] User 189 initialized at location [-71.0539, 42.3304]
+INFO:[20566.00] User 189 selected start station 17
+INFO:[20566.44] User 177 walked from [-71.1017, 42.3704] to location [-71.1044, 42.3708]
+INFO:[20566.44] User 177 unlocked bike 38 from station 3
+INFO:[20567.44] User 177 selected end station 76
+INFO:[20567.44] User 177 biking with bike 38 from [-71.1044, 42.3708] to location [-71.1031, 42.3651]
+INFO:[20574.11] User 164 arrived to final location [-71.0995, 42.3438]
+INFO:[20587.78] User 181 walked from [-71.1256, 42.3419] to location [-71.1233, 42.3416]
+INFO:[20587.78] User 181 unlocked bike 907 from station 107
+INFO:[20588.78] User 181 selected end station 187
+INFO:[20588.78] User 181 biking with bike 907 from [-71.1233, 42.3416] to location [-71.1006, 42.3635]
+INFO:[20589.40] User 179 walked from [-71.0524, 42.3366] to location [-71.0514, 42.3391]
+INFO:[20589.40] User 179 unlocked bike 2767 from station 310
+INFO:[20590.40] User 179 selected end station 292
+INFO:[20590.40] User 179 biking with bike 2767 from [-71.0514, 42.3391] to location [-71.0440, 42.3448]
+INFO:[20612.19] User 182 walked from [-71.0961, 42.3685] to location [-71.0952, 42.3660]
+INFO:[20612.19] User 182 unlocked bike 1398 from station 160
+INFO:[20613.19] User 182 selected end station 295
+INFO:[20613.19] User 182 biking with bike 1398 from [-71.0952, 42.3660] to location [-71.0828, 42.3654]
+INFO:[20619.23] User 186 walked from [-71.0449, 42.3367] to location [-71.0462, 42.3360]
+INFO:[20619.23] User 186 unlocked bike 2771 from station 311
+INFO:[20620.23] User 186 selected end station 279
+INFO:[20620.23] User 186 biking with bike 2771 from [-71.0462, 42.3360] to location [-71.0526, 42.3441]
+INFO:[20635.97] User 188 walked from [-71.0524, 42.3187] to location [-71.0536, 42.3204]
+INFO:[20635.97] User 188 unlocked bike 2556 from station 286
+INFO:[20636.97] User 188 selected end station 86
+INFO:[20636.97] User 188 biking with bike 2556 from [-71.0536, 42.3204] to location [-71.0594, 42.3514]
+INFO:[20644.00] User 190 initialized at location [-71.0755, 42.3721]
+INFO:[20644.00] User 190 selected start station 190
+INFO:[20667.12] User 184 walked from [-71.0789, 42.3718] to location [-71.0765, 42.3707]
+INFO:[20667.12] User 184 unlocked bike 1675 from station 190
+INFO:[20668.12] User 184 selected end station 194
+INFO:[20668.12] User 184 biking with bike 1675 from [-71.0765, 42.3707] to location [-71.1065, 42.3386]
+INFO:[20697.00] User 191 initialized at location [-71.0861, 42.3457]
+INFO:[20697.00] User 191 selected start station 88
+INFO:[20700.00] User 192 initialized at location [-71.0991, 42.3704]
+INFO:[20700.00] User 192 selected start station 69
+INFO:[20706.58] User 176 locked bike 1369 in station 156
+INFO:[20768.11] User 177 locked bike 38 in station 76
+INFO:[20778.56] User 189 walked from [-71.0539, 42.3304] to location [-71.0570, 42.3305]
+INFO:[20778.56] User 189 unlocked bike 157 from station 17
+INFO:[20779.29] User 167 locked bike 2800 in station 282
+INFO:[20779.56] User 189 selected end station 284
+INFO:[20779.56] User 189 biking with bike 157 from [-71.0570, 42.3305] to location [-71.0522, 42.3582]
+INFO:[20791.83] User 175 locked bike 394 in station 108
+INFO:[20792.83] User 175 walked from [-71.0774, 42.3499] to location [-71.0769, 42.3505]
+INFO:[20800.08] User 187 walked from [-71.0593, 42.3736] to location [-71.0603, 42.3718]
+INFO:[20800.08] User 187 unlocked bike 2791 from station 313
+INFO:[20801.08] No docks in a walkable distance
+INFO:[20801.08] User 187 has no end station
+INFO:[20802.83] User 175 arrived to final location [-71.0769, 42.3505]
+INFO:[20805.89] User 179 locked bike 2767 in station 292
+INFO:[20806.89] User 179 walked from [-71.0440, 42.3448] to location [-71.0440, 42.3441]
+INFO:[20811.06] User 185 walked from [-71.0794, 42.3721] to location [-71.0765, 42.3707]
+INFO:[20811.06] User 185 unlocked bike 1671 from station 190
+INFO:[20812.06] User 185 selected end station 98
+INFO:[20812.06] User 185 biking with bike 1671 from [-71.0765, 42.3707] to location [-71.1213, 42.3515]
+INFO:[20816.89] User 179 arrived to final location [-71.0440, 42.3441]
+INFO:[20823.00] User 193 initialized at location [-71.0832, 42.3397]
+INFO:[20823.00] User 193 selected start station 206
+INFO:[20832.00] User 194 initialized at location [-71.0525, 42.3634]
+INFO:[20832.00] User 194 selected start station 192
+INFO:[20836.00] User 195 initialized at location [-71.1435, 42.3954]
+INFO:[20836.00] User 195 selected start station 8
+INFO:[20842.00] User 196 initialized at location [-71.1121, 42.3754]
+INFO:[20842.00] User 196 selected start station 162
+INFO:[20843.64] User 190 walked from [-71.0755, 42.3721] to location [-71.0765, 42.3707]
+INFO:[20843.64] User 190 unlocked bike 1663 from station 190
+INFO:[20843.95] User 192 walked from [-71.0991, 42.3704] to location [-71.0976, 42.3712]
+INFO:[20843.95] User 192 unlocked bike 581 from station 69
+INFO:[20844.64] User 190 selected end station 214
+INFO:[20844.64] User 190 biking with bike 1663 from [-71.0765, 42.3707] to location [-71.0912, 42.3621]
+INFO:[20844.95] User 192 selected end station 211
+INFO:[20844.95] User 192 biking with bike 581 from [-71.0976, 42.3712] to location [-71.0606, 42.3804]
+INFO:[20845.08] User 151 locked bike 1193 in station 154
+INFO:[20848.02] User 177 walked from [-71.1031, 42.3651] to location [-71.1022, 42.3664]
+INFO:[20858.02] User 177 arrived to final location [-71.1022, 42.3664]
+INFO:[20859.20] User 183 locked bike 1339 in station 46
+INFO:[20868.34] User 176 walked from [-71.1219, 42.3722] to location [-71.1215, 42.3735]
+INFO:[20870.11] User 167 walked from [-71.0663, 42.3511] to location [-71.0646, 42.3512]
+INFO:[20875.76] User 191 walked from [-71.0861, 42.3457] to location [-71.0858, 42.3437]
+INFO:[20875.76] User 191 unlocked bike 742 from station 88
+INFO:[20876.76] User 191 selected end station 170
+INFO:[20876.76] User 191 biking with bike 742 from [-71.0858, 42.3437] to location [-71.0989, 42.3366]
+INFO:[20878.34] User 176 arrived to final location [-71.1215, 42.3735]
+INFO:[20879.00] User 197 initialized at location [-71.1518, 42.3513]
+INFO:[20879.00] User 197 selected start station 57
+INFO:[20880.11] User 167 arrived to final location [-71.0646, 42.3512]
+INFO:[20896.00] User 198 initialized at location [-71.1053, 42.3759]
+INFO:[20896.00] User 198 selected start station 33
+INFO:[20898.00] User 199 initialized at location [-71.0441, 42.3345]
+INFO:[20898.00] User 199 selected start station 311
+INFO:[20906.84] User 195 walked from [-71.1435, 42.3954] to location [-71.1439, 42.3936]
+INFO:[20906.84] User 195 unlocked bike 82 from station 8
+INFO:[20907.84] No docks in a walkable distance
+INFO:[20907.84] User 195 has no end station
+INFO:[20918.75] User 166 locked bike 1063 in station 153
+INFO:[20923.19] User 151 walked from [-71.0638, 42.3452] to location [-71.0644, 42.3452]
+INFO:[20925.98] User 174 locked bike 540 in station 325
+INFO:[20933.19] User 151 arrived to final location [-71.0644, 42.3452]
+INFO:[20949.21] User 182 locked bike 1398 in station 295
+INFO:[20961.65] User 186 locked bike 2771 in station 279
+INFO:[20965.39] User 193 walked from [-71.0832, 42.3397] to location [-71.0814, 42.3405]
+INFO:[20965.39] User 193 unlocked bike 1792 from station 206
+INFO:[20965.63] User 180 locked bike 2765 in station 11
+INFO:[20966.39] User 193 selected end station 93
+INFO:[20966.39] User 193 biking with bike 1792 from [-71.0814, 42.3405] to location [-71.1006, 42.3401]
+INFO:[20972.42] User 183 walked from [-71.0731, 42.3364] to location [-71.0752, 42.3358]
+INFO:[20974.24] User 157 locked bike 906 in station 222
+INFO:[20981.91] User 194 walked from [-71.0525, 42.3634] to location [-71.0509, 42.3639]
+INFO:[20981.91] User 194 unlocked bike 1691 from station 192
+INFO:[20982.42] User 183 arrived to final location [-71.0752, 42.3358]
+INFO:[20982.91] User 194 selected end station 329
+INFO:[20982.91] User 194 biking with bike 1691 from [-71.0509, 42.3639] to location [-71.0457, 42.3516]
+INFO:[20987.81] User 180 walked from [-71.0689, 42.3366] to location [-71.0695, 42.3360]
+INFO:[20997.81] User 180 arrived to final location [-71.0695, 42.3360]
+INFO:[21054.30] User 199 walked from [-71.0441, 42.3345] to location [-71.0462, 42.3360]
+INFO:[21054.30] User 199 unlocked bike 2777 from station 311
+INFO:[21055.30] User 199 selected end station 279
+INFO:[21055.30] User 199 biking with bike 2777 from [-71.0462, 42.3360] to location [-71.0526, 42.3441]
+INFO:[21057.67] User 166 walked from [-71.0621, 42.3494] to location [-71.0617, 42.3509]
+INFO:[21059.76] User 196 walked from [-71.1121, 42.3754] to location [-71.1140, 42.3764]
+INFO:[21059.76] User 196 unlocked bike 1412 from station 162
+INFO:[21060.76] User 196 selected end station 75
+INFO:[21060.76] User 196 biking with bike 1412 from [-71.1140, 42.3764] to location [-71.1055, 42.3664]
+INFO:[21067.67] User 166 arrived to final location [-71.0617, 42.3509]
+INFO:[21077.35] User 174 walked from [-71.0740, 42.3385] to location [-71.0746, 42.3370]
+INFO:[21087.35] User 174 arrived to final location [-71.0746, 42.3370]
+INFO:[21098.98] User 157 walked from [-71.0712, 42.3677] to location [-71.0689, 42.3668]
+INFO:[21108.98] User 157 arrived to final location [-71.0689, 42.3668]
+INFO:[21113.82] User 182 walked from [-71.0828, 42.3654] to location [-71.0839, 42.3644]
+INFO:[21123.82] User 182 arrived to final location [-71.0839, 42.3644]
+INFO:[21181.91] User 198 walked from [-71.1053, 42.3759] to location [-71.1057, 42.3784]
+INFO:[21181.91] User 198 unlocked bike 280 from station 33
+INFO:[21182.91] User 198 selected end station 270
+INFO:[21182.91] User 198 biking with bike 280 from [-71.1057, 42.3784] to location [-71.0981, 42.3868]
+INFO:[21190.88] User 169 locked bike 2019 in station 104
+INFO:[21192.50] User 186 walked from [-71.0526, 42.3441] to location [-71.0511, 42.3457]
+INFO:[21202.50] User 186 arrived to final location [-71.0511, 42.3457]
+INFO:[21202.75] User 197 walked from [-71.1518, 42.3513] to location [-71.1503, 42.3489]
+INFO:[21202.75] User 197 unlocked bike 476 from station 57
+INFO:[21203.75] User 197 selected end station 238
+INFO:[21203.75] User 197 biking with bike 476 from [-71.1503, 42.3489] to location [-71.1238, 42.3523]
+INFO:[21227.98] User 191 locked bike 742 in station 170
+INFO:[21280.92] User 169 walked from [-71.0376, 42.3481] to location [-71.0350, 42.3499]
+INFO:[21290.92] User 169 arrived to final location [-71.0350, 42.3499]
+INFO:[21309.76] User 190 locked bike 1663 in station 214
+INFO:[21377.80] User 191 walked from [-71.0989, 42.3366] to location [-71.1014, 42.3351]
+INFO:[21387.80] User 191 arrived to final location [-71.1014, 42.3351]
+INFO:[21392.56] User 194 locked bike 1691 in station 329
+INFO:[21396.71] User 199 locked bike 2777 in station 279
+INFO:[21425.99] User 193 locked bike 1792 in station 93
+INFO:[21430.62] User 173 locked bike 910 in station 234
+INFO:[21441.05] User 181 locked bike 907 in station 187
+INFO:[21441.96] User 196 locked bike 1412 in station 75
+INFO:[21454.15] User 190 walked from [-71.0912, 42.3621] to location [-71.0932, 42.3607]
+INFO:[21464.15] User 190 arrived to final location [-71.0932, 42.3607]
+INFO:[21483.28] User 194 walked from [-71.0457, 42.3516] to location [-71.0466, 42.3528]
+INFO:[21493.28] User 194 arrived to final location [-71.0466, 42.3528]
+INFO:[21503.38] User 198 locked bike 280 in station 270
+INFO:[21531.35] User 193 walked from [-71.1006, 42.3401] to location [-71.1028, 42.3387]
+INFO:[21541.35] User 193 arrived to final location [-71.1028, 42.3387]
+INFO:[21565.90] User 170 locked bike 1425 in station 168
+INFO:[21597.96] User 170 walked from [-71.1029, 42.3374] to location [-71.1041, 42.3369]
+INFO:[21599.85] User 188 locked bike 2556 in station 86
+INFO:[21607.96] User 170 arrived to final location [-71.1041, 42.3369]
+INFO:[21613.18] User 173 walked from [-71.0917, 42.3663] to location [-71.0895, 42.3680]
+INFO:[21621.56] User 181 walked from [-71.1006, 42.3635] to location [-71.1032, 42.3629]
+INFO:[21623.18] User 173 arrived to final location [-71.0895, 42.3680]
+INFO:[21631.56] User 181 arrived to final location [-71.1032, 42.3629]
+INFO:[21631.80] User 189 locked bike 157 in station 284
+INFO:[21670.79] User 199 walked from [-71.0526, 42.3441] to location [-71.0523, 42.3420]
+INFO:[21680.65] User 196 walked from [-71.1055, 42.3664] to location [-71.1091, 42.3663]
+INFO:[21680.79] User 199 arrived to final location [-71.0523, 42.3420]
+INFO:[21690.65] User 196 arrived to final location [-71.1091, 42.3663]
+INFO:[21714.52] User 198 walked from [-71.0981, 42.3868] to location [-71.0972, 42.3853]
+INFO:[21723.61] User 189 walked from [-71.0522, 42.3582] to location [-71.0532, 42.3573]
+INFO:[21724.52] User 198 arrived to final location [-71.0972, 42.3853]
+INFO:[21733.61] User 189 arrived to final location [-71.0532, 42.3573]
+INFO:[21755.03] User 197 locked bike 476 in station 238
+INFO:[21775.10] User 188 walked from [-71.0594, 42.3514] to location [-71.0571, 42.3511]
+INFO:[21785.10] User 188 arrived to final location [-71.0571, 42.3511]
+INFO:[21795.19] User 192 locked bike 581 in station 211
+INFO:[21916.85] User 184 locked bike 1675 in station 194
+INFO:[21945.07] User 192 walked from [-71.0606, 42.3804] to location [-71.0616, 42.3783]
+INFO:[21955.07] User 192 arrived to final location [-71.0616, 42.3783]
+INFO:[22014.22] User 184 walked from [-71.1065, 42.3386] to location [-71.1063, 42.3373]
+INFO:[22023.74] User 185 locked bike 1671 in station 98
+INFO:[22024.22] User 184 arrived to final location [-71.1063, 42.3373]
+INFO:[22060.42] User 197 walked from [-71.1238, 42.3523] to location [-71.1233, 42.3496]
+INFO:[22070.42] User 197 arrived to final location [-71.1233, 42.3496]
+INFO:[22187.06] User 185 walked from [-71.1213, 42.3515] to location [-71.1217, 42.3500]
+INFO:[22197.06] User 185 arrived to final location [-71.1217, 42.3500]
