@@ -23,7 +23,8 @@ class BikeDockless:
         self.update_node()
 
     def update_node(self):
-        self.location.node = self.graph.network.get_node_ids([self.location.lon], [self.location.lat])[0]
+        self.location.node = self.graph.closest_node_kdtree(self.location)
+        # self.location.node = self.graph.network.get_node_ids([self.location.lon], [self.location.lat])[0]
 
     def update_user(self, user_id):
         self.user = user_id
