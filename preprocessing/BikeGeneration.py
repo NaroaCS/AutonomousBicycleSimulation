@@ -10,7 +10,10 @@ def BikeGeneration(num_bikes, mode, stations_csv):
     num_docks = stations_data['Docks'].sum()
 
     if mode == 0:
-        num_bikes = min(num_bikes, num_docks) 
+        num_bikes = min(num_bikes, num_docks)
+    elif num_bikes > num_docks:
+        stations_data['Docks'] = np.ceil(stations_data['Docks']*num_bikes/num_docks)
+        num_docks = stations_data['Docks'].sum()
 
     count = 0
     stations_data['Bikes'] = 0
