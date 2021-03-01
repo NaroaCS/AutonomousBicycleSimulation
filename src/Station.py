@@ -23,11 +23,11 @@ class Station:
     def set_capacity(self, capacity):
         self.capacity = capacity
 
-    def has_bikes(self):
-        return self.num_bikes > 0
+    def has_bikes(self, num=0):
+        return self.num_bikes > num
 
-    def has_docks(self):
-        return self.capacity - self.num_bikes > 0
+    def has_docks(self, num=0):
+        return self.capacity - self.num_bikes > num
 
     def empty(self):
         return self.num_bikes == 0
