@@ -40,7 +40,7 @@ class Graph:
         self.edges = [float(x) for x in nx.get_edge_attributes(self.G, "length").values()]
 
     def create_kdtree_nodes(self):
-        self.kdtree_nodes = spatial.KDTree(self.nodes)
+        self.kdtree_nodes = spatial.cKDTree(self.nodes, leafsize=30)
 
     def closest_node_kdtree(self, location, k=1):
         if not self.kdtree_nodes:
@@ -63,6 +63,8 @@ class Graph:
 
         self.nearest_stations = self.network.nearest_pois(distance=maxdist, category="stations", num_pois=maxitems, include_poi_ids=True)
 
+        # TODO: preprocess data to fast query
+
     def closest_station_kdtree(self, location, k=1):
         if not self.kdtree_stations:
             self.create_kdtree_stations()
@@ -74,7 +76,7 @@ class Graph:
         edges_df = nx.to_pandas_edgelist(self.G)
 
         self.network = pdna.Network(nodes_df["x"], nodes_df["y"], edges_df["source"], edges_df["target"], edges_df[["length"]],)
-        # self.network.precompute(10000)
+        # self.network.precompute(3000)
 
     def route(self, from_lon, from_lat, to_lon, to_lat):
         from_location = Location(from_lon, from_lat)  # TODO: remove
@@ -98,6 +100,7 @@ class Graph:
         # from_closest, to_closest = self.closest_nodes([from_location, to_location])
         return self.network.shortest_path_length(from_location.node, to_location.node)
 
+    # TODO: remove? review
     def shortest_paths_multiple(self, from_locations, to_locations):
         n_from, n_to = len(from_locations), len(to_locations)
         closests = self.closest_nodes([from_locations, to_locations])
@@ -106,22 +109,26 @@ class Graph:
         dests = [d for o in closests for d in closests]
         return self.network.shortest_path_lengths(np.tile(closests[:n_from], n_to), closests[n_from:])
 
+    # TODO: remove? review
     def shortest_path_length_stations(self, from_location):
         # OPTION A: return air-distance to k stations via kdtree
         # distances, closests = self.kdtree_stations.query(from_location.get_loc(), 10)
         # return closests, distances
 
         # OPTION B: use precomputed poi and precomputed closest nodes
+
         user_node = from_location.node  # self.closest_nodes([from_location])
         k = min(10, self.maxitems)
-        distances = self.nearest_stations.iloc[user_node, :k].values
-        stations_id = self.nearest_stations.iloc[user_node, self.maxitems : self.maxitems + k].values
+        
+        distances = self.nearest_stations.values[user_node, :k]
+        stations_id = self.nearest_stations.values[user_node, self.maxitems : self.maxitems + k]
+        
         distances = distances[~np.isnan(stations_id)].tolist()
         stations_id = stations_id[~np.isnan(stations_id)].astype(int).tolist()
-
+        
         user_location = np.radians(np.array(from_location.get_loc()))
         stations_location = np.radians(self.kdtree_stations.data[stations_id])
-        air_distances = equirect(user_location[0], user_location[1], stations_location[:,0], stations_location[:,1])
+        air_distances = equirect(user_location[0], user_location[1], stations_location[:, 0], stations_location[:, 1])
         return stations_id, distances, air_distances
 
         # OPTION C: filter k air-nearest stations via kdtree + shortest-path via graph
@@ -139,13 +146,13 @@ def sort_lists(x, y, key=0):
     x, y = [list(tuple) for tuple in tuples]
     return x, y
 
+
 def equirect(lonA, latA, lonB, latB):
     R = 6378137.0
-    x = (lonB - lonA) * np.cos( 0.5*(latB+latA) )
+    x = (lonB - lonA) * np.cos(0.5 * (latB + latA))
     y = latB - latA
-    d = R * np.sqrt( x*x + y*y )
+    d = R * np.sqrt(x * x + y * y)
     return d
-
 
 
 def main():
