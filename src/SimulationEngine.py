@@ -21,6 +21,7 @@ from .DataInterface import DataInterface
 from .Location import Location
 from .Graph import Graph
 from .EnergyManager import EnergyManager
+from .Results import Results
 
 
 class SimulationEngine:
@@ -33,6 +34,7 @@ class SimulationEngine:
         self.graph = Graph()
         self.ui = DataInterface(self.env, self.graph, self.config)
         self.charger = EnergyManager(self.env, self.config)
+        self.results = Results(self.config)
 
         self.stations = []
         self.bikes = []
@@ -46,6 +48,7 @@ class SimulationEngine:
     def run(self, until):
         print("Simulation Started")
         self.env.run(until)
+        print("Simulation Finished")
 
     def start(self):
         if self.MODE != 1:
@@ -67,7 +70,7 @@ class SimulationEngine:
 
         maxdist = 2000
         maxitems = 20
-        self.graph.precompute_nearest_stations(nodes, maxdist, maxitems)
+        self.graph.precompute_nearest_stations(nodes, maxdist, maxitems) # set poi-s
 
     def init_bikes(self):
         if self.MODE == 0:
@@ -88,7 +91,7 @@ class SimulationEngine:
         elif self.MODE == 2:
             for station_id, station in self.stations_data.iterrows():  # TODO: review bike generation
                 for i in range(station["Bikes"]):
-                    bike = BikeAutonomous(self.env, self.graph, self.config, self.ui)
+                    bike = BikeAutonomous(self.env, self.graph, self.config, self.ui, self.results)
                     location = Location(station["Longitude"], station["Latitude"])
                     bike.set_location(location)
                     self.bikes.append(bike)
@@ -104,11 +107,11 @@ class SimulationEngine:
             departure_time = trip["start_time"]  # / 60  # departure time
             target_time = trip["target_time"]  # target time
             if self.MODE == 0:
-                user = UserStation(self.env, self.graph, self.ui, self.config, origin, destination, departure_time, target_time)
+                user = UserStation(self.env, self.graph, self.ui, self.config, self.results, origin, destination, departure_time, target_time)
             elif self.MODE == 1:
-                user = UserDockless(self.env, self.graph, self.ui, self.config, origin, destination, departure_time, target_time)
+                user = UserDockless(self.env, self.graph, self.ui, self.config, self.results, origin, destination, departure_time, target_time)
             elif self.MODE == 2:
-                user = UserAutonomous(self.env, self.graph, self.ui, self.config, origin, destination, departure_time, target_time)
+                user = UserAutonomous(self.env, self.graph, self.ui, self.config, self.results, origin, destination, departure_time, target_time)
             user.start()
             self.users.append(user)
 
@@ -120,7 +123,3 @@ class SimulationEngine:
         if self.MODE == 2:
             self.charger.set_bikes(self.bikes)
             # self.charger.start()
-
-    def save_config(self, path):
-        with open(os.path.join(path, 'config.json'), 'w') as f:
-            json.dump(self.config, f)
