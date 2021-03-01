@@ -154,9 +154,9 @@ class DataInterface:
         available_bikes = [bike for bike in self.bikes if not bike.busy]
         available_bikes_id = [bike.id for bike in available_bikes]
         locations = self.bikes_location[available_bikes_id]
-        
+
         # create kd-tree and find k nearest
-        kdtree = spatial.cKDTree(locations[:,:2], leafsize=50, compact_nodes=False, balanced_tree=False)
+        kdtree = spatial.cKDTree(locations[:, :2], leafsize=50, compact_nodes=False, balanced_tree=False)
         k = min(10, len(available_bikes_id))
         air_distances, bikes_id = kdtree.query(location.get_loc(), k)
 
@@ -196,7 +196,7 @@ class DataInterface:
         # print("filter available", time.time()-start)
         bikes_lon = [bike.location.lon for bike in available_bikes]
         bikes_lat = [bike.location.lat for bike in available_bikes]
-        locations = np.array((bikes_lon, bikes_lat)).transpose()         
+        locations = np.array((bikes_lon, bikes_lat)).transpose()
         # print("get available locations", time.time()-start)
 
         # start = time.time()
@@ -344,7 +344,11 @@ class DataInterface:
         yield self.env.process(bike.ride(location))
 
         if self.MODE == 1 or self.MODE == 2:
-            self.bikes_location[bike_id] = [bike.location.lon, bike.location.lat, bike.location.node]
+            self.bikes_location[bike_id] = [
+                bike.location.lon,
+                bike.location.lat,
+                bike.location.node,
+            ]
 
     def autonomous_drive(self, bike_id, location, user_id):
         bike = self.bikes[bike_id]

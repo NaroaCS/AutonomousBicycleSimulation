@@ -3,6 +3,7 @@ import logging
 from .Battery import Battery
 from .BikeTrip import BikeTrip
 
+
 class BikeAutonomous:
     id_count = -1
 
@@ -15,7 +16,7 @@ class BikeAutonomous:
         self.config = config
         self.ui = ui
         self.results = results
-        
+
         self.bike_drive_trip = BikeTrip()
         self.bike_charge_trip = BikeTrip()
         self.bike_rebalance_trip = BikeTrip()
@@ -97,12 +98,12 @@ class BikeAutonomous:
         self.location_origin = self.location
         self.departure_time = self.env.now
 
-        logging.info("[%.2f] Bike %d driving autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat))
+        logging.info("[%.2f] Bike %d driving autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat,))
         distance = self.dist(self.location, destination)
         time = distance / self.AUTONOMOUS_SPEED
         yield self.env.timeout(time)
         self.location = destination
-        logging.info("[%.2f] Bike %d drove autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat))
+        logging.info("[%.2f] Bike %d drove autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat,))
         self.battery.discharge(distance)
         logging.info("[%.2f] Battery level of bike %d: %.2f" % (self.env.now, self.id, self.battery.level))
 
@@ -177,7 +178,6 @@ class BikeAutonomous:
         yield self.env.timeout(time)
         self.battery.charge(time)
         logging.info("[%.2f] Bike %d fully charged" % (self.env.now, self.id))
-
 
     def save_bike_drive_trip(self, user_id):
         self.bike_drive_trip.set("bike_id", self.id)

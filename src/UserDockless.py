@@ -1,10 +1,13 @@
 import logging
 from .UserTrip import UserTrip
 
+
 class UserDockless:
     id_count = -1
 
-    def __init__(self, env, graph, ui, config, results, origin, destination, departure_time, target_time):
+    def __init__(
+        self, env, graph, ui, config, results, origin, destination, departure_time, target_time,
+    ):
         self.next_id()
         self.id = UserDockless.id_count
 
@@ -35,13 +38,11 @@ class UserDockless:
         distance = self.dist(self.location, location)
         time = distance / self.WALKING_SPEED
         yield self.env.timeout(time)
-        logging.info("[%.2f] User %d walked from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, location.lon, location.lat))
+        logging.info("[%.2f] User %d walked from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, location.lon, location.lat,))
         self.location = location
 
     def ride_bike_to(self, location):
-        logging.info(
-            "[%.2f] User %d biking with bike %d from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.bike_id, self.location.lon, self.location.lat, location.lon, location.lat)
-        )
+        logging.info("[%.2f] User %d biking with bike %d from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.bike_id, self.location.lon, self.location.lat, location.lon, location.lat,))
         yield self.env.process(self.ui.bike_ride(self.bike_id, location))
         self.location = location
 
@@ -80,7 +81,7 @@ class UserDockless:
 
             # 4-Unlock bike
             yield self.env.process(self.unlock_bike())
-        
+
         self.bike_location = bike_location
         self.time_walk_origin = self.env.now - self.departure_time
 
@@ -96,7 +97,7 @@ class UserDockless:
 
         self.time_ride = self.env.now - self.departure_time
         # 8-Save Trip
-        self.save_user_trip()      
+        self.save_user_trip()
 
     def select_dockless_bike(self, location):
         return self.ui.select_dockless_bike(location)
@@ -116,7 +117,6 @@ class UserDockless:
         yield self.env.timeout(1)
         self.ui.bike_lock(self.bike_id)
         logging.info("[%.2f] User %d locked bike %d" % (self.env.now, self.id, self.bike_id))
-
 
     def save_user_trip(self):
         self.user_trip.set("user_id", self.id)
