@@ -70,7 +70,7 @@ class SimulationEngine:
 
         maxdist = 2000
         maxitems = 20
-        self.graph.precompute_nearest_stations(nodes, maxdist, maxitems) # set poi-s
+        self.graph.precompute_nearest_stations(nodes, maxdist, maxitems)  # set poi-s
 
     def init_bikes(self):
         if self.MODE == 0:

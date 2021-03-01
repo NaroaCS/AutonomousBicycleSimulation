@@ -30,7 +30,9 @@ class Results:
         os.mkdir(self.path)
 
     def setup_log(self):
-        logging.basicConfig(filename=os.path.join(self.path, self.log_name), filemode="w", format="%(message)s", level=logging.INFO)
+        logging.basicConfig(
+            filename=os.path.join(self.path, self.log_name), filemode="w", format="%(message)s", level=logging.INFO,
+        )
 
     def open_user_trips(self):
         self.user_trips = open(os.path.join(self.path, self.user_trips_name), "a")

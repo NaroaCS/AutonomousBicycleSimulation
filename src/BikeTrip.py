@@ -18,7 +18,7 @@ class BikeTrip:
         "destination_lon",
         "destination_lat",
         "battery_in",
-        "battery_out"
+        "battery_out",
     ]
 
     def __init__(self):

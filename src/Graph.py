@@ -119,16 +119,16 @@ class Graph:
 
         user_node = from_location.node  # self.closest_nodes([from_location])
         k = min(10, self.maxitems)
-        
+
         distances = self.nearest_stations.values[user_node, :k]
         stations_id = self.nearest_stations.values[user_node, self.maxitems : self.maxitems + k]
-        
+
         distances = distances[~np.isnan(stations_id)].tolist()
         stations_id = stations_id[~np.isnan(stations_id)].astype(int).tolist()
-        
+
         user_location = np.radians(np.array(from_location.get_loc()))
         stations_location = np.radians(self.kdtree_stations.data[stations_id])
-        air_distances = equirect(user_location[0], user_location[1], stations_location[:, 0], stations_location[:, 1])
+        air_distances = equirect(user_location[0], user_location[1], stations_location[:, 0], stations_location[:, 1],)
         return stations_id, distances, air_distances
 
         # OPTION C: filter k air-nearest stations via kdtree + shortest-path via graph
