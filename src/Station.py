@@ -54,5 +54,5 @@ class Station:
             self.num_bikes -= 1
             return True
         else:
-            print("[%.2f] Station %d has no bikes available" % (self.env.now, self.station_id))
+            print("[%.2f] Station %d has no bikes available" % (self.env.now, self.id))
             return False
