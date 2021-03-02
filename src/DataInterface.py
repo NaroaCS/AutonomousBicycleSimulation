@@ -124,9 +124,9 @@ class DataInterface:
             has_bikes = station.has_bikes()
             walkable = dist < self.WALK_RADIUS
             if has_bikes and walkable:
-                bike_id = self.station_choose_bike(source_station_id)
-                self.station_detach_bike(source_station_id, bike_id)
-                self.station_attach_bike(sid, bike_id)
+                bike_id = self.station_choose_bike(sid)
+                self.station_detach_bike(sid, bike_id)
+                self.station_attach_bike(source_station_id, bike_id)
                 visited_stations.append(sid)
                 return sid, station.location, visited_stations, bike_id, source_station_id
 
