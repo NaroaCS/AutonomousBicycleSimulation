@@ -2,9 +2,9 @@ simpy
 pandas
 numpy
 matplotlib
-pandana
 networkx
-scipy
+scipy==1.6.0
 geopandas
 scikit-learn
 pyproj
+git+git://github.com/imartinezl/pandana.git@master
