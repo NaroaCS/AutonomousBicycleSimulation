@@ -150,24 +150,24 @@ class UserStation:
 
     def interact_bike(self, action):
         if action == "unlock":
-            if self.ui.station_has_bikes(self.station_id):
-                self.bike_id = self.ui.station_choose_bike(self.station_id)
+            if self.ui.station_has_bikes(self.origin_station):
+                self.bike_id = self.ui.station_choose_bike(self.origin_station)
                 self.ui.bike_register_unlock(self.bike_id, self.id)
-                self.ui.station_detach_bike(self.station_id, self.bike_id)
-                logging.info("[%.2f] User %d unlocked bike %d from station %d" % (self.env.now, self.id, self.bike_id, self.station_id))
+                self.ui.station_detach_bike(self.origin_station, self.bike_id)
+                logging.info("[%.2f] User %d unlocked bike %d from station %d" % (self.env.now, self.id, self.bike_id, self.origin_station))
                 self.event_interact_bike.succeed()
             else:
-                logging.info("[%.2f] User %d,station %d had zero bikes available at arrival" % (self.env.now, self.id, self.station_id))
+                logging.info("[%.2f] User %d,station %d had zero bikes available at arrival" % (self.env.now, self.id, self.origin_station))
         else:
             if action == "lock":
-                if self.ui.station_has_docks(self.station_id):
-                    self.ui.station_attach_bike(self.station_id, self.bike_id)
+                if self.ui.station_has_docks(self.destination_station):
+                    self.ui.station_attach_bike(self.destination_station, self.bike_id)
                     self.ui.bike_register_lock(self.bike_id, self.id)
-                    logging.info("[%.2f] User %d locked bike %d in station %d" % (self.env.now, self.id, self.bike_id, self.station_id))
+                    logging.info("[%.2f] User %d locked bike %d in station %d" % (self.env.now, self.id, self.bike_id, self.destination_station))
                     self.bike_id = None
                     self.event_interact_bike.succeed()
                 else:
-                    logging.info("[%.2f] User %d,station %d had zero docks available at arrival" % (self.env.now, self.id, self.station_id))
+                    logging.info("[%.2f] User %d,station %d had zero docks available at arrival" % (self.env.now, self.id, self.destination_station))
             yield self.env.timeout(1)
 
     def save_user_trip(self):
