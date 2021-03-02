@@ -81,6 +81,10 @@ class UserStation:
                     self.magic_dock = False
                     self.magic_destination_station = station_id
                     self.save_bike_trip()
+                else:
+                    #TO_DO: review this
+                    print("[%.2f] User %d had no walkable stations")(self.env.now, self.id) 
+                    logging.info("[%.2f] User %d had no walkable stations" % (self.env.now, self.id))
             logging.info("[%.2f] User %d selected start station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.walk_to(station_location))
             yield self.env.process(self.unlock_bike(station_id))
