@@ -69,7 +69,7 @@ class SimulationEngine:
         self.graph.create_kdtree_stations(nodes)  # create kdtree for stations
 
         maxdist = 2000
-        maxitems = 20
+        maxitems = 17
         self.graph.precompute_nearest_stations(nodes, maxdist, maxitems)  # set poi-s
 
     def init_bikes(self):

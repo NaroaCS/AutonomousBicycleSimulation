@@ -14,7 +14,7 @@ with open(config_path) as f:
     config = json.load(f)
 
 stations_data = BikeGeneration(config["NUM_BIKES"], config["MODE"], stations_path)
-users_data = pd.read_csv(users_path, nrows=2000)
+users_data = pd.read_csv(users_path, nrows=8000)
 
 city = SimulationEngine(config, stations_data, users_data)
 
