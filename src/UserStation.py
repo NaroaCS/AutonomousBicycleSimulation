@@ -83,6 +83,7 @@ class UserStation:
                     self.save_bike_trip()
                 else:
                     logging.info("[%.2f] User %d had no walkable stations" % (self.env.now, self.id)) # TODO: review
+                    return self.save_user_trip()
             logging.info("[%.2f] User %d selected start station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.walk_to(station_location))
             yield self.env.process(self.unlock_bike(station_id))
