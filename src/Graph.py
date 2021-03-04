@@ -119,6 +119,7 @@ class Graph:
 
         user_node = from_location.node  # self.closest_nodes([from_location])
         k = min(10, self.maxitems)
+        k = self.maxitems
 
         distances = self.nearest_stations.values[user_node, :k]
         stations_id = self.nearest_stations.values[user_node, self.maxitems : self.maxitems + k]

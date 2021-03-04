@@ -73,7 +73,7 @@ class UserStation:
                     rand_number = np.random.randint(100)
                     if rand_number <= self.MAGIC_BETA:
                         logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.id))
-                        (station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station,) = self.ui.magic_bike(self.location, visited_stations)
+                        station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_bike(self.location, visited_stations)
                     if station_id is None:
                         logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
                         return self.save_user_trip()

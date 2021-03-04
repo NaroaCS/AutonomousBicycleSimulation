@@ -42,7 +42,7 @@ class Station:
         if self.has_docks():
             self.bikes.append(bike_id)
             self.num_bikes += 1
-            logging.info("[%.2f] Station %d number of bikes +1, %d bikes available" % (self.env.now, self.id, self.num_bikes))
+            logging.info("[%.2f] Station %d number of bikes +1, %d/%d bikes available" % (self.env.now, self.id, self.num_bikes, self.capacity))
             return True
         else:
             logging.info("[%.2f] Station %d has no docks available" % (self.env.now, self.id))
@@ -53,7 +53,7 @@ class Station:
             # bike_id=random.choice(self.bikes)
             self.bikes.remove(bike_id)
             self.num_bikes -= 1
-            logging.info("[%.2f] Station %d number of bikes -1, %d bikes available" % (self.env.now, self.id, self.num_bikes))
+            logging.info("[%.2f] Station %d number of bikes -1, %d/%d bikes available" % (self.env.now, self.id, self.num_bikes, self.capacity))
             return True
         else:
             logging.info("[%.2f] Station %d has no bikes available" % (self.env.now, self.id))
