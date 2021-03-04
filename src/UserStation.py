@@ -83,6 +83,8 @@ class UserStation:
                     self.save_bike_trip()
                 else:
                     logging.info("[%.2f] User %d had no walkable stations" % (self.env.now, self.id)) # TODO: review
+                    logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
+                    return self.save_user_trip()
             logging.info("[%.2f] User %d selected start station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.walk_to(station_location))
             yield self.env.process(self.unlock_bike(station_id))
@@ -107,9 +109,9 @@ class UserStation:
                 else:
                     logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.id))
                     station_id, station_location, visited_stations = self.ui.notwalkable_dock(self.location, visited_stations)
-                if station_id is None:
-                    logging.info("[%.2f] User %d has no end station" % (self.env.now, self.id))
-                    return self.save_user_trip()
+                    if station_id is None:
+                        logging.info("[%.2f] User %d has no end station" % (self.env.now, self.id))
+                        return self.save_user_trip()
             logging.info("[%.2f] User %d selected end station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.ride_bike_to(station_location))
             yield self.env.process(self.lock_bike(station_id))
