@@ -88,11 +88,11 @@ class UserStation:
             logging.info("[%.2f] User %d selected start station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.walk_to(station_location))
             yield self.env.process(self.unlock_bike(station_id))
-            if not self.event_interact_bike.triggered:
-                rand_number = np.random.randint(100)
-                if rand_number <= self.MAGIC_BETA:
-                    logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.id))
-                    station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_bike(self.location, visited_stations)
+            # if not self.event_interact_bike.triggered:
+            #     rand_number = np.random.randint(100)
+            #     if rand_number <= self.MAGIC_BETA:
+            #         logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.id))
+            #         station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_bike(self.location, visited_stations)
 
 
 
@@ -107,7 +107,7 @@ class UserStation:
                 rand_number = np.random.randint(100)
                 if rand_number <= self.MAGIC_BETA:
                     logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.id))
-                    station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_dock(self.location, visited_stations)
+                    station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_dock(self.destination, visited_stations)
                 if station_id is not None:
                     self.magic_bike = False
                     self.magic_dock = True
@@ -115,23 +115,23 @@ class UserStation:
                     self.save_bike_trip()
                 else:
                     logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.id))
-                    station_id, station_location, visited_stations = self.ui.notwalkable_dock(self.location, visited_stations)
+                    station_id, station_location, visited_stations = self.ui.notwalkable_dock(self.destination, visited_stations)
                     if station_id is None:
                         logging.info("[%.2f] User %d has no end station" % (self.env.now, self.id))
                         return self.save_user_trip()
             logging.info("[%.2f] User %d selected end station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.ride_bike_to(station_location))
             yield self.env.process(self.lock_bike(station_id))
-            if station_id is not None and not self.event_interact_bike.triggered:
-                rand_number = np.random.randint(100)
-                if rand_number <= self.MAGIC_BETA:
-                    logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.id))
-                    station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_dock(self.location, visited_stations)
+            # if station_id is not None and not self.event_interact_bike.triggered:
+            #     rand_number = np.random.randint(100)
+            #     if rand_number <= self.MAGIC_BETA:
+            #         logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.id))
+            #         station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_dock(self.destination, visited_stations)
 
-        self.time_ride = self.env.now - self.time_walk_origin
+        self.time_ride = self.env.now - self.time_walk_origin 
         yield self.env.process(self.walk_to(self.destination))
         self.time_walk_destination = self.env.now - self.time_ride
-        yield self.env.timeout(10)
+        #yield self.env.timeout(10)
         logging.info("[%.2f] User %d arrived to final location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat))
         self.destination_station = station_id
         self.destination_visited_stations = ";".join(map(str, visited_stations))

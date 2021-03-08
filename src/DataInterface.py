@@ -97,12 +97,13 @@ class DataInterface:
                 bike_id = self.station_choose_bike(source_station_id)
                 self.station_detach_bike(source_station_id, bike_id)
                 self.station_attach_bike(sid, bike_id)
-                visited_stations.append(sid)
+                if len(visited_stations) == 0 or visited_stations[-1] != sid:
+                    visited_stations.append(sid)
                 return sid, station.location, visited_stations, bike_id, source_station_id
 
         logging.info("[%.2f] No stations found as target for magic bike" % (self.env.now))
         return None, None, visited_stations, None, None
-        ##### WHERE DO WE SAVE THE nº of magic trips???? #######
+        
 
     def magic_dock(self, location, visited_stations):
         stations_id, road_distances, air_distances = self.graph.shortest_path_length_stations(location)
@@ -127,7 +128,8 @@ class DataInterface:
                 bike_id = self.station_choose_bike(sid)
                 self.station_detach_bike(sid, bike_id)
                 self.station_attach_bike(source_station_id, bike_id)
-                visited_stations.append(sid)
+                if len(visited_stations) == 0 or visited_stations[-1] != sid:
+                    visited_stations.append(sid)
                 return sid, station.location, visited_stations, bike_id, source_station_id
 
         logging.info("[%.2f] No stations found as source for magic bike" % (self.env.now))
