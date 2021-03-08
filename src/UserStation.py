@@ -60,7 +60,7 @@ class UserStation:
     def init_user(self):
         yield self.env.timeout(self.departure_time)
         self.location = self.origin
-        print("[%.2f] User %d  departure time: %.4f " % (self.env.now, self.id,self.departure_time ))
+        #print("[%.2f] User %d  departure time: %.4f " % (self.env.now, self.id,self.departure_time ))
         logging.info("[%.2f] User %d initialized at location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat))
 
     def process(self):
@@ -100,8 +100,8 @@ class UserStation:
         self.origin_station = station_id
         self.origin_visited_stations = ";".join(map(str, visited_stations))
         self.time_walk_origin = self.env.now - self.departure_time
-        print("[%.2f] User %d origin walking time: %.4f " % (self.env.now, self.id,self.time_walk_origin ))
-        print("[%.2f] User %d origin walk time: %.4f =%.4f - %.4f " % (self.env.now, self.id,self.time_walk_origin, self.env.now, self.departure_time))
+        #print("[%.2f] User %d origin walking time: %.4f " % (self.env.now, self.id,self.time_walk_origin ))
+        #print("[%.2f] User %d origin walk time: %.4f =%.4f - %.4f " % (self.env.now, self.id,self.time_walk_origin, self.env.now, self.departure_time))
         self.event_interact_bike = self.env.event()
         visited_stations.clear()
         while not self.event_interact_bike.triggered:
@@ -132,10 +132,10 @@ class UserStation:
             #         station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_dock(self.destination, visited_stations)
 
         self.time_ride = self.env.now - self.time_walk_origin - self.departure_time
-        print("[%.2f] User %d riding time: %.4f = %.4f - %.4f - %.4f" % (self.env.now, self.id,self.time_ride, self.env.now , self.time_walk_origin , self.departure_time ))
+        #print("[%.2f] User %d riding time: %.4f = %.4f - %.4f - %.4f" % (self.env.now, self.id,self.time_ride, self.env.now , self.time_walk_origin , self.departure_time ))
         yield self.env.process(self.walk_to(self.destination))
         self.time_walk_destination = self.env.now - self.time_ride -self.time_walk_origin -self.departure_time
-        print("[%.2f] User %d destination walk time: %.4f =%.4f - %.4f - %.4f -%.4f" % (self.env.now, self.id,self.time_walk_destination, self.env.now, self.time_ride,self.time_ride, self.departure_time))
+        #print("[%.2f] User %d destination walk time: %.4f =%.4f - %.4f - %.4f -%.4f" % (self.env.now, self.id,self.time_walk_destination, self.env.now, self.time_ride,self.time_ride, self.departure_time))
         #yield self.env.timeout(10)
         logging.info("[%.2f] User %d arrived to final location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat))
         self.destination_station = station_id
