@@ -158,9 +158,19 @@ class DataInterface:
         locations = self.bikes_location[available_bikes_id]
 
         # create kd-tree and find k nearest
-        kdtree = spatial.cKDTree(locations[:, :2], leafsize=50, compact_nodes=False, balanced_tree=False)
         k = min(10, len(available_bikes_id))
-        air_distances, bikes_id = kdtree.query(location.get_loc(), k)
+        # kdtree = spatial.cKDTree(locations[:, :2], leafsize=50, compact_nodes=False, balanced_tree=False)
+        # air_distances, bikes_id = kdtree.query(location.get_loc(), k)
+
+        # alternative: use sklearn and haversine distance
+        from sklearn.neighbors import BallTree
+        R = 6371000
+        bt = BallTree(np.deg2rad(locations[:, [1,0]]), metric='haversine')
+        loc = np.deg2rad(location.get_loc())[::-1]
+        air_distances, bikes_id = bt.query([loc], k)
+        air_distances = air_distances[0]
+        bikes_id = bikes_id[0]
+        air_distances = air_distances*R
 
         # TODO: DONE check if nearest bike via-air is walkable => if not return None
         if air_distances[0] > self.WALK_RADIUS:
