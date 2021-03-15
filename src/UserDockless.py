@@ -1,6 +1,6 @@
 import logging
 from .UserTrip import UserTrip
-
+from .Location import Location
 
 class UserDockless:
     id_count = -1
@@ -25,7 +25,7 @@ class UserDockless:
 
         self.location = None
         self.bike_id = None
-        self.bike_location = None
+        self.bike_location = Location()
         self.time_walk_origin = None
         self.time_ride = None
 

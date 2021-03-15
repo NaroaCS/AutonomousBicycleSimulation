@@ -50,6 +50,9 @@ class SimulationEngine:
         self.env.run(until)
         print("Simulation Finished")
 
+    def step(self):
+        self.env.step()
+
     def start(self):
         if self.MODE != 1:
             self.init_stations()

@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Location:
-    def __init__(self, lon, lat, node=None):
+    def __init__(self, lon=None, lat=None, node=None):
         self.lon = lon
         self.lat = lat
         self.node = node
