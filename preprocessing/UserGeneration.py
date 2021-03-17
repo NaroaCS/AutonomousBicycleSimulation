@@ -27,6 +27,9 @@ lat_max = np.max(df_buildings['cy'])
 # %% IMPORT TRIPS
 
 df_trips = pd.read_csv('../data/201910-bluebikes-tripdata.csv')
+start_date= '2019-10-08 00:00:00'
+end_date='2019-10-15 00:00:00'
+df_trips=df_trips[(df_trips['starttime'] > start_date) & (df_trips['starttime'] <= end_date)]
 df_trips = df_trips[df_trips['start station longitude'].between(lon_min, lon_max) & 
                     df_trips['start station latitude'].between(lat_min, lat_max)]
 # %%
@@ -102,13 +105,14 @@ df_trips['target_lat'] = df_buildings['cy'][df_trips['target_building']].values
 
 
 # include elapsed time
-start_date = '2019-10-01 00:00:00'
+
+start_date = '2019-10-08 00:00:00'
 start_time = pd.to_datetime(start_date)
 df_trips['start_time'] = (pd.to_datetime(df_trips['starttime']) - start_time).astype('timedelta64[s]')
 df_trips['target_time'] = (pd.to_datetime(df_trips['stoptime']) - start_time).astype('timedelta64[s]')
 
 #df_trips.drop(columns = [])
-df_trips.to_csv('../data/user_trips.csv', index=False)
+df_trips.to_csv('../data/user_trips_5.csv', index=False)
 
 # %% PLOT DATA 
 
