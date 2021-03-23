@@ -29,12 +29,26 @@ lat_max = np.max(df_buildings["cy"])
 
 df_trips = pd.read_csv("../data/201910-bluebikes-tripdata.csv")
 
-df_trips = df_trips[df_trips["start station longitude"].between(lon_min, lon_max) & df_trips["start station latitude"].between(lat_min, lat_max)]
+# DATE FILTER
+start_date = "2019-10-14 00:00:00"
+end_date = "2019-10-20 00:00:00"
+df_trips = df_trips[df_trips["starttime"].between(start_date, end_date)]
+
+# ROUNDTRIP FILTER
+df_trips = df_trips[df_trips["start station id"] != df_trips["end station id"]]
+
+# LOCATION FILTER
+df_trips = df_trips[
+    df_trips["start station longitude"].between(lon_min, lon_max) & 
+    df_trips["start station latitude"].between(lat_min, lat_max)]
+
+print(len(df_trips))
+
 # %%
 
 from sklearn.neighbors import BallTree
 
-tree = BallTree(np.deg2rad(df_buildings[["cy", "cx"]].values), leaf_size=10, metric="haversine")
+tree = BallTree(np.deg2rad(df_buildings[["cy", "cx"]].values), leaf_size=50, metric="haversine")
 
 earth_radius = 6378137.0  # meters in earth
 test_radius = 300.0  # meters
@@ -45,7 +59,8 @@ if False:
 
     lon0 = -71.113054
     lat0 = 42.372509
-    results = tree.query_radius(np.radians(np.array([[lat0, lon0]])), r=test_radius / earth_radius, return_distance=False,)
+    results = tree.query_radius(np.radians(np.array([[lat0, lon0]])), 
+        r=test_radius / earth_radius, return_distance=False,)
     a = df_buildings.loc[results[0], ["cx", "cy"]]
     plt.figure()
     plt.scatter(a["cx"], a["cy"])
@@ -85,14 +100,16 @@ if False:
 
 
 # start locations
-results_start = tree.query_radius(np.deg2rad(df_trips[["start station latitude", "start station longitude"]].values), r=test_radius / earth_radius, return_distance=False,)
+results_start = tree.query_radius(np.deg2rad(df_trips[["start station latitude", "start station longitude"]].values), 
+    r=test_radius / earth_radius, return_distance=False,)
 
 df_trips["start_building"] = [np.random.choice(x) for x in results_start]
 df_trips["start_lon"] = df_buildings["cx"][df_trips["start_building"]].values
 df_trips["start_lat"] = df_buildings["cy"][df_trips["start_building"]].values
 
 # target locations
-results_target = tree.query_radius(np.deg2rad(df_trips[["end station latitude", "end station longitude"]].values), r=test_radius / earth_radius, return_distance=False,)
+results_target = tree.query_radius(np.deg2rad(df_trips[["end station latitude", "end station longitude"]].values), 
+    r=test_radius / earth_radius, return_distance=False,)
 
 df_trips["target_building"] = [np.random.choice(x) for x in results_target]
 df_trips["target_lon"] = df_buildings["cx"][df_trips["target_building"]].values
@@ -100,7 +117,6 @@ df_trips["target_lat"] = df_buildings["cy"][df_trips["target_building"]].values
 
 
 # include elapsed time
-start_date = "2019-10-01 00:00:00"
 start_time = pd.to_datetime(start_date)
 df_trips["start_time"] = (pd.to_datetime(df_trips["starttime"]) - start_time).astype("timedelta64[s]")
 df_trips["target_time"] = (pd.to_datetime(df_trips["stoptime"]) - start_time).astype("timedelta64[s]")
