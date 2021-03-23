@@ -4,11 +4,17 @@ import numpy as np
 from scipy import spatial
 import pandas as pd
 from .Location import Location
-
+import pickle
+import os
 
 class Graph:
-    def __init__(self):
+    def __init__(self, name=None):
+        self.path = os.path.join("data", "graph")
+        if name is None:
+            name = "greater_boston_road"
+        self.name = name
         self.start()
+        pass
 
     def start(self):
         print("Loading graph")
@@ -19,9 +25,33 @@ class Graph:
             self.create_kdtree_nodes()
             self.create_network()
 
+    def save(self):
+        file_h5 = os.path.join(self.path, self.name + ".h5")
+        self.network.save_hdf5(file_h5)
+        network = self.network
+
+        # network cannot be serialized with pickle (cython error)
+        self.network = None
+        file_pkl = os.path.join(self.path, self.name + ".pkl")
+        with open(file_pkl, "wb") as f:
+            pickle.dump(self, f)
+        self.network = network
+
+    @staticmethod
+    def load(name):
+        path = os.path.join("data", "graph")
+        file_pkl = os.path.join(path, name + ".pkl")
+        with open(file_pkl, "rb") as f:
+            graph = pickle.load(f)
+        file_h5 = os.path.join(path, name + ".h5")
+        graph.network = pdna.Network.from_hdf5(file_h5)
+        return graph
+
     def load_graphml(self):
-        path = "./data/greater_boston_road.graphml"
-        self.G = nx.read_graphml(path)
+        # path = "./data/greater_boston_road.graphml"
+        # path = "./data/greater_boston_walk.graphml"
+        file_graphml = os.path.join(self.path, self.name + ".graphml")
+        self.G = nx.read_graphml(file_graphml)
 
     def process_graph(self):
         # UNDIRECTED
@@ -29,7 +59,7 @@ class Graph:
 
         # REMOVE DISCONNECTED
         S = [self.G.subgraph(c).copy() for c in sorted(nx.connected_components(self.G), key=len, reverse=True)]
-        [len(x) for x in S]
+        # print([len(x) for x in S])
         self.G = nx.relabel.convert_node_labels_to_integers(S[0])
 
     def compute_nodes_edges(self):
@@ -59,9 +89,11 @@ class Graph:
     def precompute_nearest_stations(self, locations, maxdist, maxitems):
         self.maxitems = maxitems
         pts = pd.DataFrame(locations, columns=["lon", "lat"])
-        self.network.set_pois(category="stations", maxdist=maxdist, maxitems=maxitems, x_col=pts.lon, y_col=pts.lat)
+        self.network.set_pois(
+            category="stations", maxdist=maxdist, maxitems=maxitems, x_col=pts.lon, y_col=pts.lat,
+        )
 
-        self.nearest_stations = self.network.nearest_pois(distance=maxdist, category="stations", num_pois=maxitems, include_poi_ids=True)
+        self.nearest_stations = self.network.nearest_pois(distance=maxdist, category="stations", num_pois=maxitems, include_poi_ids=True,)
 
         # TODO: preprocess data to fast query
 
@@ -76,7 +108,7 @@ class Graph:
         edges_df = nx.to_pandas_edgelist(self.G)
 
         self.network = pdna.Network(nodes_df["x"], nodes_df["y"], edges_df["source"], edges_df["target"], edges_df[["length"]],)
-        # self.network.precompute(3000)
+        # self.network.precompute(500)
 
     def route(self, from_lon, from_lat, to_lon, to_lat):
         from_location = Location(from_lon, from_lat)  # TODO: remove
@@ -129,7 +161,7 @@ class Graph:
 
         user_location = np.radians(np.array(from_location.get_loc()))
         stations_location = np.radians(self.kdtree_stations.data[stations_id])
-        air_distances = equirect(user_location[0], user_location[1], stations_location[:, 0], stations_location[:, 1],)
+        air_distances = Graph.equirect(user_location[0], user_location[1], stations_location[:, 0], stations_location[:, 1],)
         return stations_id, distances, air_distances
 
         # OPTION C: filter k air-nearest stations via kdtree + shortest-path via graph
@@ -138,22 +170,22 @@ class Graph:
         user_node = from_location.node  # self.closest_nodes([from_location])
         distances = self.network.shortest_path_lengths(np.tile(user_node, k), self.stations_nodes[stations_id])
         # print(stations_id, self.stations_nodes[stations_id], user_node, distances)
-        stations_id, distances = sort_lists(stations_id, distances, 1)
+        stations_id, distances = Graph.sort_lists(stations_id, distances, 1)
         return stations_id, distances
 
+    @staticmethod
+    def sort_lists(x, y, key=0):
+        tuples = zip(*sorted(zip(x, y), reverse=False, key=lambda v: v[key]))
+        x, y = [list(tuple) for tuple in tuples]
+        return x, y
 
-def sort_lists(x, y, key=0):
-    tuples = zip(*sorted(zip(x, y), reverse=False, key=lambda v: v[key]))
-    x, y = [list(tuple) for tuple in tuples]
-    return x, y
-
-
-def equirect(lonA, latA, lonB, latB):
-    R = 6378137.0
-    x = (lonB - lonA) * np.cos(0.5 * (latB + latA))
-    y = latB - latA
-    d = R * np.sqrt(x * x + y * y)
-    return d
+    @staticmethod
+    def equirect(lonA, latA, lonB, latB):
+        R = 6378137.0
+        x = (lonB - lonA) * np.cos(0.5 * (latB + latA))
+        y = latB - latA
+        d = R * np.sqrt(x * x + y * y)
+        return d
 
 
 def main():
