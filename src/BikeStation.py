@@ -16,6 +16,10 @@ class BikeStation:
 
         self.RIDING_SPEED = config["RIDING_SPEED"] / 3.6  # m/s
 
+    @classmethod
+    def reset(cls):
+        BikeStation.id_count = -1
+
     def next_id(self):
         BikeStation.id_count += 1
 

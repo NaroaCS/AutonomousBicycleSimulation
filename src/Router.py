@@ -55,7 +55,9 @@ class Network:
     def get_osm_network(self, bounds):
         import osmnet
 
-        nodes_df, edges = osmnet.load.network_from_bbox(lat_min=bounds[1], lng_min=bounds[0], lat_max=bounds[3], lng_max=bounds[2], bbox=None, network_type="drive", two_way=True, timeout=180, custom_osm_filter=None,)
+        nodes_df, edges = osmnet.load.network_from_bbox(
+            lat_min=bounds[1], lng_min=bounds[0], lat_max=bounds[3], lng_max=bounds[2], bbox=None, network_type="drive", two_way=True, timeout=180, custom_osm_filter=None,
+        )
         nodes_df, edges, node_name_map = self.rename_nodes(nodes_df, edges, "id", "to", "from")
         nodes_list = [[nodes_df.iloc[i]["x"], nodes_df.iloc[i]["y"]] for i in range(len(nodes_df))]
         return nodes_list, edges

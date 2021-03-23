@@ -30,6 +30,8 @@ class Results:
         os.mkdir(self.path)
 
     def setup_log(self):
+        for handler in logging.root.handlers[:]:
+            logging.root.removeHandler(handler)
         logging.basicConfig(
             filename=os.path.join(self.path, self.log_name), filemode="w", format="%(message)s", level=logging.INFO,
         )

@@ -31,6 +31,10 @@ class UserAutonomous:
 
         self.WALKING_SPEED = config["WALKING_SPEED"] / 3.6  # m/s
 
+    @classmethod
+    def reset(cls):
+        UserAutonomous.id_count = -1
+
     def next_id(self):
         UserAutonomous.id_count += 1
 
@@ -42,7 +46,9 @@ class UserAutonomous:
         self.location = location
 
     def ride_bike_to(self, location):
-        logging.info("[%.2f] User %d biking with bike %d from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.bike_id, self.location.lon, self.location.lat, location.lon, location.lat,))
+        logging.info(
+            "[%.2f] User %d biking with bike %d from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.bike_id, self.location.lon, self.location.lat, location.lon, location.lat,)
+        )
         yield self.env.process(self.ui.bike_ride(self.bike_id, location))
         self.location = location
 

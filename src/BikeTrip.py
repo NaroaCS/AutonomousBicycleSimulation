@@ -28,6 +28,10 @@ class BikeTrip:
         self.store = dict.fromkeys(BikeTrip.header, "")
         # self.set("trip_id", self.id)
 
+    @classmethod
+    def reset(cls):
+        BikeTrip.id_count = -1
+
     def next_id(self):
         BikeTrip.id_count += 1
 

@@ -1,6 +1,7 @@
 import random
 import logging
 
+
 class Station:
     id_count = -1
 
@@ -13,6 +14,10 @@ class Station:
         self.capacity = 0
         self.num_bikes = 0
         self.bikes = []
+
+    @classmethod
+    def reset(cls):
+        Station.id_count = -1
 
     def next_id(self):
         Station.id_count += 1
