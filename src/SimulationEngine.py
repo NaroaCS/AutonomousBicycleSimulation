@@ -49,9 +49,9 @@ class SimulationEngine:
         self.start()
 
     def run(self, until):
-        print("Simulation Started")
+        # print("Simulation Started")
         self.env.run(until)
-        print("Simulation Finished")
+        # print("Simulation Finished")
 
     def step(self):
         self.env.step()
@@ -110,7 +110,7 @@ class SimulationEngine:
         self.users_data["start_node"] = self.graph.network.get_node_ids(self.users_data["start_lon"], self.users_data["start_lat"])
         self.users_data["target_node"] = self.graph.network.get_node_ids(self.users_data["target_lon"], self.users_data["target_lat"])
 
-        print("Loading users")
+        # print("Loading users")
         UserStation.reset()
         UserDockless.reset()
         UserAutonomous.reset()

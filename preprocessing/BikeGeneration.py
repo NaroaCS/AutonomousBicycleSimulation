@@ -3,7 +3,7 @@ import numpy as np
 
 
 def BikeGeneration(num_bikes, mode, stations_csv):
-    print("Generating Bikes")
+    # print("Generating Bikes")
     stations_data = pd.read_csv(stations_csv)
     stations_data = stations_data.rename(columns={"Total docks": "Docks"})
     stations_data = stations_data[stations_data["Docks"] > 0].reset_index(drop=True)
