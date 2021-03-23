@@ -91,7 +91,7 @@ class UserAutonomous:
         yield self.env.process(self.lock_bike())
 
         # 6-Finish
-        yield self.env.timeout(10)
+        # yield self.env.timeout(0)
         # TODO: estimate travel from building to nearest node
         logging.info("[%.2f] User %d arrived to final destination" % (self.env.now, self.id))
 
