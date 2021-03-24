@@ -18,42 +18,115 @@ name = "greater_boston_walk"
 
 graph = Graph.load(name)
 
-# %% PARAMETERS
+MODE = 1
+# %% PARAMETERS MODE 0
 
-config_path = os.path.join("data", "config_mode_0.json")
-with open(config_path) as f:
-    config_nom = json.load(f)
-
-
-grid_x = {
-    "NUM_BIKES": [1000,1500,2000,2500,3000,3500,4000,4500,5000,5500]
-}
-grid_y = {
-    "WALK_RADIUS": [100,300,500,750,1000,1500],
-    "RIDING_SPEED": [5,8,10,12,15,20],
-    "WALKING_SPEED": [3,4,5,6,7,8],
-    "MAGIC_BETA": [0,50,80,90,98,100],
-    "MAGIC_MIN_BIKES": [0,1,2,3,4,5],
-    "USER_TRIPS_FILE": [0,1,2,3,4]
-}
+if MODE == 0:
+    config_path = os.path.join("data", "config_mode_0.json")
+    with open(config_path) as f:
+        config_nom = json.load(f)
 
 
-grid = []
-for kx in grid_x:
-    for vx in grid_x[kx]:
-        for ky in grid_y:
-            for vy in grid_y[ky]:
-                # RESET CONFIG
-                config = config_nom.copy()
-                config[kx] = vx
-                config[ky] = vy
-                
-                # minor fix for station based
-                config["MAGIC_MIN_DOCKS"] = config["MAGIC_MIN_BIKES"]      
+    grid_x = {
+        "NUM_BIKES": [1000,1500,2000,2500,3000,3500,4000,4500,5000,5500]
+    }
+    grid_y = {
+        "WALK_RADIUS": [100,300,500,750,1000,1500],
+        "RIDING_SPEED": [5,8,10,12,15,20],
+        "WALKING_SPEED": [3,4,5,6,7,8],
+        "MAGIC_BETA": [0,50,80,90,98,100],
+        "MAGIC_MIN_BIKES": [0,1,2,3,4,5],
+        "USER_TRIPS_FILE": [0,1,2,3,4]
+    }
 
-                grid.append(config)
 
-pd.DataFrame(grid)
+    grid = []
+    for kx in grid_x:
+        for vx in grid_x[kx]:
+            for ky in grid_y:
+                for vy in grid_y[ky]:
+                    # RESET CONFIG
+                    config = config_nom.copy()
+                    config[kx] = vx
+                    config[ky] = vy
+                    
+                    # minor fix for station based
+                    config["MAGIC_MIN_DOCKS"] = config["MAGIC_MIN_BIKES"]      
+
+                    grid.append(config)
+
+    pd.DataFrame(grid)
+
+# %% PARAMETERS MODE 1
+
+if MODE == 1:
+    config_path = os.path.join("data", "config_mode_1.json")
+    with open(config_path) as f:
+        config_nom = json.load(f)
+
+
+    grid_x = {
+        "NUM_BIKES": [2000,3000,4000,5000,6000,7000,8000,9000, 10000,11000]
+    }
+    grid_y = {
+        "WALK_RADIUS": [100,300,500,750,1000,1500],
+        "RIDING_SPEED": [5,8,10,12,15,20],
+        "WALKING_SPEED": [3,4,5,6,7,8],
+        "USER_TRIPS_FILE": [0,1,2,3,4]
+    }
+
+
+    grid = []
+    for kx in grid_x:
+        for vx in grid_x[kx]:
+            for ky in grid_y:
+                for vy in grid_y[ky]:
+                    # RESET CONFIG
+                    config = config_nom.copy()
+                    config[kx] = vx
+                    config[ky] = vy    
+
+                    grid.append(config)
+
+    pd.DataFrame(grid)
+
+
+# %% PARAMETERS MODE 2
+
+if MODE == 2:
+    config_path = os.path.join("data", "config_mode_2.json")
+    with open(config_path) as f:
+        config_nom = json.load(f)
+
+
+    grid_x = {
+        "NUM_BIKES": [300,500,600,700,800,1000,1500,2000,2500,3000]
+    }
+    grid_y = {
+        "AUTONOMOUS_RADIUS": [500,1000,1500,2000,2500,3000],
+        "RIDING_SPEED": [5,8,10,12,15,20],
+        # "WALKING_SPEED": [3,4,5,6,7,8],
+        "AUTONOMOUS_SPEED": [1,2.5,5,10,15,20],
+        "BATTERY_MIN_LEVEL": [5,10,15,20,25,30],
+        "BATTERY_AUTONOMY": [30,50,70,90,110,130],
+        "BATTERY_CHARGE_TIME": [0.5,1,2,4,6,8],
+        "USER_TRIPS_FILE": [0,1,2,3,4]
+    }
+
+
+    grid = []
+    for kx in grid_x:
+        for vx in grid_x[kx]:
+            for ky in grid_y:
+                for vy in grid_y[ky]:
+                    # RESET CONFIG
+                    config = config_nom.copy()
+                    config[kx] = vx
+                    config[ky] = vy    
+
+                    grid.append(config)
+
+    pd.DataFrame(grid)
 
 # %% RUN MULTIPLE SIMULATIONS
 
