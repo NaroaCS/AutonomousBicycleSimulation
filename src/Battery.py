@@ -13,6 +13,10 @@ class Battery:
         self.discharge_rate = discharge_rate  # energy per distance
         self.level = capacity
 
+    @classmethod
+    def reset(cls):
+        Battery.id_count = -1
+
     def next_id(self):
         Battery.id_count += 1
 

@@ -14,10 +14,10 @@ with open(config_path) as f:
     config = json.load(f)
 
 stations_data = BikeGeneration(config["NUM_BIKES"], config["MODE"], stations_path)
-users_data = pd.read_csv(users_path, nrows=8000)
+users_data = pd.read_csv(users_path, nrows=800)
 
 city = SimulationEngine(config, stations_data, users_data)
 
 start = time.time()
-city.run(until=150000)
+city.run(until=650000)
 print(time.time() - start)

@@ -15,6 +15,10 @@ class BikeDockless:
 
         self.RIDING_SPEED = config["RIDING_SPEED"] / 3.6  # m/s
 
+    @classmethod
+    def reset(cls):
+        BikeDockless.id_count = -1
+
     def next_id(self):
         BikeDockless.id_count += 1
 

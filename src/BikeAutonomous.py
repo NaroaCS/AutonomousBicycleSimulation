@@ -46,6 +46,11 @@ class BikeAutonomous:
         self.ride_time = None
         self.charge_time = None
 
+    @classmethod
+    def reset(cls):
+        BikeAutonomous.id_count = -1
+        Battery.reset()
+
     def next_id(self):
         BikeAutonomous.id_count += 1
 
@@ -98,7 +103,9 @@ class BikeAutonomous:
         self.location_origin = self.location
         self.departure_time = self.env.now
 
-        logging.info("[%.2f] Bike %d driving autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat,))
+        logging.info(
+            "[%.2f] Bike %d driving autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat,)
+        )
         distance = self.dist(self.location, destination)
         time = distance / self.AUTONOMOUS_SPEED
         yield self.env.timeout(time)
@@ -124,7 +131,7 @@ class BikeAutonomous:
 
         while not self.event_interact_station.triggered:
             # 2-Select charging station
-            self.station_id, station_location, self.visited_stations = self.select_charging_station(self.location, self.visited_stations)
+            (self.station_id, station_location, self.visited_stations,) = self.select_charging_station(self.location, self.visited_stations)
 
             if self.station_id is None:
                 continue  # Will try again

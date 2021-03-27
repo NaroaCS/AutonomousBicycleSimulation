@@ -2,6 +2,7 @@ import logging
 from .UserTrip import UserTrip
 from .Location import Location
 
+
 class UserDockless:
     id_count = -1
 
@@ -31,6 +32,10 @@ class UserDockless:
 
         self.WALKING_SPEED = config["WALKING_SPEED"] / 3.6  # m/s
 
+    @classmethod
+    def reset(cls):
+        UserDockless.id_count = -1
+
     def next_id(self):
         UserDockless.id_count += 1
 
@@ -42,7 +47,9 @@ class UserDockless:
         self.location = location
 
     def ride_bike_to(self, location):
-        logging.info("[%.2f] User %d biking with bike %d from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.bike_id, self.location.lon, self.location.lat, location.lon, location.lat,))
+        logging.info(
+            "[%.2f] User %d biking with bike %d from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.bike_id, self.location.lon, self.location.lat, location.lon, location.lat,)
+        )
         yield self.env.process(self.ui.bike_ride(self.bike_id, location))
         self.location = location
 
@@ -92,7 +99,7 @@ class UserDockless:
         yield self.env.process(self.lock_bike())
 
         # 7-Finish
-        yield self.env.timeout(10)
+        # yield self.env.timeout(0)
         logging.info("[%.2f] User %d arrived to final location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat))
 
         self.time_ride = self.env.now - self.departure_time
@@ -109,7 +116,7 @@ class UserDockless:
             logging.info("[%.2f] User %d unlocked bike %d" % (self.env.now, self.id, self.bike_id))
             self.event_unlock_bike.succeed()
         else:
-            yield self.env.timeout(3)
+            yield self.env.timeout(1)
             logging.info("[%.2f] User %d, bike %d has already been rented. Looking for another one." % (self.env.now, self.id, self.bike_id))
             # self.bike_id = None
 
