@@ -2,6 +2,7 @@ class UserTrip:
     id_count = -1
     header = [
         "user_id",
+        "status",
         "bike_id",
         "mode",
         "time_departure",
