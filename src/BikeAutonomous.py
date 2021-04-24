@@ -148,7 +148,7 @@ class BikeAutonomous:
 
         # 5-Battery Charging
         yield self.env.process(self.battery_charge())
-        self.charge_time = self.env.now - self.departure_time
+        self.charge_time = self.env.now - self.ride_time - self.departure_time
 
         # 6-Unlock from station
         yield self.env.process(self.interact_charging_station(action="unlock"))
