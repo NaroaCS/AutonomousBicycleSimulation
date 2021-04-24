@@ -102,7 +102,7 @@ class UserDockless:
         # yield self.env.timeout(0)
         logging.info("[%.2f] User %d arrived to final location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat))
 
-        self.time_ride = self.env.now - self.departure_time
+        self.time_ride = self.env.now - self.time_walk_origin - self.departure_time
         # 8-Save Trip
         self.save_user_trip()
 

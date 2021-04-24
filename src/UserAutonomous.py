@@ -100,7 +100,7 @@ class UserAutonomous:
         # 7-Charge bike if low battery
         yield self.env.process(self.charge_bike())
 
-        self.time_ride = self.env.now - self.departure_time
+        self.time_ride = self.env.now - self.time_wait - self.departure_time
         # 8-Save state
         self.save_user_trip()
 
