@@ -317,11 +317,33 @@ class DataInterface:
         available_bikes = [bike for bike in self.bikes if not bike.busy and bike.battery.level > self.BATTERY_MIN_LEVEL]
         available_bikes_id = [bike.id for bike in available_bikes]
         locations = self.bikes_location[available_bikes_id]
+        user_location = location.get_loc()
 
         # create kd-tree and find k nearest
-        kdtree = spatial.cKDTree(locations[:, :2], leafsize=50, compact_nodes=False, balanced_tree=False)
         k = min(10, len(available_bikes_id))
-        air_distances, bikes_id = kdtree.query(location.get_loc(), k)
+        option = "degrees"  # "degrees", "cartesian", "balltree"
+        if option == "degrees":
+            kdtree = spatial.cKDTree(locations[:, :2], leafsize=50, compact_nodes=False, balanced_tree=False)
+            _, bikes_id = kdtree.query(user_location, k)
+            air_distances = DataInterface.haversine_np(user_location[0], user_location[1], locations[bikes_id, 0], locations[bikes_id, 1],)
+
+        if option == "cartesian":
+            locations_cartesian = DataInterface.cartesian(locations[:, 0], locations[:, 1])
+            location_cartesian = DataInterface.cartesian(user_location[0], user_location[1])
+            kdtree = spatial.cKDTree(locations_cartesian, leafsize=50, compact_nodes=False, balanced_tree=False,)
+            air_distances, bikes_id = kdtree.query(location_cartesian, k)
+
+        if option == "balltree":
+            # alternative: use sklearn and haversine distance
+            from sklearn.neighbors import BallTree
+
+            R = 6371000
+            bt = BallTree(np.deg2rad(locations[:, [1, 0]]), metric="haversine")
+            loc = np.deg2rad(user_location)[::-1]
+            air_distances, bikes_id = bt.query([loc], k)
+            air_distances = air_distances[0]
+            bikes_id = bikes_id[0]
+            air_distances = air_distances * R
 
         # TODO: DONE check if nearest bike via-air is walkable => if not return None
         if air_distances[0] > self.WALK_RADIUS:
