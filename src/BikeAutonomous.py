@@ -2,7 +2,7 @@ import logging
 
 from .Battery import Battery
 from .BikeTrip import BikeTrip
-
+import numpy as np
 
 class BikeAutonomous:
     id_count = -1
@@ -29,11 +29,13 @@ class BikeAutonomous:
         self.AUTONOMOUS_SPEED = config["AUTONOMOUS_SPEED"] / 3.6  # m/s
 
         # We will assume that all the bikes start with a full charge
+        self.BATTERY_MIN_LEVEL = config["BATTERY_MIN_LEVEL"]
         self.BATTERY_CAPACITY = 100.0
         self.BATTERY_DISCHARGE_RATE = self.BATTERY_CAPACITY / (config["BATTERY_AUTONOMY"] * 1000)  # %/meter
         self.BATTERY_CHARGE_RATE = self.BATTERY_CAPACITY / (config["BATTERY_CHARGE_TIME"] * 3600)  # %/second  (This is 5h for 100% charge)
+        self.BATTERY_LEVEL = np.random.randint(self.BATTERY_MIN_LEVEL, self.BATTERY_CAPACITY)
 
-        self.battery = Battery(self.BATTERY_CAPACITY, self.BATTERY_CHARGE_RATE, self.BATTERY_DISCHARGE_RATE)
+        self.battery = Battery(self.BATTERY_CAPACITY, self.BATTERY_CHARGE_RATE, self.BATTERY_DISCHARGE_RATE, self.BATTERY_LEVEL)
 
         self.station_id = None
         self.visited_stations = []
