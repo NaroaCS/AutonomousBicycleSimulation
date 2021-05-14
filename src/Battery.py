@@ -4,14 +4,16 @@ import logging
 class Battery:
     id_count = -1
 
-    def __init__(self, capacity, charge_rate, discharge_rate):
+    def __init__(self, capacity, charge_rate, discharge_rate, level=None):
         self.next_id()
         self.id = Battery.id_count
 
         self.capacity = capacity  # total energy
         self.charge_rate = charge_rate  # energy per time
         self.discharge_rate = discharge_rate  # energy per distance
-        self.level = capacity
+        if level is None:
+            level = capacity
+        self.level = level
 
     @classmethod
     def reset(cls):

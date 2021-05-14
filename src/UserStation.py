@@ -16,23 +16,30 @@ class UserStation:
         self.ui = ui
         self.config = config
         self.results = results
+
         self.user_trip = UserTrip()
         self.bike_trip = BikeTrip()
+
         self.origin = origin
         self.destination = destination
         self.departure_time = departure_time
         self.target_time = target_time
         self.location = None
         self.bike_id = None
+        self.status = None
+
         self.origin_station = None
         self.destination_station = None
-        self.origin_visited_stations = []
-        self.destination_visited_stations = []
-        self.magic_bike = False
-        self.magic_dock = False
+        self.origin_visited_stations = None
+        self.destination_visited_stations = None
+
+        self.magic_bike = 0
+        self.magic_dock = 0
+
         self.time_walk_origin = None
         self.time_ride = None
         self.time_walk_destination = None
+
         self.WALKING_SPEED = config["WALKING_SPEED"] / 3.6
         self.MAGIC_BETA = config["MAGIC_BETA"]
 
@@ -83,14 +90,16 @@ class UserStation:
                         (station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station,) = self.ui.magic_bike(self.location, visited_stations)
                     if station_id is None:
                         logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
+                        self.status = "no_bikes"
                         return self.save_user_trip()
-                    self.magic_bike = True
-                    self.magic_dock = False
+                    self.magic_bike += 1
+                    # self.magic_dock = 0
                     self.magic_destination_station = station_id
-                    self.save_bike_trip()
+                    self.save_bike_trip(magic_bike=True, magic_dock=False)
                 else:
                     logging.info("[%.2f] User %d had no walkable stations" % (self.env.now, self.id))  # TODO: review
                     logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
+                    self.status = "not_walkable_stations"
                     return self.save_user_trip()
             logging.info("[%.2f] User %d selected start station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.walk_to(station_location))
@@ -116,15 +125,16 @@ class UserStation:
                     logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.id))
                     (station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station,) = self.ui.magic_dock(self.destination, visited_stations)
                 if station_id is not None:
-                    self.magic_bike = False
-                    self.magic_dock = True
+                    # self.magic_bike = 0
+                    self.magic_dock += 1
                     self.magic_destination_station = station_id
-                    self.save_bike_trip()
+                    self.save_bike_trip(magic_bike=False, magic_dock=True)
                 else:
                     logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.id))
                     (station_id, station_location, visited_stations,) = self.ui.notwalkable_dock(self.destination, visited_stations)
                     if station_id is None:
                         logging.info("[%.2f] User %d has no end station" % (self.env.now, self.id))
+                        self.status = "no_end_station"
                         return self.save_user_trip()
             logging.info("[%.2f] User %d selected end station %d" % (self.env.now, self.id, station_id))
             yield self.env.process(self.ride_bike_to(station_location))
@@ -144,6 +154,7 @@ class UserStation:
         logging.info("[%.2f] User %d arrived to final location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat))
         self.destination_station = station_id
         self.destination_visited_stations = ";".join(map(str, visited_stations))
+        self.status = "finished"
         self.save_user_trip()
 
     def select_start_station(self, location, visited_stations):
@@ -197,6 +208,7 @@ class UserStation:
 
     def save_user_trip(self):
         self.user_trip.set("user_id", self.id)
+        self.user_trip.set("status", self.status)
         self.user_trip.set("bike_id", self.bike_id)
         self.user_trip.set("mode", 0)
         self.user_trip.set("time_departure", self.departure_time, 0)
@@ -216,14 +228,14 @@ class UserStation:
         self.user_trip.set("magic_dock", self.magic_dock)
         self.results.add_user_trip(self.user_trip)
 
-    def save_bike_trip(self):
+    def save_bike_trip(self, magic_dock, magic_bike):
         self.bike_trip.set("bike_id", self.magic_bike_id)
         self.bike_trip.set("user_id", self.id)
         self.bike_trip.set("mode", 0)
         self.bike_trip.set("trip_type", 0)
         self.bike_trip.set("time_departure", self.departure_time, 0)
-        self.bike_trip.set("magic_bike", self.magic_bike)
-        self.bike_trip.set("magic_dock", self.magic_dock)
+        self.bike_trip.set("magic_bike", magic_bike)
+        self.bike_trip.set("magic_dock", magic_dock)
         self.bike_trip.set("origin_station", self.magic_origin_station)
         self.bike_trip.set("destination_station", self.magic_destination_station)
         self.results.add_bike_trip(self.bike_trip)

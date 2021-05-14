@@ -2,7 +2,7 @@ import logging
 
 from .Battery import Battery
 from .BikeTrip import BikeTrip
-
+import numpy as np
 
 class BikeAutonomous:
     id_count = -1
@@ -29,11 +29,13 @@ class BikeAutonomous:
         self.AUTONOMOUS_SPEED = config["AUTONOMOUS_SPEED"] / 3.6  # m/s
 
         # We will assume that all the bikes start with a full charge
+        self.BATTERY_MIN_LEVEL = config["BATTERY_MIN_LEVEL"]
         self.BATTERY_CAPACITY = 100.0
         self.BATTERY_DISCHARGE_RATE = self.BATTERY_CAPACITY / (config["BATTERY_AUTONOMY"] * 1000)  # %/meter
         self.BATTERY_CHARGE_RATE = self.BATTERY_CAPACITY / (config["BATTERY_CHARGE_TIME"] * 3600)  # %/second  (This is 5h for 100% charge)
+        self.BATTERY_LEVEL = np.random.randint(self.BATTERY_MIN_LEVEL, self.BATTERY_CAPACITY)
 
-        self.battery = Battery(self.BATTERY_CAPACITY, self.BATTERY_CHARGE_RATE, self.BATTERY_DISCHARGE_RATE)
+        self.battery = Battery(self.BATTERY_CAPACITY, self.BATTERY_CHARGE_RATE, self.BATTERY_DISCHARGE_RATE, self.BATTERY_LEVEL)
 
         self.station_id = None
         self.visited_stations = []
@@ -139,7 +141,7 @@ class BikeAutonomous:
             logging.info("[%.2f] Bike %d going to station %d for recharge" % (self.env.now, self.id, self.station_id))
 
             # 3-Drive autonomously to station
-            yield self.env.process(self.autonomous_drive(station_location))
+            yield self.env.process(self.autonomous_drive(station_location, -1))
 
             # 4-Lock in station
             yield self.env.process(self.interact_charging_station(action="lock"))
@@ -148,7 +150,7 @@ class BikeAutonomous:
 
         # 5-Battery Charging
         yield self.env.process(self.battery_charge())
-        self.charge_time = self.env.now - self.departure_time
+        self.charge_time = self.env.now - self.ride_time - self.departure_time
 
         # 6-Unlock from station
         yield self.env.process(self.interact_charging_station(action="unlock"))
@@ -193,7 +195,7 @@ class BikeAutonomous:
         self.bike_drive_trip.set("trip_type", 1)
         self.bike_drive_trip.set("time_departure", self.departure_time, 0)
         self.bike_drive_trip.set("time_ride", self.ride_time, 0)
-        # self.bike_drive_trip.set("time_charge", self.time_charge, 0)
+        # self.bike_drive_trip.set("time_charge", self.charge_time, 0)
         # self.bike_drive_trip.set("magic_bike", self.magic_bike)
         # self.bike_drive_trip.set("magic_dock", self.magic_dock)
         # self.bike_drive_trip.set("origin_station", self.origin_station)
@@ -213,8 +215,8 @@ class BikeAutonomous:
         self.bike_charge_trip.set("mode", 2)
         self.bike_charge_trip.set("trip_type", 2)
         self.bike_charge_trip.set("time_departure", self.departure_time, 0)
-        self.bike_charge_trip.set("time_ride", self.time_ride, 0)
-        self.bike_charge_trip.set("time_charge", self.time_charge, 0)
+        self.bike_charge_trip.set("time_ride", self.ride_time, 0)
+        self.bike_charge_trip.set("time_charge", self.charge_time, 0)
         # self.bike_charge_trip.set("magic_bike", self.magic_bike)
         # self.bike_charge_trip.set("magic_dock", self.magic_dock)
         # self.bike_charge_trip.set("origin_station", self.origin_station)

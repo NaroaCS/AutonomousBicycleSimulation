@@ -1,6 +1,6 @@
 import logging
 from .UserTrip import UserTrip
-
+from .Location import Location
 
 class UserAutonomous:
     id_count = -1
@@ -25,7 +25,7 @@ class UserAutonomous:
 
         self.location = None
         self.bike_id = None
-        self.bike_location = None
+        self.bike_location = Location()
         self.time_wait = None
         self.time_ride = None
 
@@ -71,16 +71,18 @@ class UserAutonomous:
         yield self.env.process(self.init_user())
 
         # 2-Call autonomous bike
-        self.bike_id, self.bike_location = self.call_autonomous_bike(self.location)
+        self.bike_id, bike_location = self.call_autonomous_bike(self.location)
 
         if self.bike_id is None:
             logging.info("[%.2f] User %d will not make the trip" % (self.env.now, self.id))
+            self.save_user_trip()
             return
 
         logging.info("[%.2f] User %d was assigned the autonomous bike %d" % (self.env.now, self.id, self.bike_id))
 
         # 3-Wait for autonomous bike
         yield self.env.process(self.autonomous_drive())
+        self.bike_location = bike_location
         self.time_wait = self.env.now - self.departure_time
         yield self.env.process(self.unlock_bike())
 
@@ -98,7 +100,7 @@ class UserAutonomous:
         # 7-Charge bike if low battery
         yield self.env.process(self.charge_bike())
 
-        self.time_ride = self.env.now - self.departure_time
+        self.time_ride = self.env.now - self.time_wait - self.departure_time
         # 8-Save state
         self.save_user_trip()
 
