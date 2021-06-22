@@ -3,5 +3,14 @@ __pycache__
 *.code-workspace
 .DS_Store
 .vscode
+.Rhistory
+*.Rproj
 .venv
 results/
+.Rproj.user
+
+
+analysis/figures
+analysis/metrics
+analysis/figures_paper
+analysis/battery/figures
