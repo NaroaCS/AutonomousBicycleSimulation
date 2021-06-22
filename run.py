@@ -18,7 +18,7 @@ name = "greater_boston_walk"
 
 graph = Graph.load(name)
 
-MODE = 1
+MODE = 2
 # %% PARAMETERS MODE 0
 
 if MODE == 0:
@@ -94,7 +94,7 @@ if MODE == 1:
 # %% PARAMETERS MODE 2
 
 if MODE == 2:
-    config_path = os.path.join("data", "config_mode_2.json")
+    config_path = os.path.join("data", "config_mode_2_1.json")
     with open(config_path) as f:
         config_nom = json.load(f)
 
@@ -105,14 +105,13 @@ if MODE == 2:
     grid_y = {
         "AUTONOMOUS_RADIUS": [500,1000,1500,2000,2500,3000],
         "RIDING_SPEED": [5,8,10,12,15,20],
-        # "WALKING_SPEED": [3,4,5,6,7,8],
+        #"WALKING_SPEED": [3,4,5,6,7,8],
         "AUTONOMOUS_SPEED": [1,2.5,5,10,15,20],
         "BATTERY_MIN_LEVEL": [5,10,15,20,25,30],
         "BATTERY_AUTONOMY": [30,50,70,90,110,130],
         "BATTERY_CHARGE_TIME": [0.5,1,2,4,6,8],
         "USER_TRIPS_FILE": [0,1,2,3,4]
     }
-
 
     grid = []
     for kx in grid_x:
@@ -128,6 +127,108 @@ if MODE == 2:
 
     pd.DataFrame(grid)
 
+
+if MODE == 3:
+    config_path = os.path.join("data", "config_mode_2.json")
+    with open(config_path) as f:
+        config_nom = json.load(f)
+
+    grid_x = {
+    "REBALANCING_EVERY": [-1, 15, 30, 45, 60, 120]
+    }
+    grid_y = {
+    "REBALANCING_AHEAD": [0, 15, 30, 45, 60, 120],
+    "REBALANCING_WINDOW": [15, 30, 45, 60, 120]
+    }
+
+    grid = []
+    for kx in grid_x:
+        for vx in grid_x[kx]:
+            for ky in grid_y:
+                for vy in grid_y[ky]:
+                    # RESET CONFIG
+                    config = config_nom.copy()
+                    config[kx] = vx
+                    config[ky] = vy    
+
+                    grid.append(config)
+
+    pd.DataFrame(grid)
+
+if MODE == 4:
+
+    config_path = os.path.join("data", "config_mode_2.json")
+    with open(config_path) as f:
+        config_nom = json.load(f)
+
+    grid_x = {
+        "NUM_BIKES": [600,700,800,900,1000,1100]
+    }
+    grid_y = {
+        "AUTONOMOUS_SPEED": [2.5,5,10,15]
+    }
+    grid_z = {
+        #"AUTONOMOUS_RADIUS": [500,1000,1500,2000,2500,3000],
+        #"RIDING_SPEED": [5,8,10,12,15,20],
+        # "WALKING_SPEED": [3,4,5,6,7,8],
+        #"BATTERY_MIN_LEVEL": [5,10,15,20,25,30],
+        #"BATTERY_AUTONOMY": [30,50,70,90,110,130],
+        #"BATTERY_CHARGE_TIME": [0.5,1,2,4,6,8],
+
+    "REBALANCING_EVERY": [-1, 15, 30, 60, 120],
+    "REBALANCING_AHEAD": [0, 15, 30, 60, 120],
+    "REBALANCING_WINDOW": [15, 30, 60, 90, 120],
+
+        #"USER_TRIPS_FILE": [0,1,2,3,4]
+    }
+
+    grid = []
+    for kx in grid_x:
+        for vx in grid_x[kx]:
+            for ky in grid_y:
+                for vy in grid_y[ky]:
+                    for kz in grid_z:
+                        for vz in grid_z[kz]:
+                            # RESET CONFIG
+                            config = config_nom.copy()
+                            config[kx] = vx
+                            config[ky] = vy    
+                            config[kz] = vz
+
+                            grid.append(config)
+
+    print(pd.DataFrame(grid), len(grid))
+
+if MODE == 5:
+
+    config_path = os.path.join("data", "config_mode_2_predictive.json")
+    with open(config_path) as f:
+        config_nom = json.load(f)
+
+    grid_x = {
+        "NUM_BIKES": [600,800,1000,1250,1500,1750,2000,2500,3000]
+    }
+    grid_y = {
+        "AUTONOMOUS_SPEED": [2.5,5,8,10,12,15,20]
+    }
+
+    grid = []
+    for kx in grid_x:
+        for vx in grid_x[kx]:
+            for ky in grid_y:
+                for vy in grid_y[ky]:
+                    # RESET CONFIG
+                    config = config_nom.copy()
+                    config[kx] = vx
+                    config[ky] = vy    
+
+                    grid.append(config)
+
+    print(pd.DataFrame(grid), len(grid))
+
+
+
+
 # %% RUN MULTIPLE SIMULATIONS
 
 k = 0
@@ -141,10 +242,10 @@ for config in grid:
 
     start = time.time()
     city = SimulationEngine(config, stations_data, users_data, graph)
-    city.run(until=650000)
+    city.run(until=750000)
     # city.run(until=650)
     print("[", k, "/", len(grid) ,"]", round(time.time() - start, 3))
-    break
+    #break
 
 # %% RUN ONE SIMULATION (EXAMPLE)
 
