@@ -1,4 +1,5 @@
-import numpy as np, logging
+import numpy as np
+import logging
 from .UserTrip import UserTrip
 from .BikeTrip import BikeTrip
 
