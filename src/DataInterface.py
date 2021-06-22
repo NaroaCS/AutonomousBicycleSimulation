@@ -526,9 +526,15 @@ class DataInterface:
                 bike.location.node,
             ]
 
-    def autonomous_drive(self, bike_id, location, user_id):
+    def autonomous_drive(self, bike_id, location, user_id, magic, rebalancing, liberate, charge):
         bike = self.bikes[bike_id]
-        yield self.env.process(bike.autonomous_drive(location, user_id))
+        yield self.env.process(bike.autonomous_drive(location, user_id, magic, rebalancing, liberate, charge))
+
+        self.bikes_location[bike_id] = [
+            bike.location.lon,
+            bike.location.lat,
+            bike.location.node,
+        ]
 
     def station_has_bikes(self, station_id):
         station = self.stations[station_id]
@@ -558,9 +564,13 @@ class DataInterface:
         bike = self.bikes[bike_id]
         bike.register_lock(user_id)
 
-    def bike_busy(self, bike_id):
+    def bike_get_busy(self, bike_id):
         bike = self.bikes[bike_id]
         return bike.busy
+
+    def bike_set_busy(self, bike_id, busy):
+        bike = self.bikes[bike_id]
+        bike.busy = busy
 
     def bike_unlock(self, bike_id, user_id):
         bike = self.bikes[bike_id]
@@ -573,5 +583,12 @@ class DataInterface:
     def bike_charge(self, bike_id):
         bike = self.bikes[bike_id]
         low_battery = bike.battery.level < self.BATTERY_MIN_LEVEL
-        if low_battery:
+        busy = bike.busy
+        if low_battery and not busy:
             yield self.env.process(bike.autonomous_charge())
+
+            self.bikes_location[bike_id] = [
+                bike.location.lon,
+                bike.location.lat,
+                bike.location.node,
+            ]
