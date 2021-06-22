@@ -316,8 +316,13 @@ class DataInterface:
         # filter by not busy and with battery
         available_bikes = [bike for bike in self.bikes if not bike.busy and bike.battery.level > self.BATTERY_MIN_LEVEL]
         available_bikes_id = [bike.id for bike in available_bikes]
+        logging.info("[%.2f] available bikes: " % (self.env.now) + str(available_bikes_id))
         locations = self.bikes_location[available_bikes_id]
         user_location = location.get_loc()
+
+        if len(available_bikes_id) < 1:
+            logging.info("[%.2f] No available bikes" % (self.env.now))
+            return None, None
 
         # create kd-tree and find k nearest
         k = min(10, len(available_bikes_id))
@@ -346,29 +351,117 @@ class DataInterface:
             air_distances = air_distances * R
 
         # TODO: DONE check if nearest bike via-air is walkable => if not return None
-        if air_distances[0] > self.WALK_RADIUS:
+        air_distances = np.atleast_1d(air_distances)
+        bikes_id = np.atleast_1d(bikes_id)
+
+        if air_distances[0] > self.AUTONOMOUS_RADIUS:
             logging.info("[%.2f] No bikes in walkable distance" % (self.env.now))
             return None, None
 
         # get nodes in graph and estimate shortest path lengths
         user_node = location.node
-        bikes_nodes = locations[bikes_id, 2].astype(int)
+        bikes_nodes = np.atleast_1d(locations[bikes_id, 2].astype(int))
 
         # TODO: if the walkable criteria is based on air-distances, do we need the road_distance?
         # only for sorting, because the bikes_id are selected based on kdtree (air-distances)
         distances = self.graph.network.shortest_path_lengths(np.tile(user_node, k), bikes_nodes)
-        bikes_id, distances = DataInterface.sort_lists(bikes_id, distances, 1)
-        air_distances, distances = DataInterface.sort_lists(air_distances, distances, 1)
+        if len(distances) > 1:
+            bikes_id, distances = DataInterface.sort_lists(bikes_id, distances, 1)
+            air_distances, distances = DataInterface.sort_lists(air_distances, distances, 1)
 
         # look for walkable ones
-        for bid, dist in zip(bikes_id, distances):
+        for bid, dist in zip(bikes_id, air_distances):
             bike = available_bikes[bid]
             reachable = dist < self.AUTONOMOUS_RADIUS
-            if reachable:
+            busy = bike.busy
+            if reachable and not busy:
                 bike.busy = True
                 return bike.id, bike.location
 
         logging.info("[%.2f] No bikes in reachable distance" % (self.env.now))
+        return None, None
+
+    def call_autonomous_magic_bike(self, location):
+        # not busy, reachable, with battery
+
+        # filter by not busy and with battery
+        available_bikes = [bike for bike in self.bikes if not bike.busy and bike.battery.level > self.BATTERY_MIN_LEVEL]
+        available_bikes_id = [bike.id for bike in available_bikes]
+        logging.info("[%.2f] available bikes: " % (self.env.now) + str(available_bikes_id))
+        locations = self.bikes_location[available_bikes_id]
+        user_location = location.get_loc()
+
+        if len(available_bikes_id) < 1:
+            logging.info("[%.2f] No available bikes" % (self.env.now))
+            return None, None
+
+        # create kd-tree and find k nearest
+        k = min(10, len(available_bikes_id))
+        option = "degrees"  # "degrees", "cartesian", "balltree"
+        if option == "degrees":
+            kdtree = spatial.cKDTree(locations[:, :2], leafsize=50, compact_nodes=False, balanced_tree=False)
+            _, bikes_id = kdtree.query(user_location, k)
+            air_distances = DataInterface.haversine_np(user_location[0], user_location[1], locations[bikes_id, 0], locations[bikes_id, 1],)
+
+        if option == "cartesian":
+            locations_cartesian = DataInterface.cartesian(locations[:, 0], locations[:, 1])
+            location_cartesian = DataInterface.cartesian(user_location[0], user_location[1])
+            kdtree = spatial.cKDTree(locations_cartesian, leafsize=50, compact_nodes=False, balanced_tree=False,)
+            air_distances, bikes_id = kdtree.query(location_cartesian, k)
+
+        if option == "balltree":
+            # alternative: use sklearn and haversine distance
+            from sklearn.neighbors import BallTree
+
+            R = 6371000
+            bt = BallTree(np.deg2rad(locations[:, [1, 0]]), metric="haversine")
+            loc = np.deg2rad(user_location)[::-1]
+            air_distances, bikes_id = bt.query([loc], k)
+            air_distances = air_distances[0]
+            bikes_id = bikes_id[0]
+            air_distances = air_distances * R
+
+        # TODO: DONE check if nearest bike via-air is walkable => if not return None
+        air_distances = np.atleast_1d(air_distances)
+        bikes_id = np.atleast_1d(bikes_id)
+
+        # if air_distances[0] > self.AUTONOMOUS_RADIUS:
+        #     logging.info("[%.2f] No bikes in walkable distance" % (self.env.now))
+        #     return None, None
+
+        # get nodes in graph and estimate shortest path lengths
+        user_node = location.node
+        bikes_nodes = np.atleast_1d(locations[bikes_id, 2].astype(int))
+
+        # TODO: if the walkable criteria is based on air-distances, do we need the road_distance?
+        # only for sorting, because the bikes_id are selected based on kdtree (air-distances)
+        distances = self.graph.network.shortest_path_lengths(np.tile(user_node, k), bikes_nodes)
+        if len(distances) > 1:
+            bikes_id, distances = DataInterface.sort_lists(bikes_id, distances, 1)
+            air_distances, distances = DataInterface.sort_lists(air_distances, distances, 1)
+
+        # look for walkable ones
+        for bid, dist in zip(bikes_id, air_distances):
+            bike = available_bikes[bid]
+            busy = bike.busy
+            if not busy:
+                bike.busy = True
+                return bike.id, bike.location
+
+        logging.info("[%.2f] No bikes in reachable distance" % (self.env.now))
+        return None, None
+
+    def call_autonomous_magic_bike_old(self, location):
+        # not busy, with battery
+        # TODO: closest bike please
+        # filter by not busy and with battery
+        available_bikes = [bike for bike in self.bikes if not bike.busy and bike.battery.level > self.BATTERY_MIN_LEVEL]
+        if len(available_bikes) > 0:
+            bike = np.random.choice(available_bikes)
+            bike.busy = True
+            return bike.id, bike.location
+
+        logging.info("[%.2f] No available bikes with battery" % (self.env.now))
         return None, None
 
     def call_autonomous_bike_old(self, location):
