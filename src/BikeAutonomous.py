@@ -38,6 +38,7 @@ class BikeAutonomous:
         self.battery = Battery(self.BATTERY_CAPACITY, self.BATTERY_CHARGE_RATE, self.BATTERY_DISCHARGE_RATE, self.BATTERY_LEVEL)
 
         self.station_id = None
+        self.grid_id = None
         self.visited_stations = []
 
         self.battery_in = None
@@ -93,13 +94,15 @@ class BikeAutonomous:
 
     # TODO: remove (use autonomous drive)
     def go_towards(self, destination):
-        # This is for the demand prediction -> maybe it's enough with autonomous_drive()
         distance = self.dist(self.location, destination)
         time = distance / self.AUTONOMOUS_SPEED
         yield self.env.timeout(time)
+        self.battery.charge(time)
         self.location = destination
 
-    def autonomous_drive(self, destination, user_id):
+    def autonomous_drive(self, destination, user_id=-1, magic=False, rebalancing=False, liberate=False, charge=False):
+        
+        self.busy = True
         # Data before
         self.battery_in = self.battery.level
         self.location_origin = self.location
@@ -109,10 +112,13 @@ class BikeAutonomous:
             "[%.2f] Bike %d driving autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat,)
         )
         distance = self.dist(self.location, destination)
-        time = distance / self.AUTONOMOUS_SPEED
+        if magic:
+            time = 0
+        else:
+            time = distance / self.AUTONOMOUS_SPEED
         yield self.env.timeout(time)
-        self.location = destination
         logging.info("[%.2f] Bike %d drove autonomously from [%.4f, %.4f] to location [%.4f, %.4f]" % (self.env.now, self.id, self.location.lon, self.location.lat, destination.lon, destination.lat,))
+        self.location = destination
         self.battery.discharge(distance)
         logging.info("[%.2f] Battery level of bike %d: %.2f" % (self.env.now, self.id, self.battery.level))
 
@@ -120,7 +126,16 @@ class BikeAutonomous:
         self.ride_time = self.env.now - self.departure_time
         self.location_destination = self.location
         self.battery_out = self.battery.level
-        self.save_bike_drive_trip(user_id)
+
+        if rebalancing:
+            self.save_bike_rebalance_trip()
+        else:
+            self.save_bike_drive_trip(user_id)
+        if liberate:
+            self.busy = False
+        if charge:
+            if self.battery.level < self.BATTERY_MIN_LEVEL:
+                yield self.env.process(self.autonomous_charge())
 
     def autonomous_charge(self):
         logging.info("[%.2f] Bike %d needs to recharge. Battery level:  %.2f" % (self.env.now, self.id, self.battery.level))
@@ -141,7 +156,7 @@ class BikeAutonomous:
             logging.info("[%.2f] Bike %d going to station %d for recharge" % (self.env.now, self.id, self.station_id))
 
             # 3-Drive autonomously to station
-            yield self.env.process(self.autonomous_drive(station_location, -1))
+            yield self.env.process(self.autonomous_drive(station_location))
 
             # 4-Lock in station
             yield self.env.process(self.interact_charging_station(action="lock"))
@@ -236,7 +251,7 @@ class BikeAutonomous:
         self.bike_rebalance_trip.set("mode", 2)
         self.bike_rebalance_trip.set("trip_type", 3)
         self.bike_rebalance_trip.set("time_departure", self.departure_time, 0)
-        self.bike_rebalance_trip.set("time_ride", self.time_ride, 0)
+        self.bike_rebalance_trip.set("time_ride", self.ride_time, 0)
         # self.bike_rebalance_trip.set("time_charge", self.time_charge, 0)
         # self.bike_rebalance_trip.set("magic_bike", self.magic_bike)
         # self.bike_rebalance_trip.set("magic_dock", self.magic_dock)
@@ -247,6 +262,6 @@ class BikeAutonomous:
         self.bike_rebalance_trip.set("destination_lon", self.location_destination.lon, 5)
         self.bike_rebalance_trip.set("destination_lat", self.location_destination.lat, 5)
         self.bike_rebalance_trip.set("battery_in", self.battery_in, 0)
-        self.bike_rebalance_trip.set("battery_in", self.battery_out, 0)
+        self.bike_rebalance_trip.set("battery_out", self.battery_out, 0)
 
         self.results.add_bike_trip(self.bike_rebalance_trip)

@@ -110,7 +110,7 @@ class UserDockless:
         return self.ui.select_dockless_bike(location)
 
     def unlock_bike(self):
-        if not self.ui.bike_busy(self.bike_id):
+        if not self.ui.bike_get_busy(self.bike_id):
             yield self.env.timeout(1)
             self.ui.bike_unlock(self.bike_id, self.id)
             logging.info("[%.2f] User %d unlocked bike %d" % (self.env.now, self.id, self.bike_id))
