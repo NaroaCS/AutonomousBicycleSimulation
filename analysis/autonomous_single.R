@@ -31,6 +31,8 @@ origin <- "2019-10-07"
 freq_hour <- 60*60
 freq_day <- 24*60*60
 peak_times <- c(seq(7*60+50, 9*60+30), seq(15*60+50, 18*60+30))
+date_breaks <- seq(lubridate::ymd_hm('2019-10-07 12:00'),lubridate::ymd_hm('2019-10-14 12:00'),by='day')
+date_minor_breaks <- seq(lubridate::ymd_hm('2019-10-07 00:00'),lubridate::ymd_hm('2019-10-15 00:00'),by='12 hours')
 
 
 
