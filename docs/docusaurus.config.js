@@ -4,7 +4,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Micro-mobility ABM',
-  tagline: 'Simulating future mobility modes',
+  tagline: 'Simulating future mobility',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
