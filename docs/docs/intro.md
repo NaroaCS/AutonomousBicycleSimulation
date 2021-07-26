@@ -26,4 +26,3 @@ For this simulator we have chosen autonomous bicycles, but this simulator can be
 
 
 
-
