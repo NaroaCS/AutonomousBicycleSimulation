@@ -21,17 +21,17 @@ You will need GIS data of your chosen city/area:
     I don't have these files -> check how they're generated
 :::
 
-    ```shell
-    @staticmethod
-    def load(name):
-        path = os.path.join("data", "graph")
-        file_pkl = os.path.join(path, name + ".pkl")
-        with open(file_pkl, "rb") as f:
-            graph = pickle.load(f)
-        file_h5 = os.path.join(path, name + ".h5")
-        graph.network = pdna.Network.from_hdf5(file_h5)
-        return graph
-    ```
+```shell
+@staticmethod
+def load(name):
+    path = os.path.join("data", "graph")
+    file_pkl = os.path.join(path, name + ".pkl")
+    with open(file_pkl, "rb") as f:
+        graph = pickle.load(f)
+    file_h5 = os.path.join(path, name + ".h5")
+    graph.network = pdna.Network.from_hdf5(file_h5)
+    return graph
+```
 
 Eg. Buildings
 <img src={useBaseUrl('/img/user/boston_buildings.png')} alt="drawing" width="40%" /> 
@@ -54,7 +54,7 @@ Eg. Road network
 This is the file where you will set the configuration of the simulations. This structure contains all the config from the three systems (SB= Station-based, DL= Dockless, AUT= Autonomous): 
 
 | Parameter        |      Description     |   Units | Type of system |
-| ------------- | :----------- | :-----: | :-----: |
+| -------------: | :----------- | :-----: | :-----: |
 | "MODE" | 0=Station-based, 1=Dockless, 2= Autonomous | [-] | (SB, DL, AUT) |
 | "NUM_BIKES" | Number of bikes in the system, fleet size | [-] | (SB, DL, AUT) |
 | "WALK_RADIUS" | Maximum distance that a user is willing to walk | [m] | (SB, DL) |

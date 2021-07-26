@@ -10,7 +10,7 @@ Before you start, you will need to download the code from our **[GitHub repo](ht
 git clone https://github.com/NaroaCS/AutonomousBicycleSimulation.git
 ```
 
-Make sure you have Python 3 or higher. We're using Python 3.6. To check your python version:
+Make sure you have Python 3.6 or higher. To check your python version:
 
 ```shell
 python3 --version
