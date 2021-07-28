@@ -33,11 +33,9 @@ def load(name):
     return graph
 ```
 
-Eg. Buildings
-<img src={useBaseUrl('/img/user/boston_buildings.png')} alt="drawing" width="40%" /> 
-
-Eg. Road network
-<img src={useBaseUrl('/img/user/boston_road_network.png')} alt="drawing" width="40%" /> 
+Eg. Buildings            |  Eg. Road network
+:-------------------------:|:-------------------------:
+|<div style={{textAlign: 'center'}}><img src={useBaseUrl('/img/user/boston_buildings.png')} alt="drawing" width="80%" /> </div> | <div style={{textAlign: 'center'}}> <img src={useBaseUrl('/img/user/boston_road_network.png')} alt="drawing" width="80%" /> </div>|
 
 
 ## OD matrix

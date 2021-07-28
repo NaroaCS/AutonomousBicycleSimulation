@@ -5,8 +5,11 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Architecture
 
-The core of the simulator is composed of a discrete event-based engine that manages every activity carried out by the agents during their life-cycle using a priority event queue, ordered by time.  The main building blocks of the simulator are the following: 
+The core of the simulator is composed of a discrete event-based engine that manages every activity carried out by the agents during their life-cycle using a priority event queue, ordered by time.  The main building blocks of the simulator are the following:
+
+<div style={{textAlign: 'center'}}>
 <img src={useBaseUrl('/img/developer/Architecture-1.png')} alt="drawing" width="60%" /> 
+</div>
 
 The event-based engine is at the core of the simulator and is fed by events produced by the agents. Any entity that can interact with or produce events is considered to be an agent. 
 During the simulation execution, events are handled sequentially, in chronological order. Whenever any agent does an action or takes a decision, it generates and inserts new events into the priority queue.
@@ -20,7 +23,7 @@ The workflow of the simulator is described as follows: initially, Simpy's enviro
 ## Geospatial data
 The geospatial information is provided by the <code>geospatial data</code> module, which contains a) the road graph, b) buildings data, and c) geospatial indexing system. Among these, only the road graph is strictly necessary to perform the simulation. Buildings data is optional, as it is used to generate users' origin and destination locations inside the buildings. This process yields realistic locations and avoids geographical obstacles such as highways or rivers. The geospatial indexing system is also optional, as it is used for the demand prediction and rebalancing manager, explained more in detail in <code>Demand Prediction</code> and <code>Rebalancing</code>. 
 
-Geospatial data was obtained using OpenStreetMap **[OpenStreetMap](https://www.openstreetmap.org/)** services. Given the bounding box of the city under study, OpenStreetMap <code>highway</code> tag is queried, downloaded, and converted into a directed and weighted graph, denoted as road network from this point onward. 
+Geospatial data was obtained using **[OpenStreetMap](https://www.openstreetmap.org/)** services. Given the bounding box of the city under study, OpenStreetMap <code>highway</code> tag is queried, downloaded, and converted into a directed and weighted graph, denoted as road network from this point onward. 
 
 ## Routing Manager
 The routing manager is in charge of choosing the most appropriate route (usually the shortest path) to transport people and vehicles around the urban space. This is a critical service and needs to be computed fast and with high resolution to yield results as close to reality. For the task of routing in road networks, an optimized fork **[fork](https://github.com/imartinezl/pandana.git)** of the **[Pandana](http://udst.github.io/pandana/)** Python library was implemented, as it uses contraction hierarchies (CH) to calculate super-fast travel accessibility metrics and shortest paths. The numerical code is in C++. 
@@ -37,6 +40,8 @@ The contraction hierarchies algorithm is a speed-up technique for finding the sh
 The charging manager, the rebalancing manager, and the demand prediction modules will be discussed in greater depth under each mode of transportation. 
 
 
+
+**References** 
 
 [1] Matloff, N., 2008. Introduction to discrete-event simulation and the simpy language. Davis, CA. Dept of Computer Science. University of California at Davis. Retrieved on August, 2(2009), pp.1-33.
 
