@@ -5,6 +5,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # Autonomous system
 
+## Processes
+
 The autonomous bike process has three main sub-routines: a) user call request, b) battery management, and c) rebalancing management.
 
 The user call sub-routine is very similar to the one in the station-based system, except that the user does not walk to the station, but rather the bike drives autonomously to the user location.

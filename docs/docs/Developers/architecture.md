@@ -25,6 +25,12 @@ The geospatial information is provided by the <code>geospatial data</code> modul
 
 Geospatial data was obtained using **[OpenStreetMap](https://www.openstreetmap.org/)** services. Given the bounding box of the city under study, OpenStreetMap <code>highway</code> tag is queried, downloaded, and converted into a directed and weighted graph, denoted as road network from this point onward. 
 
+## User demand data
+
+:::danger Here or in a doc for setup and init?
+:::
+The demand considered for the simulation is based on  **[Bluebikes](https://www.bluebikes.com/system-data)** public bike-sharing system usage data. The user generation process takes advantage of this historical usage data and the buildings' spatial data. Buildings data is used to generate users' origin and destination locations inside the buildings.  This process yields realistic locations and avoids geographical obstacles such as highways or rivers. The impact of variations in the demand was analyzed by repeating the simulations with a randomized distribution of the scattering of the origins and destinations in buildings within 300 m around stations.
+
 ## Routing Manager
 The routing manager is in charge of choosing the most appropriate route (usually the shortest path) to transport people and vehicles around the urban space. This is a critical service and needs to be computed fast and with high resolution to yield results as close to reality. For the task of routing in road networks, an optimized fork **[fork](https://github.com/imartinezl/pandana.git)** of the **[Pandana](http://udst.github.io/pandana/)** Python library was implemented, as it uses contraction hierarchies (CH) to calculate super-fast travel accessibility metrics and shortest paths. The numerical code is in C++. 
 

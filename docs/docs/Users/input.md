@@ -38,16 +38,36 @@ Eg. Buildings            |  Eg. Road network
 |<div style={{textAlign: 'center'}}><img src={useBaseUrl('/img/user/boston_buildings.png')} alt="drawing" width="80%" /> </div> | <div style={{textAlign: 'center'}}> <img src={useBaseUrl('/img/user/boston_road_network.png')} alt="drawing" width="80%" /> </div>|
 
 
-## OD matrix
+## User demand
 
-:::danger TODO
+The user demand data must be in a <code>.csv</code> format that has the following colums for each user: 
+
+* "start_lat"
+* "start_lon"
+* "target_lat"
+* "target_lon" 
+* "start_time" elapsed -> # / 60  # departure time ??
+* "target_time" Do we need it ? 
+
+:::danger Review
 :::
+
+This <code>.csv</code>  must be saved under the <code>data </code> folder. The name of the .csv must be specified in <code>main.py</code>:
+
+```
+users_path = os.path.join("data", "user_trips.csv")
+```
+
+The demand considered for the simulation is based on **[Bluebikes](https://www.bluebikes.com/system-data)**  public bike-sharing system usage data. The user generation process takes advantage of this historical usage data and the buildings' spatial data. Buildings data is used to generate users' origin and destination locations inside the buildings, scattering users in buildings 300 m around stations. This process can be found <code>UserGeneration.py</code> under the folder <code>Preprocessing</code>.
 
 ## Stations -> alternatives (?)
 :::danger TODO
 :::
 
 ## Config.js
+
+:::danger Remove Magic?
+:::
 
 This is the file where you will set the configuration of the simulations. This structure contains all the config from the three systems (SB= Station-based, DL= Dockless, AUT= Autonomous): 
 
