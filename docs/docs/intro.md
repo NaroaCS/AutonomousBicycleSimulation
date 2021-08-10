@@ -1,6 +1,7 @@
 ---
 sidebar_position: 1
 ---
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # About
 
@@ -17,6 +18,10 @@ Rethinking cities is now more imperative than ever, as society faces global chal
 At the City Science group, we envision the cities of the future to be "human-centric", being composed of dense and diverse districts where people can walk or bike from home to school, work, or even shopping. In this new car-less scenario, shared and autonomous micro-mobility systems like the **[MIT Autonomous Bicycle](https://www.media.mit.edu/projects/AutonomousBicycleProject/overview/)** would work either as a mobility option for short commuting distances or as first- or last-mile solutions in connection to mass transit. 
 
 An autonomous bicycle-sharing system would combine the most relevant benefits of vehicle sharing, electrification, autonomy, and micro-mobility, increasing the efficiency and convenience of bicycle-sharing systems and incentivizing more people to bike and enjoy their cities in an environmentally friendly way.  Users will be able to call for a bicycle trough an app and a bicycle will drive autonomously to wherever they are. Then, it can be ridden just like a regular bike and once the trip is complete, it will go back to autonomous mode either to pick up its next user, to a charging station, or head towards where demand is predicted to occur.
+
+
+<div style={{textAlign: 'center'}}><img src={useBaseUrl('/img/outdoor-rear-view.jpg')} alt="picture rear" width="40%" /> </div> 
+<div style={{textAlign: 'center'}}> <img src={useBaseUrl('/img/outdoor-side-view.jpg')} alt="picture side" width="40%" /> </div>
 
 ## About this simulator
 
