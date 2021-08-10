@@ -101,7 +101,9 @@ The first constraint limits the number of bikes supplied by each cell $i$ and th
 
 **Figure:** Bike rebalancing transportation problem: minimize the global transport costs between a set of supply points and a set of demand points. $T_{i,j}\geqslant0$ represents the number of bikes transported from supply point $i$ (with $B_{i}\geqslant0$ bikes available) to demand point $j$ (that requires $D_{j}\geqslant0$ bikes).
     
-
+:::danger TODO
+Aren't we missing the Charing Manager?
+:::
 
 
 **References**

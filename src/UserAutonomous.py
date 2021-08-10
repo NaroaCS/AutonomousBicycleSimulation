@@ -30,10 +30,10 @@ class UserAutonomous:
         self.bike_location = Location()
         self.time_wait = None
         self.time_ride = None
-        self.magic_bike = False
+        self.instant_bike = False
 
         self.WALKING_SPEED = config["WALKING_SPEED"] / 3.6  # m/s
-        self.MAGIC_BETA = config["MAGIC_BETA"] # %
+        self.INSTANT_BETA = config["INSTANT_BETA"] # %
 
     @classmethod
     def reset(cls):
@@ -79,9 +79,9 @@ class UserAutonomous:
 
         if self.bike_id is None:
             rand_number = np.random.randint(100)
-            if rand_number <= self.MAGIC_BETA:
-                self.magic_bike = True
-                self.bike_id, bike_location = self.call_autonomous_magic_bike(self.location)
+            if rand_number <= self.INSTANT_BETA:
+                self.instant_bike = True
+                self.bike_id, bike_location = self.call_autonomous_instant_bike(self.location)
 
         if self.bike_id is None:
             logging.info("[%.2f] User %d will not make the trip" % (self.env.now, self.id))
@@ -91,7 +91,7 @@ class UserAutonomous:
         logging.info("[%.2f] User %d was assigned the autonomous bike %d" % (self.env.now, self.id, self.bike_id))
 
         # 3-Wait for autonomous bike
-        yield self.env.process(self.autonomous_drive(self.magic_bike))
+        yield self.env.process(self.autonomous_drive(self.instant_bike))
 
         self.bike_location = bike_location
         self.time_wait = self.env.now - self.departure_time
@@ -114,14 +114,14 @@ class UserAutonomous:
         # 8-Save state
         self.save_user_trip()
 
-    def autonomous_drive(self, magic=False, rebalancing=False, liberate=False, charge=False):
-        yield self.env.process(self.ui.autonomous_drive(self.bike_id, self.location, self.id, magic, rebalancing, liberate, charge))
+    def autonomous_drive(self, instant=False, rebalancing=False, liberate=False, charge=False):
+        yield self.env.process(self.ui.autonomous_drive(self.bike_id, self.location, self.id, instant, rebalancing, liberate, charge))
 
     def call_autonomous_bike(self, location):
         return self.ui.call_autonomous_bike(location)
 
-    def call_autonomous_magic_bike(self, location):
-        return self.ui.call_autonomous_magic_bike(location)
+    def call_autonomous_instant_bike(self, location):
+        return self.ui.call_autonomous_instant_bike(location)
 
     def charge_bike(self):
         yield self.env.process(self.ui.bike_charge(self.bike_id))
@@ -154,6 +154,6 @@ class UserAutonomous:
         self.user_trip.set("bike_lon", self.bike_location.lon)
         self.user_trip.set("bike_lat", self.bike_location.lat)
 
-        self.user_trip.set("magic_bike", self.magic_bike)
+        self.user_trip.set("instant_bike", self.instant_bike)
 
         self.results.add_user_trip(self.user_trip)

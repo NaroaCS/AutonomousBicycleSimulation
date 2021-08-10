@@ -34,8 +34,8 @@ if MODE == 0:
         "WALK_RADIUS": [100,300,500,750,1000,1500],
         "RIDING_SPEED": [5,8,10,12,15,20],
         "WALKING_SPEED": [3,4,5,6,7,8],
-        "MAGIC_BETA": [0,50,80,90,98,100],
-        "MAGIC_MIN_BIKES": [0,1,2,3,4,5],
+        "INSTANT_BETA": [0,50,80,90,98,100],
+        "INSTANT_MIN_BIKES": [0,1,2,3,4,5],
         "USER_TRIPS_FILE": [0,1,2,3,4]
     }
 
@@ -51,7 +51,7 @@ if MODE == 0:
                     config[ky] = vy
                     
                     # minor fix for station based
-                    config["MAGIC_MIN_DOCKS"] = config["MAGIC_MIN_BIKES"]      
+                    config["INSTANT_MIN_DOCKS"] = config["INSTANT_MIN_BIKES"]      
 
                     grid.append(config)
 

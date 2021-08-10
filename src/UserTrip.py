@@ -19,8 +19,8 @@ class UserTrip:
         "destination_visited_stations",
         "origin_station",
         "destination_station",
-        "magic_bike",
-        "magic_dock",
+        "instant_bike",
+        "instant_dock",
         "bike_lon",
         "bike_lat",
     ]

@@ -34,15 +34,15 @@ class UserStation:
         self.origin_visited_stations = None
         self.destination_visited_stations = None
 
-        self.magic_bike = 0
-        self.magic_dock = 0
+        self.instant_bike = 0
+        self.instant_dock = 0
 
         self.time_walk_origin = None
         self.time_ride = None
         self.time_walk_destination = None
 
         self.WALKING_SPEED = config["WALKING_SPEED"] / 3.6
-        self.MAGIC_BETA = config["MAGIC_BETA"]
+        self.INSTANT_BETA = config["INSTANT_BETA"]
 
     @classmethod
     def reset(cls):
@@ -86,17 +86,17 @@ class UserStation:
             if station_id is None:
                 if any_walkable:
                     rand_number = np.random.randint(100)
-                    if rand_number <= self.MAGIC_BETA:
-                        logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.id))
-                        (station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station,) = self.ui.magic_bike(self.location, visited_stations)
+                    if rand_number <= self.INSTANT_BETA:
+                        logging.info("[%.2f] User %d  made a instant bike request" % (self.env.now, self.id))
+                        (station_id, station_location, visited_stations, self.instant_bike_id, self.instant_origin_station,) = self.ui.instant_bike(self.location, visited_stations)
                     if station_id is None:
                         logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
                         self.status = "no_bikes"
                         return self.save_user_trip()
-                    self.magic_bike += 1
-                    # self.magic_dock = 0
-                    self.magic_destination_station = station_id
-                    self.save_bike_trip(magic_bike=True, magic_dock=False)
+                    self.instant_bike += 1
+                    # self.instant_dock = 0
+                    self.instant_destination_station = station_id
+                    self.save_bike_trip(instant_bike=True, instant_dock=False)
                 else:
                     logging.info("[%.2f] User %d had no walkable stations" % (self.env.now, self.id))  # TODO: review
                     logging.info("[%.2f] User %d  will not make the trip" % (self.env.now, self.id))
@@ -107,9 +107,9 @@ class UserStation:
             yield self.env.process(self.unlock_bike(station_id))
             # if not self.event_interact_bike.triggered:
             #     rand_number = np.random.randint(100)
-            #     if rand_number <= self.MAGIC_BETA:
-            #         logging.info("[%.2f] User %d  made a magic bike request" % (self.env.now, self.id))
-            #         station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_bike(self.location, visited_stations)
+            #     if rand_number <= self.INSTANT_BETA:
+            #         logging.info("[%.2f] User %d  made a instant bike request" % (self.env.now, self.id))
+            #         station_id, station_location, visited_stations, self.instant_bike_id, self.instant_origin_station = self.ui.instant_bike(self.location, visited_stations)
 
         self.origin_station = station_id
         self.origin_visited_stations = ";".join(map(str, visited_stations))
@@ -122,14 +122,14 @@ class UserStation:
             station_id, station_location, visited_stations = self.select_end_station(self.destination, visited_stations)
             if station_id is None:
                 rand_number = np.random.randint(100)
-                if rand_number <= self.MAGIC_BETA:
-                    logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.id))
-                    (station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station,) = self.ui.magic_dock(self.destination, visited_stations)
+                if rand_number <= self.INSTANT_BETA:
+                    logging.info("[%.2f] User %d  made a instant dock request" % (self.env.now, self.id))
+                    (station_id, station_location, visited_stations, self.instant_bike_id, self.instant_origin_station,) = self.ui.instant_dock(self.destination, visited_stations)
                 if station_id is not None:
-                    # self.magic_bike = 0
-                    self.magic_dock += 1
-                    self.magic_destination_station = station_id
-                    self.save_bike_trip(magic_bike=False, magic_dock=True)
+                    # self.instant_bike = 0
+                    self.instant_dock += 1
+                    self.instant_destination_station = station_id
+                    self.save_bike_trip(instant_bike=False, instant_dock=True)
                 else:
                     logging.info("[%.2f] User %d  will end at a station out of walkable distance" % (self.env.now, self.id))
                     (station_id, station_location, visited_stations,) = self.ui.notwalkable_dock(self.destination, visited_stations)
@@ -142,9 +142,9 @@ class UserStation:
             yield self.env.process(self.lock_bike(station_id))
             # if station_id is not None and not self.event_interact_bike.triggered:
             #     rand_number = np.random.randint(100)
-            #     if rand_number <= self.MAGIC_BETA:
-            #         logging.info("[%.2f] User %d  made a magic dock request" % (self.env.now, self.id))
-            #         station_id, station_location, visited_stations, self.magic_bike_id, self.magic_origin_station = self.ui.magic_dock(self.destination, visited_stations)
+            #     if rand_number <= self.INSTANT_BETA:
+            #         logging.info("[%.2f] User %d  made a instant dock request" % (self.env.now, self.id))
+            #         station_id, station_location, visited_stations, self.instant_bike_id, self.instant_origin_station = self.ui.instant_dock(self.destination, visited_stations)
 
         self.time_ride = self.env.now - self.time_walk_origin - self.departure_time
         # print("[%.2f] User %d riding time: %.4f = %.4f - %.4f - %.4f" % (self.env.now, self.id,self.time_ride, self.env.now , self.time_walk_origin , self.departure_time ))
@@ -225,18 +225,18 @@ class UserStation:
         self.user_trip.set("destination_station", self.destination_station)
         self.user_trip.set("origin_visited_stations", self.origin_visited_stations)
         self.user_trip.set("destination_visited_stations", self.destination_visited_stations)
-        self.user_trip.set("magic_bike", self.magic_bike)
-        self.user_trip.set("magic_dock", self.magic_dock)
+        self.user_trip.set("instant_bike", self.instant_bike)
+        self.user_trip.set("instant_dock", self.instant_dock)
         self.results.add_user_trip(self.user_trip)
 
-    def save_bike_trip(self, magic_dock, magic_bike):
-        self.bike_trip.set("bike_id", self.magic_bike_id)
+    def save_bike_trip(self, instant_dock, instant_bike):
+        self.bike_trip.set("bike_id", self.instant_bike_id)
         self.bike_trip.set("user_id", self.id)
         self.bike_trip.set("mode", 0)
         self.bike_trip.set("trip_type", 0)
         self.bike_trip.set("time_departure", self.departure_time, 0)
-        self.bike_trip.set("magic_bike", magic_bike)
-        self.bike_trip.set("magic_dock", magic_dock)
-        self.bike_trip.set("origin_station", self.magic_origin_station)
-        self.bike_trip.set("destination_station", self.magic_destination_station)
+        self.bike_trip.set("instant_bike", instant_bike)
+        self.bike_trip.set("instant_dock", instant_dock)
+        self.bike_trip.set("origin_station", self.instant_origin_station)
+        self.bike_trip.set("destination_station", self.instant_destination_station)
         self.results.add_bike_trip(self.bike_trip)
