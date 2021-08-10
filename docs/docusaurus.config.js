@@ -13,13 +13,13 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'MIT Media Lab - City Science', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  projectName: 'Micro-mobility ABM', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'Micro-mobility ABM',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       items: [
         {
@@ -48,7 +48,7 @@ module.exports = {
           ],
         }
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Micro-mobility ABM, Inc. Built with Docusaurus.`,
     },
     prism: {
       theme: lightCodeTheme,

@@ -4,33 +4,30 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to use',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Open Source',
+    Svg: require('../../static/img/undraw_open_source_1qxw.svg').default,
     description: (
       <>
-        Lorem ipsum
       </>
     ),
   },
   {
-    title: 'Follow the tutorials',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Easy to use',
+    Svg: require('../../static/img/undraw_researching_22gp.svg').default,
     description: (
       <>
-        Lorem Ipsum
-        ahead and move your docs into the <code>docs</code> directory.
       </>
     ),
   },
   {
     title: 'Develop your own code',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('../../static/img/undraw_programmer_imem.svg').default,
     description: (
       <>
-       Lorem ipsum
       </>
     ),
   },
+
 ];
 
 function Feature({Svg, title, description}) {
