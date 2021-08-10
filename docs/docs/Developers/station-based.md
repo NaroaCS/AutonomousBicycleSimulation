@@ -32,6 +32,6 @@ The configuration parameters that are specific for station-based systems are:
 | "WALK_RADIUS" | Maximum distance that a user is willing to walk | [m] | 
 | "RIDING_SPEED" | Average bike riding speed of users | [km/h] | 
 | "WALKING_SPEED" | Walking speed of users | [km/h] | 
-| "MAGIC_BETA" | Probability of a user getting an instant rebalancing; it reflects the amount of rebalancing | [0-1] | 
-| "MAGIC_MIN_BIKES" | Minimum number of bikes that a station should have for the rebalancing action to remove a bike from that station | [-] | 
-| "MAGIC_MIN_DOCKS" | Minimum number of docks that a station should have for the rebalancing action to insert a bike in that station | [-] |
+| "INSTANT_BETA" | Probability of a user getting an instant rebalancing; it reflects the amount of rebalancing | [0-1] | 
+| "INSTANT_MIN_BIKES" | Minimum number of bikes that a station should have for the rebalancing action to remove a bike from that station | [-] | 
+| "INSTANT_MIN_DOCKS" | Minimum number of docks that a station should have for the rebalancing action to insert a bike in that station | [-] |
