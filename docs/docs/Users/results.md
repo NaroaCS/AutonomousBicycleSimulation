@@ -5,7 +5,7 @@ label: Results
 
 # Reading the results 
 
-The results are stored in the <code>results</code> folder. The subfolder will the results of an specific simulation will have the date and time of the moment when it was launched as a name in <code>%Y-%m-%d_%H-%M-%S</code> format.
+The results are stored in the <code>results</code> folder. The subfolder with the results of an specific simulation will have the date and time of the moment when it was launched as a name in <code>%Y-%m-%d_%H-%M-%S</code> format.
 
 For each simulation there are four files that are saved: <code>user_trips.csv</code>, <code>bike_trips.csv</code>, <code>config.json</code> and <code>app.log</code>.
 
