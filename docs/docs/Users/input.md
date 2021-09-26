@@ -10,28 +10,9 @@ In our case, we modeled autonomous bicycles, the used Boston-Cambridge as the sc
 ## GIS data
 
 You will need GIS data of your chosen city/area: 
-* A shapefile containing the buildings 
-:::danger TODO
-Add how we got it
-:::
+* A shapefile containing the buildings: it can be downloaded using the **[OSMbuildings](https://osmbuildings.org/)** service.
  
-* a .pkl and .h5 file containing the roads
-
-:::danger TODO
-I don't have these files -> check how they're generated
-:::
-
-```shell
-@staticmethod
-def load(name):
-    path = os.path.join("data", "graph")
-    file_pkl = os.path.join(path, name + ".pkl")
-    with open(file_pkl, "rb") as f:
-        graph = pickle.load(f)
-    file_h5 = os.path.join(path, name + ".h5")
-    graph.network = pdna.Network.from_hdf5(file_h5)
-    return graph
-```
+* A shapefile containing the roads: it can be downloaded using the **[Overpass](https://overpass-turbo.eu/)** API.
 
 Buildings            |   Road network
 :-------------------------:|:-------------------------:
@@ -42,15 +23,12 @@ Buildings            |   Road network
 
 The user demand data must be in a <code>.csv</code> format that has the following colums for each user: 
 
-* "start_lat"
-* "start_lon"
-* "target_lat"
-* "target_lon" 
-* "start_time" elapsed -> # / 60  # departure time ??
-* "target_time" Do we need it ? 
+* *start_lat* : latitude at the start location, e.g. 42.36114.
+* *start_lon* : longitude at the start location, e.g. -71.05703.
+* *target_lat* : latitude at the target location, e.g. 42.37003.
+* *target_lon* : longitude at the target location, e.g. -71.04555.
+* *start_time* : trip departure time in seconds, relative to the simulation start, e.g. 3600 means it starts 1 hour from the simulation start.
 
-:::danger Review
-:::
 
 This <code>.csv</code>  must be saved under the <code>data </code> folder. The name of the .csv must be specified in <code>main.py</code>:
 
@@ -61,9 +39,7 @@ users_path = os.path.join("data", "user_trips.csv")
 The demand considered for the simulation is based on **[Bluebikes](https://www.bluebikes.com/system-data)**  public bike-sharing system usage data. The user generation process takes advantage of this historical usage data and the buildings' spatial data. Buildings data is used to generate users' origin and destination locations inside the buildings, scattering users in buildings 300 m around stations. This process can be found <code>UserGeneration.py</code> under the folder <code>Preprocessing</code>. <code>UserGeneration.py</code> is not called every time the simulation runs because it is a time consuming process, but it can be run manually to create a new user demand file.
 
 ## Stations
-:::danger Review
-If users only want to simulate dockless, do they still need stations? Or should we add a random function that just leaves them at any node?
-:::
+
 
 The station data must be in a <code>.csv</code> format that has the following colums for each station:
 
@@ -79,12 +55,13 @@ stations_path = os.path.join("data", "bluebikes_stations_07_2020.csv")
 ```
 This file is used in <code>BikeGeneration.py</code> under the folder <code>Preprocessing</code>. This code is automatically called for each simulation. In the three systems bikes are generated randomly at stations, with a probability proportional to their capacity.
 
-:::info Review!
-In the station-based system, the max number of bikes is limited to be smaller than the maximum number of docks in the system. In the dockless and the autonomous sytems, the docks are sized proportionally to the fleet size considered in that simulation.
+:::note Note
+In the station-based system, the total number of bikes is limited to be smaller than the total number of docks in the system. In the dockless and the autonomous systems, bikes are initially located next to stations, in a quantity proportional to the number of docks available at each station, and considering the fleet size considered in that simulation.
 :::
 
-
-
+:::note Note
+In the dockless system, stations data is only used to locate the bikes at the beginning of the simulation. A different function could be used (random, based on demand, etc.) to generate the initial locations. For the moment, stations data is considered.
+:::
 
 ## Configuration
 

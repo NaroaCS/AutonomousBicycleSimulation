@@ -62,10 +62,11 @@ The structure of the <code>bike_trips.csv</code> file can be found in the <code>
 | destination_lon | Longitude of the destination point | SB, DL, AUT |
 | destination_lat| Latitude of the destination point | SB, DL, AUT |
 | battery_in| Battery at the beginning of the trip/process | AUT |
-| battery_out| Battery at the beginning of the trip/process  | AUT |
+| battery_out| Battery at the end of the trip/process  | AUT |
 
-:::danger Review
+:::note Review
 The charging trips have just one line? or do we also save the battery at arrival to the station?
+Yes, we only do save the battery at the end of the trip. We could include another column to save these three values: at the beginning of the process, at the charging station arrival, and at the end of the process (which in this case should be full battery 100%).
 ::: 
 
 ## Configuration
@@ -74,8 +75,10 @@ The <code>config.json</code> file saves the parameters that were used when runni
 
 ## Logging
 
-The <code>app.log</code> file saves the log of the actions 
+The <code>app.log</code> file saves the log of the actions. 
 
-:::danger Review
+:::note Review
 Do we have the app.log active? How do we activate/deactivate?
+The logging can be activated and deactivated on the Results.py file, commenting out the *self.setup_log()* command.
+We could take this parameter up to the SimulationEngine to be easier to change.
 ::: 

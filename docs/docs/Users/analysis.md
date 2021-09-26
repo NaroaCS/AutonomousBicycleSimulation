@@ -5,6 +5,6 @@ label: Analysis
 
 # Analysis and visualization
 
-:::danger TODO
-Iñigo?
+:::danger
+WORK IN PROGRESS
 :::

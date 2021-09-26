@@ -27,17 +27,12 @@ Geospatial data was obtained using **[OpenStreetMap](https://www.openstreetmap.o
 
 ## User demand data
 
-:::danger Here or in a doc for setup and init?
-:::
 The demand considered for the simulation is based on  **[Bluebikes](https://www.bluebikes.com/system-data)** public bike-sharing system usage data. The user generation process takes advantage of this historical usage data and the buildings' spatial data. Buildings data is used to generate users' origin and destination locations inside the buildings.  This process yields realistic locations and avoids geographical obstacles such as highways or rivers. The impact of variations in the demand was analyzed by repeating the simulations with a randomized distribution of the scattering of the origins and destinations in buildings within 300 m around stations.
 
 ## Routing Manager
 The routing manager is in charge of choosing the most appropriate route (usually the shortest path) to transport people and vehicles around the urban space. This is a critical service and needs to be computed fast and with high resolution to yield results as close to reality. For the task of routing in road networks, an optimized fork **[fork](https://github.com/imartinezl/pandana.git)** of the **[Pandana](http://udst.github.io/pandana/)** Python library was implemented, as it uses contraction hierarchies (CH) to calculate super-fast travel accessibility metrics and shortest paths. The numerical code is in C++. 
 
-:::danger TODO
-    Review the link to the fork
-:::
- 
+
 
 ## Contraction Hierarchies
 The contraction hierarchies algorithm is a speed-up technique for finding the shortest path in a graph, and it consists of two phases: preprocessing and query. To achieve its speed-up, CH relies on the fact that road networks do not change frequently. Given a directed, weighted graph $G(V,E,C)$ with vertex set $V$, edge set $E$ and cost function $C: E \rightarrow \mathbb{R}^+$, the goal is to preprocess $G$ in such a way that the subsequent shortest path queries specified by a source node $s$ and a target node $t$ can be answered very quickly. In the preprocessing phase, $G$ is augmented by additional edges $E'$, which are shortcuts that represent the shortest paths in the original graph $G$. In addition, a natural number is assigned to each node $v \in V$, called $level(v)$ [2]. In the query phase, a bidirectional Dijkstra algorithm is applied on the augmented graph $G^\star$. Amongst all nodes settled from the Dijkstra, the one where the added distances from $s$ and to $t$ are minimal determines the shortest path from $s$ to $t$. The query is highly efficient because the modified Dijkstra can discard the majority of the nodes and edges of $G^\star$ while visiting only a small portion of the graph $G^\star$[2].
