@@ -42,7 +42,7 @@ The structure of the <code>user_trips.csv</code> file can be found in the <code>
 
 ## Bike trips 
 
-The structure of the <code>bike_trips.csv</code> file can be found in the <code>BikeTrip.py</code> under the folder <code>src</code>. The format is the same for the three types of system SB= Station-based, DL= Dockless, AUT= Autonomous. This output file contains the following colums:
+The structure of the <code>bike_trips.csv</code> file can be found in the <code>BikeTrip.py</code> under the folder <code>src</code>. The format is the same for the three types of system SB= Station-based, DL= Dockless, AUT= Autonomous. This output file contains the following columns:
 
 | Parameter        |      Description     |  Type of system |
 | -------------: | :----------- |:-----: |

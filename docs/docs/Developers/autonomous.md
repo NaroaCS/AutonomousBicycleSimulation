@@ -50,8 +50,8 @@ There are two requirements for providing an autonomous BSS fleet with such rebal
 
 The demand prediction module informs the rebalancing manager where users' demand will occur in the near future.The demand function $f$ is a mapping from the continuous 2D plane space to a scalar in the natural numbers: $f: \mathbb{R}^2 \rightarrow \mathbb{N}$. To facilitate the demand prediction, first the urban 2D space is discretized into a finite number of cells. Cells can be of any shape and size. For this implementation, Uber's hexagonal hierarchical spatial index (H3) [1] with resolution level 8 was selected, yielding 180 hexagonal cells.
 
-:::danger Review
-Do we have the hex cells in the code?
+:::note Review
+Do we have the hex cells in the code?: no, this is part of the demand prediction module
 :::
 
 A demand prediction model for each cell separately fails to utilize hidden correlations between cells to enhance prediction performance. Therefore, for the task of demand prediction, a Graph Convolutional Neural Networks with Data-driven Graph Filter (GCNN-DDGF) [2] was applied. The main limitation of a GCNN [3] is that its performance relies on a pre-defined graph structure. The GCNN-DDGF model, on the contrary, can learn hidden heterogeneous pairwise correlations between grid cells to predict cell-level hourly demand in a large-scale bike-sharing network. The GCNN-DDGF model is enhanced with a Negative Binomial probabilistic neuron at the last layer of the neural topology.
@@ -65,8 +65,8 @@ This performance metric is very close to the results obtained by the original im
 The demand prediction module alone is not enough to generate an efficient rebalancing algorithm. A routing optimization algorithm is necessary to minimize the global transport costs between a set of supply points and a set of demand points. %In this section, the selected routing optimization algorithm is presented. 
 $T_{i,j}\geqslant0$ represents the number of bikes transported from supply point $i$ (with $B_{i}\geqslant0$ bikes available) to demand point $j$ (that requires $D_{j}\geqslant0$ bikes). Taking into account the number of bikes in each cell $B_{i}$, a unbalanced Hitchcock–Koopmans transportation problem is solved to yield the optimal flow of bikes between each pair of cells.
 
-:::danger Review
-Do we have the hex cells in the code? Review Figure XX below
+:::note Review
+Do we have the hex cells in the code? Review Figure XX below: the figure below just represent the transition matrix between two cells. It does not matter if the grid is rectangular or hexagonal. The rebalancing optimization works perfectly in every case.
 :::
 
 The urban area is subdivided into a grid of $n$ cells, label these $i=1,...,n$. The grid can be rectangular, square, or hexagonal. For this application, Uber's Hexagonal Hierarchical Spatial Index (H3) [1] with resolution level 8 was selected as illustrated on Figure XX. The transportation cost between two cells is denoted as $C_{i,j}$ and it is proportional to the road distance from cell $i$ to cell $j$. The rebalancing transportation problem is to get bikes from supply cells to demand cells. The goal is to minimize the total cost: 
@@ -101,8 +101,8 @@ The first constraint limits the number of bikes supplied by each cell $i$ and th
 
 **Figure:** Bike rebalancing transportation problem: minimize the global transport costs between a set of supply points and a set of demand points. $T_{i,j}\geqslant0$ represents the number of bikes transported from supply point $i$ (with $B_{i}\geqslant0$ bikes available) to demand point $j$ (that requires $D_{j}\geqslant0$ bikes).
     
-:::danger TODO
-Aren't we missing the Charing Manager?
+:::note REVIEW
+Aren't we missing the Charging Manager?: No, the charging manager was not implemented, since the charging process was very simple in the end: Whenever a bike's battery goes below the minimum threshold, the changing process is triggered.
 :::
 
 
