@@ -17,7 +17,8 @@ class BikeAutonomous:
         self.ui = ui
         self.results = results
 
-        self.bike_drive_trip = BikeTrip()
+        self.bike_ride_trip=BikeTrip() #NEW
+        self.bike_drive_trip = BikeTrip() 
         self.bike_charge_trip = BikeTrip()
         self.bike_rebalance_trip = BikeTrip()
 
@@ -30,7 +31,7 @@ class BikeAutonomous:
 
         # We will assume that all the bikes start with a full charge
         self.BATTERY_MIN_LEVEL = config["BATTERY_MIN_LEVEL"]
-        self.BATTERY_CAPACITY = 100.0
+        self.BATTERY_CAPACITY = 100.0 
         self.BATTERY_DISCHARGE_RATE = self.BATTERY_CAPACITY / (config["BATTERY_AUTONOMY"] * 1000)  # %/meter
         self.BATTERY_CHARGE_RATE = self.BATTERY_CAPACITY / (config["BATTERY_CHARGE_TIME"] * 3600)  # %/second  (This is 5h for 100% charge)
         self.BATTERY_LEVEL = np.random.randint(self.BATTERY_MIN_LEVEL, self.BATTERY_CAPACITY)
@@ -76,10 +77,26 @@ class BikeAutonomous:
             return True
 
     def ride(self, destination):
+
+        # NEW: Data before
+        self.battery_in = self.battery.level
+        self.location_origin = self.location
+        self.departure_time = self.env.now
+
         distance = self.dist(self.location, destination)
         time = distance / self.RIDING_SPEED
         yield self.env.timeout(time)
         self.location = destination
+
+        ##NEW
+        self.battery.discharge(distance)
+        logging.info("[%.2f] Battery level of bike %d: %.2f" % (self.env.now, self.id, self.battery.level))
+
+        # NEW: Data after
+        self.ride_time = self.env.now - self.departure_time
+        self.location_destination = self.location
+        self.battery_out = self.battery.level
+        self.save_bike_ride_trip()
 
     def dist(self, a, b):
         return self.graph.shortest_path_length(a, b)
@@ -203,7 +220,23 @@ class BikeAutonomous:
         self.battery.charge(time)
         logging.info("[%.2f] Bike %d fully charged" % (self.env.now, self.id))
 
-    def save_bike_drive_trip(self, user_id):
+    #NEW
+    def save_bike_ride_trip(self): #NEW #TRIP TYPE 0: user ride !
+        self.bike_ride_trip.set("bike_id", self.id)
+        self.bike_ride_trip.set("mode", 2)
+        self.bike_ride_trip.set("trip_type", 0)
+        self.bike_ride_trip.set("time_departure", self.departure_time, 0)
+        self.bike_ride_trip.set("time_ride", self.ride_time, 0)
+        #
+        self.bike_ride_trip.set("origin_lon", self.location_origin.lon, 5)
+        self.bike_ride_trip.set("origin_lat", self.location_origin.lat, 5)
+        self.bike_ride_trip.set("destination_lon", self.location_destination.lon, 5)
+        self.bike_ride_trip.set("destination_lat", self.location_destination.lat, 5)
+        self.bike_ride_trip.set("battery_in", self.battery_in, 0)
+        self.bike_ride_trip.set("battery_out", self.battery_out, 0)
+        self.results.add_bike_trip(self.bike_ride_trip)
+
+    def save_bike_drive_trip(self, user_id): #TRIP TYPE 1:pickup ride !
         self.bike_drive_trip.set("bike_id", self.id)
         self.bike_drive_trip.set("user_id", user_id)
         self.bike_drive_trip.set("mode", 2)
@@ -224,7 +257,7 @@ class BikeAutonomous:
 
         self.results.add_bike_trip(self.bike_drive_trip)
 
-    def save_bike_charge_trip(self):
+    def save_bike_charge_trip(self): ##TRIP TYPE 2:charge ride !
         self.bike_charge_trip.set("bike_id", self.id)
         # self.bike_charge_trip.set("user_id", self.user_id)
         self.bike_charge_trip.set("mode", 2)
@@ -245,7 +278,8 @@ class BikeAutonomous:
 
         self.results.add_bike_trip(self.bike_charge_trip)
 
-    def save_bike_rebalance_trip(self):
+    def save_bike_rebalance_trip(self): #TRIP TYPE 3: rebalance ride !
+
         self.bike_rebalance_trip.set("bike_id", self.id)
         # self.bike_rebalance_trip.set("user_id", self.user_id)
         self.bike_rebalance_trip.set("mode", 2)

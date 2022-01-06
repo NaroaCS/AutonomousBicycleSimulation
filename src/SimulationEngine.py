@@ -1,5 +1,5 @@
 # LIBRARIES
-from src.RebalancingManager import RebalancingManager
+#from src.RebalancingManager import RebalancingManager
 import simpy
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ from .UserAutonomous import UserAutonomous
 from .DataInterface import DataInterface
 from .Location import Location
 from .Graph import Graph
-from .RebalancingManager import RebalancingManager
+#from .RebalancingManager import RebalancingManager
 from .Results import Results
 
 
@@ -37,7 +37,7 @@ class SimulationEngine:
         else:
             self.graph = graph
         self.ui = DataInterface(self.env, self.graph, self.config)
-        self.rebalancer = RebalancingManager(self.env, self.config, self.graph, self.ui)
+        #self.rebalancer = RebalancingManager(self.env, self.config, self.graph, self.ui)
         self.results = Results(self.config)
 
         self.stations = []
@@ -135,6 +135,6 @@ class SimulationEngine:
             self.ui.set_stations(self.stations)
         self.ui.set_bikes(self.bikes)
 
-        if self.MODE == 2 and self.REBALANCING_EVERY > 0:
-            self.rebalancer.set_bikes(self.bikes)
-            self.rebalancer.start()
+        #if self.MODE == 2 and self.REBALANCING_EVERY > 0:
+        #    self.rebalancer.set_bikes(self.bikes)
+        #    self.rebalancer.start()
