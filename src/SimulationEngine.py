@@ -31,22 +31,26 @@ class SimulationEngine:
         self.stations_data = stations_data
         self.users_data = users_data
 
+        self.MODE = self.config["MODE"]  # 0 for StationBased / 1 for Dockless / 2 for Autonomous
+        self.NUM_BIKES = self.config["NUM_BIKES"]
+        self.REBALANCING_EVERY = self.config["REBALANCING_EVERY"]
+
+
         self.env = simpy.Environment()
         if graph is None:
             self.graph = Graph()
         else:
             self.graph = graph
         self.ui = DataInterface(self.env, self.graph, self.config)
-        self.rebalancer = RebalancingManager(self.env, self.config, self.graph, self.ui)
+
+        if self.MODE == 2 and self.REBALANCING_EVERY > 0:
+            self.rebalancer = RebalancingManager(self.env, self.config, self.graph, self.ui)
+            
         self.results = Results(self.config)
 
         self.stations = []
         self.bikes = []
         self.users = []
-
-        self.MODE = self.config["MODE"]  # 0 for StationBased / 1 for Dockless / 2 for Autonomous
-        self.NUM_BIKES = self.config["NUM_BIKES"]
-        self.REBALANCING_EVERY = self.config["REBALANCING_EVERY"]
 
         self.start()
 
