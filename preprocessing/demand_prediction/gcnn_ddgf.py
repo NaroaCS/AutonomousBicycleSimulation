@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Commented out IPython magic to ensure Python compatibility.
-# %tensorflow_version 1.x
-
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -20,13 +17,12 @@ else:
 
 path = "training_data.csv"
 df_demand = pd.read_csv(path)
-df_demand.columns = ["timebin", "cell", "count"]
+df_demand.columns = ["timebin", "cell", "lon", "lat", "count"]
 
 timebins = pd.unique(df_demand['timebin'])
 stations = pd.unique(df_demand['cell'])
-num_timebins, num_cells, num_counts = df_demand.nunique(axis=0)
+num_timebins, num_cells, num_lon, num_lat, num_counts = df_demand.nunique(axis=0)
 
-# data = pd.pivot(df_demand, index='timebin', columns='start_station_id', values='count')
 demand_count = df_demand['count'].values.reshape((num_cells, num_timebins)).T
 df_demand_count = pd.DataFrame(demand_count, columns=stations).add_prefix('station_')
 
@@ -59,8 +55,6 @@ test_filter = (datebins >= '2019-10-01') & (datebins < '2019-12-31')
 df_train = df[train_filter]
 df_val = df[val_filter]
 df_test = df[test_filter]
-
-df.head(), df.shape
 
 num_input = df.shape[1]
 # num_input = num_cells
@@ -125,12 +119,12 @@ reg_weight = [0, 0, 0] # regularization weights for adjacency matrices L1 loss
 keep = 1 # drop out probability
 
 early_stop_th = 200 # early stopping threshold, if validation RMSE not dropping in continuous 20 steps, break
-training_epochs = 10 # total training epochs
+training_epochs = 10 # 10 total training epochs
 
 # Training
 start_time = datetime.datetime.now()
 
-val_error, predic_res, test_Y, test_error, bestWeightA = gcn.gcnn_ddgf(
+val_error, predic_res, Y_test_pred, test_error, bestWeightA = gcn.gcnn_ddgf(
     hidden_num_layer, reg_weight, 
     num_input, num_output, num_feature, num_horizon, 
     learning_rate, decay, batchsize, 
@@ -141,5 +135,12 @@ val_error, predic_res, test_Y, test_error, bestWeightA = gcn.gcnn_ddgf(
     scaler, 'RMSE')
 
 end_time = datetime.datetime.now()
-val_error
 print('Total training time: ', end_time-start_time)
+
+count_pred = np.round(Y_test_pred[:,:180]).flatten()
+
+datebins = pd.to_datetime(df_demand["timebin"].values, unit='s', utc=True, infer_datetime_format=True).tz_convert(tz='US/Eastern')
+test_filter = (datebins >= '2019-10-01') & (datebins < '2019-12-31')
+df_output = df_demand[test_filter][:count_pred.shape[0]]
+df_output["count_pred"] = count_pred
+df_output.to_csv("testing_data.csv", index=False)
