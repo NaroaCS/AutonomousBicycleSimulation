@@ -50,15 +50,22 @@ There are two requirements for providing an autonomous BSS fleet with such rebal
 
 The demand prediction module informs the rebalancing manager where users' demand will occur in the near future.The demand function $f$ is a mapping from the continuous 2D plane space to a scalar in the natural numbers: $f: \mathbb{R}^2 \rightarrow \mathbb{N}$. To facilitate the demand prediction, first the urban 2D space is discretized into a finite number of cells. Cells can be of any shape and size. For this implementation, Uber's hexagonal hierarchical spatial index (H3) [1] with resolution level 8 was selected, yielding 180 hexagonal cells.
 
-:::note Review
-Do we have the hex cells in the code?: no, this is part of the demand prediction module
-:::
-
 A demand prediction model for each cell separately fails to utilize hidden correlations between cells to enhance prediction performance. Therefore, for the task of demand prediction, a Graph Convolutional Neural Networks with Data-driven Graph Filter (GCNN-DDGF) [2] was applied. The main limitation of a GCNN [3] is that its performance relies on a pre-defined graph structure. The GCNN-DDGF model, on the contrary, can learn hidden heterogeneous pairwise correlations between grid cells to predict cell-level hourly demand in a large-scale bike-sharing network. The GCNN-DDGF model is enhanced with a Negative Binomial probabilistic neuron at the last layer of the neural topology.
     
 The simulation experiments were applied to the city of Boston. The bike-sharing demand dataset includes over 4.2 million bike-sharing transactions between 01/01/2018 and 31/12/2019, which are downloaded from **[Bluebikes](https://www.bluebikes.com/system-data)** Metro Boston's public bike share program. The dataset was split at date 31/09/2019 into the train (01/01/2018-31/09/2019) and test (01/10/2019-21/12/2019) sets and was processed as follows: for each cell, 70080 (2 years x 365 days x 24 hours x 4) 15-minute bike demands were aggregated based on the bike check-out time and start station in transaction records. After preprocessing, as 180 hexagonal cells were considered in this study, a 180 by 70080 matrix was obtained. The input to the model is a window of $W$ data points (each point representing 15 minutes), and the output is computed $P$ data points ahead of time. Finally, the prediction model is invoked every $T$ data points. These three parameters, input window $W$, prediction ahead $P$, and prediction period $T$, were implemented on the simulation so that the rebalancing manager can customize this service. The model performance was evaluated using the Root Mean Square Error (RMSE) as the main criteria. The testing RMSE for the trained GCNN-DDGF model on Boston data was $2.69$. 
 
 This performance metric is very close to the results obtained by the original implementation by Lin et al. [2], with a testing RMSE of $2.12$. The model training task was conducted using Tensorflow, an open-source deep learning neural network library, with Python 3.7.4 in a Ubuntu 18.04 Linux system with 64 GB RAM and GTX 1080 graphics card. 
+
+The procedure that was followed to generate the demand prediction file is the following:
+
+1. Download the historical trip data from **[Bluebikes](https://www.bluebikes.com/system-data)** and save it in a folder ‘bluebikes_data’ within the Preprocessing folder
+
+2. Rscript training_data.R (input bluebikes_data → outputs training_data.csv)
+
+3. python3 gccn_ddgf.py (input training_data.csv → outputs testing_data.csv)
+
+4. Rscript testing_data.R (input testing_data.csv → outputs demand_grid.csv)
+
 
 ## Bike Rebalancing Transportation Problem
 
@@ -101,9 +108,9 @@ The first constraint limits the number of bikes supplied by each cell $i$ and th
 
 **Figure:** Bike rebalancing transportation problem: minimize the global transport costs between a set of supply points and a set of demand points. $T_{i,j}\geqslant0$ represents the number of bikes transported from supply point $i$ (with $B_{i}\geqslant0$ bikes available) to demand point $j$ (that requires $D_{j}\geqslant0$ bikes).
     
-:::note REVIEW
-Aren't we missing the Charging Manager?: No, the charging manager was not implemented, since the charging process was very simple in the end: Whenever a bike's battery goes below the minimum threshold, the changing process is triggered.
-:::
+
+
+
 
 
 **References**

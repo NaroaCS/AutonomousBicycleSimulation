@@ -27,9 +27,15 @@ An autonomous bicycle-sharing system would combine the most relevant benefits of
 
 Due to the uniqueness and radical novelty of introducing autonomous driving technology into shared micro-mobility systems and the inherent complexity of these systems, there is a need to quantify the potential impact of autonomy on feet performance and user experience. This is why we have developed an ad-hoc agent-based simulator that provides an in-depth understanding of the feet behavior of autonomous micro-mobility systems in realistic scenarios, including a rebalancing system based on demand prediction. In addition, it allows to asses the impact of dierent parameters on system efficency and service quality and quantify the extent to which an autonomous system would outperform current non autonomous micro-mobility sharing schemes: station-based and dockless sytems.
 
-Here is the preprint of the **[paper](https://arxiv.org/abs/2106.09694)** related to this work which explains our research and the simulator with much great, and this is our **[GitHub repo.](https://github.com/NaroaCS/AutonomousBicycleSimulation)**
+Here is our **[GitHub repo.](https://github.com/NaroaCS/AutonomousBicycleSimulation)**
 
-For this simulator we have chosen autonomous bicycles, but this simulator can be used to simulate virtually any kind of micro-mobility systems such as autonomous tricyles (**[PEV](https://www.media.mit.edu/projects/pev/overview/)**), scooters, or any other vehicle that you might want to design. 
+We have published a paper that describes the **[simulation tool](https://doi.org/10.1016/j.commtr.2022.100065)** related to  with much greater detail. In addition, we have also published an article that uses this tool for analyzing the behavior of shared autonomous bicycles as a **[simulation tool](https://doi.org/10.1016/j.commtr.2022.100066)**. 
+
+Even if for this simulation study we have chosen an **[autonomous bicycle](https://www.media.mit.edu/projects/AutonomousBicycleProject/overview/)**, it can be used to simulate virtually any kind of micro-mobility systems such as autonomous tricyles (**[PEV](https://www.media.mit.edu/projects/pev/overview/)**), scooters, or any other vehicle that you might want to design. 
+
+
+
+
 
 
 
