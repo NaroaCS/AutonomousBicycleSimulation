@@ -1,7 +1,8 @@
 ---
 sidebar_position: 4
-label: Demand prediction and rebalancing
+label: Demand prediction
 ---
+# Demand prediction
 
 While we provide the results for our demand prediction in the file *demad_grid.csv*, we detail here the procedure that was followed to generate such files:
 
