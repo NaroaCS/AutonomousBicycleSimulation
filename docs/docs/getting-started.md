@@ -31,7 +31,7 @@ Finally, you will need some packages:
 * pyproj
 * tqdm
 * tensorflow==1.15
-* git+git://github.com/imartinezl/pandana.git@master
+* *git+git://github.com/imartinezl/pandana.git@master*
 
 To install the packages you can use pip3, which comes already ingtegated with Python3. Eg:
 
