@@ -85,7 +85,3 @@ user_trips %>%
 
 You can find more of these R scripts on the **[analysis](https://github.com/NaroaCS/AutonomousBicycleSimulation/tree/master/analysis)** directory in the source code repository on **[Github](https://github.com/NaroaCS/AutonomousBicycleSimulation)**.
 
-
-:::danger
-WORK IN PROGRESS
-:::
