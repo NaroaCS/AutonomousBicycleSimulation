@@ -1,0 +1,21 @@
+{
+    "MODE": 0,
+
+    "NUM_BIKES": 3000,
+
+    "WALK_RADIUS": 500,
+    "AUTONOMOUS_RADIUS": 3000,
+
+    "RIDING_SPEED": 15,
+    "WALKING_SPEED": 5,
+    "AUTONOMOUS_SPEED": 10,
+
+    "BATTERY_MIN_LEVEL": 15,
+    "BATTERY_AUTONOMY": 4,
+    "BATTERY_CHARGE_TIME": 5,
+
+    "MAGIC_BETA": 90,
+    "MAGIC_MIN_BIKES": 3,
+    "MAGIC_MIN_DOCKS": 3
+
+}

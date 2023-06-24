@@ -1,2 +1,7 @@
 logs/
 __pycache__
+*.code-workspace
+.DS_Store
+.vscode
+.venv
+results/
